@@ -12,3 +12,7 @@
 3. If exists → link new portrayals to existing node
 4. If not exists → create with `wikidata_id` property
 5. Aliases only when scholarly source confirms alternate title
+
+## Safety & Path Integrity
+- **Permanent Storage Only:** Before creating or moving any files, verify the destination is a permanent project directory (Root, `/src`, etc.).
+- **Cache Restriction:** NEVER write to or assume context from temporary or cache folders like `__pycache__`, `.venv`, or `dist`.

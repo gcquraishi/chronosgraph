@@ -1,0 +1,52 @@
+[
+    {
+      "wikidata_id": "Q1344573",
+      "title": "I, Claudius (Novel)",
+      "media_type": "Book",
+      "release_year": 1934,
+      "brief_historiography_note": "Graves's novel established the modern 'poisoner Livia' archetype, heavily influencing all subsequent media portrayals of the Julio-Claudian era.",
+      "creator_wikidata_id": "Q201732",
+      "creator": "Robert Graves",
+      "key_historical_figures": ["Claudius", "Livia Drusilla", "Octavian (Augustus)", "Tiberius", "Caligula", "Germanicus", "Marcus Vipsanius Agrippa"]
+    },
+    {
+      "wikidata_id": "Q1344599",
+      "title": "I, Claudius (BBC TV Series)",
+      "media_type": "TVSeries",
+      "release_year": 1976,
+      "brief_historiography_note": "This definitive BBC production defined the visual and performative language of the Roman Imperial family for a generation.",
+      "creator_wikidata_id": "Q6114704",
+      "creator": "Jack Pulman",
+      "key_historical_figures": ["Claudius", "Livia Drusilla", "Octavian (Augustus)", "Tiberius", "Caligula", "Nero", "Messalina", "Agrippina the Younger"]
+    },
+    {
+      "wikidata_id": "Q229808",
+      "title": "Cleopatra",
+      "media_type": "Film",
+      "release_year": 1963,
+      "brief_historiography_note": "A monumental Hollywood epic focusing on the romantic-political transition from Republic to Empire.",
+      "creator_wikidata_id": "Q51583",
+      "creator": "Joseph L. Mankiewicz",
+      "key_historical_figures": ["Cleopatra VII", "Julius Caesar", "Mark Antony", "Octavian (Augustus)", "Marcus Tullius Cicero"]
+    },
+    {
+      "wikidata_id": "Q938137",
+      "title": "Quo Vadis",
+      "media_type": "Film",
+      "release_year": 1951,
+      "brief_historiography_note": "The definitive cinematic portrayal of Nero's decadence and the Great Fire of Rome.",
+      "creator_wikidata_id": "Q103788",
+      "creator": "Mervyn LeRoy",
+      "key_historical_figures": ["Nero", "Saint Peter", "Paul the Apostle", "Poppaea Sabina"]
+    },
+    {
+      "wikidata_id": "Q1139023",
+      "title": "The Robe",
+      "media_type": "Film",
+      "release_year": 1953,
+      "brief_historiography_note": "Groundbreaking widescreen epic exploring Caligula's madness and early Christian interaction with the Empire.",
+      "creator_wikidata_id": "Q61859",
+      "creator": "Henry Koster",
+      "key_historical_figures": ["Caligula", "Tiberius", "Pontius Pilate", "Saint Peter"]
+    }
+  ]
