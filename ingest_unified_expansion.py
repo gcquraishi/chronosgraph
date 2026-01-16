@@ -27,12 +27,10 @@ class UnifiedChronosIngestor:
                     session.run(statement)
         print("✅ Schema constraints verified.")
 
-    def ingest_json_expansion(self, file_path):
-        with open(file_path, 'r') as f:
-            expansion_data = json.load(f)
-
+    def ingest_batch(self, seed_data):
+        """Ingest expansion data from a loaded JSON structure."""
         with self.driver.session() as session:
-            for entry in expansion_data:
+            for entry in seed_data:
                 # 1. Ingest MediaWork
                 media = entry['media_work']
                 session.run("""
@@ -40,7 +38,7 @@ class UnifiedChronosIngestor:
                     SET m.media_id = $mid, m.title = $title, m.media_type = $type,
                         m.release_year = $year, m.creator = $creator,
                         m.creator_wikidata_id = $c_qid
-                """, qid=media['wikidata_id'], mid=media['media_id'], 
+                """, qid=media['wikidata_id'], mid=media['media_id'],
                      title=media['title'], type=media['media_type'],
                      year=media['release_year'], creator=media['creator'],
                      c_qid=media.get('creator_wikidata_id'))
@@ -71,16 +69,44 @@ class UnifiedChronosIngestor:
                          is_proto=p['is_protagonist'], c_flag=p.get('conflict_flag', False),
                          c_notes=p.get('conflict_notes'))
 
-        print(f"🚀 Ingestion of {file_path} complete.")
+        print(f"🚀 Ingestion complete: {len(seed_data)} entries processed.")
 
 def main():
     load_dotenv()
-    uri, user, pwd = os.getenv("NEO4J_URI"), os.getenv("NEO4J_USERNAME", "neo4j"), os.getenv("NEO4J_PASSWORD")
-    
+
+    # Check if file path argument was provided
+    if len(sys.argv) < 2:
+        print("Usage: python ingest_unified_expansion.py <your_file.json>")
+        sys.exit(1)
+
+    # Get the JSON file path from command-line argument
+    json_path = sys.argv[1]
+
+    # Load JSON data from file
+    try:
+        with open(json_path, 'r') as f:
+            seed_data = json.load(f)
+    except FileNotFoundError:
+        print(f"❌ Error: The file '{json_path}' was not found.")
+        sys.exit(1)
+    except json.JSONDecodeError as e:
+        print(f"❌ Error: Invalid JSON in '{json_path}': {e}")
+        sys.exit(1)
+
+    # Connect to Neo4j and ingest data
+    uri = os.getenv("NEO4J_URI")
+    user = os.getenv("NEO4J_USERNAME", "neo4j")
+    pwd = os.getenv("NEO4J_PASSWORD")
+
+    if not pwd:
+        print("❌ Error: NEO4J_PASSWORD environment variable not set.")
+        sys.exit(1)
+
     ingestor = UnifiedChronosIngestor(uri, user, pwd)
     try:
+        print(f"--- ChronosGraph Unified Ingestion: {datetime.now()} ---")
         ingestor.setup_schema()
-        ingestor.ingest_json_expansion("literary_expansion.json")
+        ingestor.ingest_batch(seed_data)
     finally:
         ingestor.close()
 
