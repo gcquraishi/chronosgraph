@@ -1,6 +1,8 @@
-import { Search } from 'lucide-react';
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { getAllFigures } from '@/lib/db';
+import SearchInput from '@/components/SearchInput';
+import HistoricityBadge from '@/components/HistoricityBadge';
 
 export default async function Dashboard() {
   const figures = await getAllFigures();
@@ -21,18 +23,9 @@ export default async function Dashboard() {
 
           {/* Search Section */}
           <div className="mb-12">
-            <form action="/search" method="GET" className="relative">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  name="q"
-                  placeholder="Search for historical figures (e.g., Nero, Jesus, Vespasian)..."
-                  className="w-full pl-12 pr-4 py-4 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  autoFocus
-                />
-              </div>
-            </form>
+            <Suspense fallback={<div className="h-14 bg-gray-800 rounded-lg animate-pulse" />}>
+              <SearchInput />
+            </Suspense>
           </div>
 
           {/* Featured Figures */}
@@ -47,11 +40,7 @@ export default async function Dashboard() {
                 >
                   <div className="flex items-start justify-between mb-2">
                     <h3 className="text-lg font-semibold text-white">{figure.name}</h3>
-                    {figure.is_fictional && (
-                      <span className="px-2 py-1 text-xs bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">
-                        Fictional
-                      </span>
-                    )}
+                    <HistoricityBadge status={figure.historicity_status} isFictional={figure.is_fictional} />
                   </div>
                   {figure.era && (
                     <p className="text-sm text-gray-400">{figure.era}</p>

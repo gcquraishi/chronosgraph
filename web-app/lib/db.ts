@@ -18,6 +18,7 @@ export async function searchFigures(query: string): Promise<HistoricalFigure[]> 
         canonical_id: node.properties.canonical_id,
         name: node.properties.name,
         is_fictional: node.properties.is_fictional || false,
+        historicity_status: node.properties.historicity_status || (node.properties.is_fictional ? 'Fictional' : 'Historical'),
         era: node.properties.era,
       };
     });
@@ -59,6 +60,7 @@ export async function getFigureById(canonicalId: string): Promise<FigureProfile 
       canonical_id: figureNode.properties.canonical_id,
       name: figureNode.properties.name,
       is_fictional: figureNode.properties.is_fictional || false,
+      historicity_status: figureNode.properties.historicity_status || (figureNode.properties.is_fictional ? 'Fictional' : 'Historical'),
       era: figureNode.properties.era,
       portrayals,
     };
@@ -103,6 +105,7 @@ export async function getAllFigures(): Promise<HistoricalFigure[]> {
         canonical_id: node.properties.canonical_id,
         name: node.properties.name,
         is_fictional: node.properties.is_fictional || false,
+        historicity_status: node.properties.historicity_status || (node.properties.is_fictional ? 'Fictional' : 'Historical'),
         era: node.properties.era,
       };
     });
@@ -111,12 +114,110 @@ export async function getAllFigures(): Promise<HistoricalFigure[]> {
   }
 }
 
-export async function getGraphData(canonicalId: string): Promise<{ nodes: GraphNode[]; links: GraphLink[] }> {
+export async function getMediaById(wikidataId: string) {
   const session = await getSession();
   try {
     const result = await session.run(
+      `MATCH (m:MediaWork {wikidata_id: $wikidataId})
+       OPTIONAL MATCH (f:HistoricalFigure)-[r:APPEARS_IN]->(m)
+       RETURN m, collect({figure: f, sentiment: r.sentiment, role: r.role_description}) as portrayals`,
+      { wikidataId }
+    );
+
+    if (result.records.length === 0) return null;
+
+    const record = result.records[0];
+    const mediaNode = record.get('m');
+    const portrayals = record.get('portrayals').filter((p: any) => p.figure !== null);
+
+    return {
+      wikidata_id: mediaNode.properties.wikidata_id,
+      title: mediaNode.properties.title,
+      release_year: mediaNode.properties.release_year?.toNumber?.() ?? Number(mediaNode.properties.release_year),
+      media_type: mediaNode.properties.media_type,
+      creator: mediaNode.properties.creator,
+      portrayals: portrayals.map((p: any) => ({
+        figure: {
+          canonical_id: p.figure.properties.canonical_id,
+          name: p.figure.properties.name,
+          is_fictional: p.figure.properties.is_fictional,
+          historicity_status: p.figure.properties.historicity_status || (p.figure.properties.is_fictional ? 'Fictional' : 'Historical'),
+        },
+        sentiment: p.sentiment,
+        role: p.role
+      }))
+    };
+  } finally {
+    await session.close();
+  }
+}
+
+export async function getMediaGraphData(wikidataId: string): Promise<{ nodes: GraphNode[]; links: GraphLink[] }> {
+  const session = await getSession();
+  try {
+    const result = await session.run(
+      `MATCH (m:MediaWork {wikidata_id: $wikidataId})<-[r:APPEARS_IN]-(f:HistoricalFigure)
+       RETURN m, r, f`,
+      { wikidataId }
+    );
+
+    const nodes: GraphNode[] = [];
+    const links: GraphLink[] = [];
+    const nodeIds = new Set<string>();
+
+    if (result.records.length > 0) {
+      const mediaNode = result.records[0].get('m');
+      const mediaId = `media-${wikidataId}`;
+      nodes.push({
+        id: mediaId,
+        name: mediaNode.properties.title,
+        type: 'media',
+        sentiment: 'Complex'
+      });
+      nodeIds.add(mediaId);
+    }
+
+    result.records.forEach(record => {
+      const figureNode = record.get('f');
+      const relationship = record.get('r');
+      const figureId = `figure-${figureNode.properties.canonical_id}`;
+
+      if (!nodeIds.has(figureId)) {
+        nodes.push({
+          id: figureId,
+          name: figureNode.properties.name,
+          type: 'figure',
+        });
+        nodeIds.add(figureId);
+      }
+
+      links.push({
+        source: `media-${wikidataId}`,
+        target: figureId,
+        sentiment: relationship.properties.sentiment || 'Complex',
+      });
+    });
+
+    return { nodes, links };
+  } finally {
+    await session.close();
+  }
+}
+
+export async function getGraphData(canonicalId: string): Promise<{ nodes: GraphNode[]; links: GraphLink[] }> {
+  const session = await getSession();
+  try {
+    // 1. Fetch Media Appearances
+    const mediaResult = await session.run(
       `MATCH (f:HistoricalFigure {canonical_id: $canonicalId})-[r:APPEARS_IN]->(m:MediaWork)
        RETURN f, r, m`,
+      { canonicalId }
+    );
+
+    // 2. Fetch Social Interactions (Human-to-Human)
+    const socialResult = await session.run(
+      `MATCH (f:HistoricalFigure {canonical_id: $canonicalId})-[r:INTERACTED_WITH]-(h:HistoricalFigure)
+       RETURN f, r, h`,
       { canonicalId }
     );
 
@@ -124,23 +225,44 @@ export async function getGraphData(canonicalId: string): Promise<{ nodes: GraphN
     const links: GraphLink[] = [];
     const nodeIds = new Set<string>();
 
-    // Add the central figure node
-    if (result.records.length > 0) {
-      const figureNode = result.records[0].get('f');
-      const figureId = `figure-${canonicalId}`;
-      nodes.push({
-        id: figureId,
-        name: figureNode.properties.name,
-        type: 'figure',
-      });
-      nodeIds.add(figureId);
+    // Helper to add the central figure if not present
+    // (We do this from the first result that has it, or explicit check)
+    // Actually, let's just use the first record from either result if available.
+    // Ideally we should just fetch the figure first.
+    
+    // Let's assume the figure exists if we are asking for it.
+    // We'll grab the name from the first result of either query.
+    let centralFigureName = "";
+    
+    if (mediaResult.records.length > 0) {
+      centralFigureName = mediaResult.records[0].get('f').properties.name;
+    } else if (socialResult.records.length > 0) {
+      centralFigureName = socialResult.records[0].get('f').properties.name;
+    } else {
+        // Fallback or fetch specifically if needed, but likely no graph if no connections
+        // We can do a quick check to get the name if both are empty
+        const figureCheck = await session.run(`MATCH (f:HistoricalFigure {canonical_id: $canonicalId}) RETURN f`, {canonicalId});
+        if (figureCheck.records.length > 0) {
+            centralFigureName = figureCheck.records[0].get('f').properties.name;
+        }
     }
 
-    // Add media work nodes and links
-    result.records.forEach(record => {
+    if (centralFigureName) {
+        const figureId = `figure-${canonicalId}`;
+        nodes.push({
+            id: figureId,
+            name: centralFigureName,
+            type: 'figure',
+        });
+        nodeIds.add(figureId);
+    }
+
+    // Process Media Links
+    mediaResult.records.forEach(record => {
       const mediaNode = record.get('m');
       const relationship = record.get('r');
-      const mediaId = `media-${mediaNode.properties.title}`;
+      const wikidataId = mediaNode.properties.wikidata_id;
+      const mediaId = `media-${wikidataId}`;
 
       if (!nodeIds.has(mediaId)) {
         nodes.push({
@@ -156,6 +278,28 @@ export async function getGraphData(canonicalId: string): Promise<{ nodes: GraphN
         source: `figure-${canonicalId}`,
         target: mediaId,
         sentiment: relationship.properties.sentiment || 'Complex',
+      });
+    });
+
+    // Process Social Links
+    socialResult.records.forEach(record => {
+      const otherFigure = record.get('h');
+      const otherId = `figure-${otherFigure.properties.canonical_id}`;
+      
+      if (!nodeIds.has(otherId)) {
+        nodes.push({
+          id: otherId,
+          name: otherFigure.properties.name,
+          type: 'figure', // It's another figure
+          // Optional: we could distinguish 'central' vs 'other' via ID or another property
+        });
+        nodeIds.add(otherId);
+      }
+      
+      links.push({
+        source: `figure-${canonicalId}`,
+        target: otherId,
+        sentiment: 'Complex', // Default for interactions for now
       });
     });
 

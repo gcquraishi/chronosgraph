@@ -1,6 +1,8 @@
-import { Search } from 'lucide-react';
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { searchFigures } from '@/lib/db';
+import SearchInput from '@/components/SearchInput';
+import HistoricityBadge from '@/components/HistoricityBadge';
 
 export default async function SearchPage({
   searchParams,
@@ -22,19 +24,9 @@ export default async function SearchPage({
 
           {/* Search */}
           <div className="mb-8">
-            <form action="/search" method="GET" className="relative">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  name="q"
-                  defaultValue={query}
-                  placeholder="Search for historical figures..."
-                  className="w-full pl-12 pr-4 py-4 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  autoFocus
-                />
-              </div>
-            </form>
+            <Suspense fallback={<div className="h-14 bg-gray-800 rounded-lg animate-pulse" />}>
+              <SearchInput />
+            </Suspense>
           </div>
 
           {/* Results */}
@@ -59,11 +51,7 @@ export default async function SearchPage({
                             <p className="text-sm text-gray-400">{figure.era}</p>
                           )}
                         </div>
-                        {figure.is_fictional && (
-                          <span className="px-2 py-1 text-xs bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">
-                            Fictional
-                          </span>
-                        )}
+                        <HistoricityBadge status={figure.historicity_status} isFictional={figure.is_fictional} />
                       </div>
                     </Link>
                   ))}

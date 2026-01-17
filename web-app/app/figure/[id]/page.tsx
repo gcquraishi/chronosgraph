@@ -4,6 +4,7 @@ import { getFigureById, calculateSentimentDistribution, getGraphData } from '@/l
 import ConflictRadar from '@/components/ConflictRadar';
 import MediaTimeline from '@/components/MediaTimeline';
 import GraphExplorer from '@/components/GraphExplorer';
+import HistoricityBadge from '@/components/HistoricityBadge';
 import { User } from 'lucide-react';
 
 export default async function FigurePage({
@@ -41,11 +42,7 @@ export default async function FigurePage({
               <div className="flex-grow">
                 <div className="flex items-start justify-between gap-4 mb-2">
                   <h1 className="text-4xl font-bold text-white">{figure.name}</h1>
-                  {figure.is_fictional && (
-                    <span className="px-3 py-1 text-sm bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">
-                      Fictional Anchor
-                    </span>
-                  )}
+                  <HistoricityBadge status={figure.historicity_status} isFictional={figure.is_fictional} />
                 </div>
                 {figure.era && (
                   <p className="text-lg text-gray-300 mb-4">{figure.era}</p>

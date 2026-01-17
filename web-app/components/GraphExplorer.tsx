@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { GraphNode, GraphLink } from '@/lib/types';
 
@@ -20,6 +21,7 @@ const SENTIMENT_COLORS = {
 };
 
 export default function GraphExplorer({ nodes, links }: GraphExplorerProps) {
+  const router = useRouter();
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -67,7 +69,7 @@ export default function GraphExplorer({ nodes, links }: GraphExplorerProps) {
           <span className="text-gray-400">Complex</span>
         </div>
       </div>
-      <div ref={containerRef} className="bg-gray-900 rounded-lg overflow-hidden">
+      <div ref={containerRef} className="bg-gray-900 rounded-lg overflow-hidden cursor-pointer">
         <ForceGraph2D
           graphData={{ nodes, links }}
           width={dimensions.width}
@@ -81,6 +83,15 @@ export default function GraphExplorer({ nodes, links }: GraphExplorerProps) {
           linkColor={() => '#4b5563'}
           linkWidth={2}
           backgroundColor="#111827"
+          onNodeClick={(node: any) => {
+            if (node.type === 'figure' && typeof node.id === 'string' && node.id.startsWith('figure-')) {
+              const id = node.id.replace('figure-', '');
+              router.push(`/figure/${id}`);
+            } else if (node.type === 'media' && typeof node.id === 'string' && node.id.startsWith('media-')) {
+              const id = node.id.replace('media-', '');
+              router.push(`/media/${id}`);
+            }
+          }}
           nodeCanvasObject={(node: any, ctx, globalScale) => {
             const label = node.name;
             const fontSize = 12 / globalScale;

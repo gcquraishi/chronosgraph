@@ -2,6 +2,7 @@ export interface HistoricalFigure {
   canonical_id: string;
   name: string;
   is_fictional: boolean;
+  historicity_status?: 'Historical' | 'Fictional' | 'Disputed';
   era?: string;
 }
 
