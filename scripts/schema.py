@@ -98,6 +98,12 @@ class FictionalCharacter(BaseModel):
     role_type: Optional[str] = Field(default=None, description="Type of role (e.g., 'Protagonist', 'Antagonist', 'Supporting')")
 
 
+class Agent(BaseModel):
+    """Represents the user or AI agent creating the data."""
+    name: str = Field(description="Unique name of the agent (e.g., 'Claude', 'Gemini', 'GCQ')")
+
+
+
 # Neo4j Schema Constraints and Indexes
 SCHEMA_CONSTRAINTS = """
 // Master Entity Resolution: Ensure unique historical figures by canonical_id
@@ -120,6 +126,10 @@ FOR (s:ScholarlyWork) REQUIRE s.wikidata_id IS UNIQUE;
 CREATE CONSTRAINT fictional_character_unique IF NOT EXISTS
 FOR (c:FictionalCharacter) REQUIRE c.char_id IS UNIQUE;
 
+// Ensure unique agents by name
+CREATE CONSTRAINT agent_unique IF NOT EXISTS
+FOR (a:Agent) REQUIRE a.name IS UNIQUE;
+
 // Index for efficient lookups
 CREATE INDEX figure_name_idx IF NOT EXISTS FOR (f:HistoricalFigure) ON (f.name);
 CREATE INDEX media_title_idx IF NOT EXISTS FOR (m:MediaWork) ON (m.title);
@@ -141,4 +151,5 @@ RELATIONSHIP_TYPES = {
     "inspired_by": "INSPIRED_BY",     # Media -> Media (creative influence)
     "interacted_with": "INTERACTED_WITH",  # Figure -> Figure (historical social connection)
     "has_scholarly_basis": "HAS_SCHOLARLY_BASIS",  # HistoricalFigure/MediaWork -> ScholarlyWork
+    "created_by": "CREATED_BY",       # Node -> Agent
 }

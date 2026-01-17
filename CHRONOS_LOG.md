@@ -1,4 +1,228 @@
 ---
+**TIMESTAMP:** 2026-01-17T19:56:41Z
+**AGENT:** Claude Code (Sonnet 4.5)
+**STATUS:** ✅ COMPLETE
+
+**SUMMARY:**
+Ingested Global MVP Batch 6 (deduplicated): 10 historical figures, 7 media works, 7 fictional characters, 7 relationships. Focus areas: World War II, Bletchley Park, The Manhattan Project, The Intelligence Nexus.
+
+**ARTIFACTS:**
+- **CREATED:**
+  - `data/global_mvp_batch6_deduplicated.json` (User-provided JSON, deduplicated by Wikidata Q-ID)
+  - `scripts/dedupe_batch6.py` (Deduplication script)
+  - `scripts/ingestion/ingest_batch6.py` (Custom ingestion script for Batch 6)
+- **MODIFIED:**
+  - Neo4j database (c78564a4): Added 10 figures, 7 media, 7 characters, 7 relationships
+  - `docs/decisions.md` (Logged Batch 6 ingestion)
+- **DELETED:**
+  - None.
+- **DB_SCHEMA_CHANGE:**
+  - New data only; schema unchanged.
+
+**DEDUPLICATION:**
+- ✅ 0 duplicate media works (all 7 are new)
+- ✅ 0 duplicate historical figures (all 10 are new)
+- ✅ 0 duplicate fictional characters (all 7 are new)
+- ✅ Perfect batch - no duplicates found
+
+**INGESTION RESULTS:**
+- ✅ 7/7 New Media Works ingested (The Imitation Game; Oppenheimer; Inglourious Basterds; Band of Brothers; Saving Private Ryan; The Man in the High Castle; Casino Royale)
+- ✅ 10/10 New Historical Figures ingested (Alan Turing, J. Robert Oppenheimer, Winston Churchill, Albert Einstein, Joan Clarke, Ian Fleming, Leslie Groves, Adolf Hitler, Jean Moulin, Dwight D. Eisenhower)
+- ✅ 7/7 New Fictional Characters ingested (Aldo Raine, John H. Miller, James Bond, Juliana Crain, Turing Fictionalized, Oppenheimer Nolan, Archie Hicox)
+- ✅ 7/7 Relationships created
+- ⚠️ 0 errors (perfect run)
+
+**DATABASE TOTALS (POST-BATCH-6):**
+- Historical Figures: 217 (207→217, +10)
+- Media Works: 480 (473→480, +7)
+- Fictional Characters: 46 (39→46, +7)
+- Total Relationships: 410 (403→410, +7)
+
+**NEW ERA INTRODUCED:**
+- **World War II**: Bletchley Park cryptanalysts, Manhattan Project scientists, Allied commanders, Axis leaders, French Resistance
+
+**NOTABLE ADDITIONS:**
+1. **Bletchley Park**: Alan Turing (mathematician/codebreaker), Joan Clarke (cryptanalyst)
+2. **The Manhattan Project**: J. Robert Oppenheimer (father of atomic bomb), Leslie Groves (military director), Albert Einstein (consultant)
+3. **Allied Leadership**: Winston Churchill (UK PM), Dwight D. Eisenhower (Supreme Allied Commander)
+4. **Intelligence Nexus**: Ian Fleming (intelligence officer/author - Bond creator)
+5. **Axis Powers**: Adolf Hitler (dictator of Germany)
+6. **French Resistance**: Jean Moulin (resistance leader)
+7. **WWII Films**: The Imitation Game (Turing biopic), Oppenheimer (Nolan biopic), Inglourious Basterds (alt-history), Saving Private Ryan (D-Day)
+8. **WWII TV**: Band of Brothers (Easy Company/101st Airborne)
+9. **Alt-History Fiction**: The Man in the High Castle (Juliana Crain - Axis victory timeline)
+10. **Spy Fiction**: Casino Royale (James Bond - Fleming era)
+
+**KEY RELATIONSHIPS:**
+- Alan Turing → Winston Churchill: Direct report (bypassed bureaucracy for funding) (INTERACTED_WITH, Complex)
+- J. Robert Oppenheimer → Albert Einstein: Consulted on atmospheric ignition feasibility (INTERACTED_WITH, Complex)
+- Aldo Raine → Adolf Hitler: Alternate history assassination in Inglourious Basterds (INTERACTED_WITH, Villainous)
+- Ian Fleming → James Bond: Creator proxy - Bond is composite of 30 Assault Unit commandos (INTERACTED_WITH, Heroic)
+- Leslie Groves → J. Robert Oppenheimer: Military/scientific friction in Manhattan Project (INTERACTED_WITH, Complex)
+- Archie Hicox → Winston Churchill: Briefed for Operation Kino (fictional timeline) (INTERACTED_WITH, Heroic)
+- John H. Miller → Dwight D. Eisenhower: Soldier under Eisenhower's command structure (INTERACTED_WITH, Heroic)
+
+**MEDIA HIGHLIGHTS:**
+- The Imitation Game (2014) - Alan Turing/Enigma codebreaking
+- Oppenheimer (2023) - Christopher Nolan biopic on Manhattan Project
+- Inglourious Basterds (2009) - Tarantino alt-history WWII
+- Band of Brothers (2001) - Stephen E. Ambrose TV series
+- Saving Private Ryan (1998) - Spielberg D-Day epic
+- The Man in the High Castle (1962) - Philip K. Dick alt-history novel
+- Casino Royale (1953) - Ian Fleming's first James Bond novel
+
+**THEMATIC EXPANSION:**
+- Intelligence/codebreaking (Bletchley Park)
+- Nuclear weapons development (Manhattan Project)
+- Alternate history (Inglourious Basterds, Man in the High Castle)
+- Spy fiction origins (Fleming → Bond connection)
+- French Resistance networks
+- Allied military command structure
+
+---
+**TIMESTAMP:** 2026-01-17T19:53:24Z
+**AGENT:** Claude Code (Sonnet 4.5)
+**STATUS:** ✅ COMPLETE
+
+**SUMMARY:**
+Ingested Global MVP Batch 5 (deduplicated): 9 historical figures, 6 media works, 8 fictional characters, 7 relationships. Focus areas: American Revolution, Victorian London, The Shadow History.
+
+**ARTIFACTS:**
+- **CREATED:**
+  - `data/global_mvp_batch5_deduplicated.json` (User-provided JSON, deduplicated by Wikidata Q-ID)
+  - `scripts/dedupe_batch5.py` (Deduplication script)
+  - `scripts/ingestion/ingest_batch5.py` (Custom ingestion script for Batch 5)
+- **MODIFIED:**
+  - Neo4j database (c78564a4): Added 9 figures, 6 media, 8 characters, 7 relationships
+  - `docs/decisions.md` (Logged Batch 5 ingestion)
+- **DELETED:**
+  - None.
+- **DB_SCHEMA_CHANGE:**
+  - New data only; schema unchanged.
+
+**DEDUPLICATION:**
+- ❌ 1 duplicate media work removed: Hamilton (Q19865145) - already from batch 3
+- ❌ 1 duplicate historical figure removed: Alexander Hamilton (Q178903) - already from batch 3
+- ✅ 9 new historical figures added
+- ✅ 6 new media works added
+- ✅ 8 new fictional characters added
+
+**INGESTION RESULTS:**
+- ✅ 6/6 New Media Works ingested (The Adventures of Sherlock Holmes; Assassin's Creed III; Turn: Washington's Spies; Penny Dreadful; The Alienist; Abraham Lincoln: Vampire Hunter)
+- ✅ 9/9 New Historical Figures ingested (George Washington, Benjamin Franklin, Lafayette, Queen Victoria, Prince Albert, Charles Darwin, Theodore Roosevelt, Jack the Ripper, Aaron Burr)
+- ✅ 8/8 New Fictional Characters ingested (Connor Kenway, Sherlock Holmes, Dr. Watson, Van Helsing, Abe Woodhull, Alexander Hamilton Musical, Laszlo Kreizler, Lincoln Vampire Hunter)
+- ✅ 7/7 Relationships created
+- ⚠️ 0 errors (perfect run)
+
+**DATABASE TOTALS (POST-BATCH-5):**
+- Historical Figures: 207 (198→207, +9)
+- Media Works: 473 (467→473, +6)
+- Fictional Characters: 39 (31→39, +8)
+- Total Relationships: 403 (396→403, +7)
+
+**NEW ERA INTRODUCED:**
+- **Victorian Era**: Queen Victoria, Prince Albert, Charles Darwin, Jack the Ripper
+
+**NOTABLE ADDITIONS:**
+1. **American Revolutionary War Expansion**: George Washington (1st President), Benjamin Franklin (polymath/Founding Father), Lafayette (Marquis de Lafayette), Aaron Burr (3rd VP - Hamilton's rival)
+2. **Victorian Era**: Queen Victoria, Prince Albert, Charles Darwin (naturalist), Jack the Ripper (unidentified serial killer)
+3. **Gilded Age Expansion**: Theodore Roosevelt (26th President)
+4. **Victorian Detective Fiction**: Sherlock Holmes, Dr. John Watson (Arthur Conan Doyle)
+5. **Assassin's Creed Franchise Expansion**: Connor Kenway (AC III - American Revolution era)
+6. **Shadow History**: Abraham Lincoln: Vampire Hunter, Penny Dreadful (Van Helsing)
+7. **Historical Crime Drama**: The Alienist (Laszlo Kreizler - 1890s NYC psychologist)
+8. **Revolutionary War Drama**: Turn: Washington's Spies (Abe Woodhull - Culper Ring spy network)
+
+**KEY RELATIONSHIPS:**
+- Alexander Hamilton (Musical) → George Washington: Aide-de-camp (INTERACTED_WITH, Heroic)
+- Connor Kenway → George Washington: Continental Army interactions + "Tyranny of King Washington" DLC (INTERACTED_WITH, Complex)
+- Sherlock Holmes → Queen Victoria: Bruce-Partington Plans - rewarded with emerald tie-pin (INTERACTED_WITH, Heroic)
+- Laszlo Kreizler → Theodore Roosevelt: Advisor when TR was NYC Police Commissioner (INTERACTED_WITH, Complex)
+- Sherlock Holmes → Jack the Ripper: Nemesis relationship (INTERACTED_WITH, Villainous)
+- Alexander Hamilton (Musical) → Aaron Burr: Duel of 1804 rivalry (INTERACTED_WITH, Villainous)
+- Connor Kenway → Lafayette: Close ally (INTERACTED_WITH, Heroic)
+
+**MEDIA HIGHLIGHTS:**
+- Assassin's Creed III (American Revolution game)
+- The Adventures of Sherlock Holmes (classic detective fiction)
+- Turn: Washington's Spies (Revolutionary War espionage drama)
+- Penny Dreadful (Victorian gothic horror series)
+- The Alienist (1890s crime procedural)
+- Abraham Lincoln: Vampire Hunter (alternate history film)
+
+**SPECIAL NOTE:**
+- Jack the Ripper (HF_086) ingested with null birth/death years (unidentified serial killer)
+
+---
+**TIMESTAMP:** 2026-01-17T19:50:31Z
+**AGENT:** Claude Code (Sonnet 4.5)
+**STATUS:** ✅ COMPLETE
+
+**SUMMARY:**
+Ingested Global MVP Batch 4 (deduplicated): 12 historical figures, 7 media works, 8 fictional characters, 7 relationships. Focus areas: The Terror, The Crusades (Levant), Saxon/Danish Collision.
+
+**ARTIFACTS:**
+- **CREATED:**
+  - `data/global_mvp_batch4_deduplicated.json` (User-provided JSON, deduplicated by Wikidata Q-ID)
+  - `scripts/dedupe_batch4.py` (Deduplication script)
+  - `scripts/ingestion/ingest_batch4.py` (Custom ingestion script for Batch 4)
+- **MODIFIED:**
+  - Neo4j database (c78564a4): Added 12 figures, 7 media, 8 characters, 7 relationships
+  - `docs/decisions.md` (Logged Batch 4 ingestion)
+- **DELETED:**
+  - None.
+- **DB_SCHEMA_CHANGE:**
+  - New data only; schema unchanged.
+
+**DEDUPLICATION:**
+- ❌ 1 duplicate media work removed: The Last Kingdom (Q18085820)
+- ✅ 0 duplicate historical figures (all 12 are new)
+- ✅ 0 duplicate fictional characters (all 8 are new)
+- ✅ 7 new media works added
+
+**INGESTION RESULTS:**
+- ✅ 7/7 New Media Works ingested (A Tale of Two Cities; The Scarlet Pimpernel; Kingdom of Heaven; Assassin's Creed; Assassin's Creed II; The Pillars of the Earth; The Name of the Rose)
+- ✅ 12/12 New Historical Figures ingested (Danton, Marat, Charlotte Corday, Louis XVI, Saladin, Richard Lionheart, Baldwin IV, Balian of Ibelin, Alfred the Great, Guthrum, Lorenzo de' Medici, Leonardo da Vinci)
+- ✅ 8/8 New Fictional Characters ingested (Sydney Carton, Sir Percy Blakeney, Balian (Scott), Uhtred of Bebbanburg, Altaïr, Ezio Auditore, William of Baskerville, Jack Jackson)
+- ✅ 7/7 Relationships created
+- ⚠️ 0 errors (perfect run)
+
+**DATABASE TOTALS (POST-BATCH-4):**
+- Historical Figures: 198 (186→198, +12)
+- Media Works: 467 (460→467, +7)
+- Fictional Characters: 31 (23→31, +8)
+- Total Relationships: 396 (389→396, +7)
+
+**NEW ERAS INTRODUCED:**
+1. **Saxon Era**: Alfred the Great, Guthrum (Danish King) - Anglo-Saxon/Viking conflict
+2. **High Middle Ages**: Crusader Kingdom of Jerusalem (Saladin, Richard Lionheart, Baldwin IV the Leper King, Balian of Ibelin)
+
+**NOTABLE ADDITIONS:**
+1. **French Revolution - The Terror**: Georges Danton (Jacobin leader), Jean-Paul Marat (radical journalist), Charlotte Corday (Marat's assassin), Louis XVI
+2. **The Crusades**: Saladin vs Richard Lionheart rivalry, Baldwin IV (Leper King of Jerusalem), Balian of Ibelin (defender of Jerusalem)
+3. **Saxon/Danish Collision**: Alfred the Great vs Guthrum - foundation of England
+4. **Renaissance Italy**: Lorenzo de' Medici (Lord of Florence), Leonardo da Vinci (polymath)
+5. **Assassin's Creed Franchise**: Altaïr Ibn-La'Ahad (original assassin, Third Crusade era), Ezio Auditore (Renaissance Italy)
+6. **Classic Historical Fiction**: A Tale of Two Cities (Sydney Carton), The Scarlet Pimpernel (Sir Percy Blakeney)
+7. **Medieval Fiction**: The Last Kingdom (Uhtred of Bebbanburg - Saxon era), The Pillars of the Earth (Jack Jackson), The Name of the Rose (William of Baskerville)
+8. **Crusader Fiction**: Kingdom of Heaven (Ridley Scott's fictionalized Balian)
+
+**KEY RELATIONSHIPS:**
+- Charlotte Corday → Jean-Paul Marat: Assassination (INTERACTED_WITH, Villainous)
+- Sir Percy Blakeney → Georges Danton: Rescuing aristocrats (INTERACTED_WITH, Villainous)
+- Altaïr → Richard Lionheart: Battle of Arsuf interaction (INTERACTED_WITH, Complex)
+- Uhtred → Alfred the Great: Advisor relationship (INTERACTED_WITH, Complex)
+- Ezio Auditore → Leonardo da Vinci: Close ally/gadget maker (INTERACTED_WITH, Heroic)
+- Balian (fictional) → Saladin: Surrender of Jerusalem negotiation (INTERACTED_WITH, Heroic)
+- Sydney Carton → Louis XVI: Terror-era guillotine (INTERACTED_WITH, Complex)
+
+**MEDIA HIGHLIGHTS:**
+- Added Assassin's Creed I & II (game franchise spanning Crusades to Renaissance)
+- Added classic literature: A Tale of Two Cities, The Scarlet Pimpernel
+- Added medieval fiction: The Pillars of the Earth, The Name of the Rose
+- Added Kingdom of Heaven (Ridley Scott film on Crusades)
+
+---
 **TIMESTAMP:** 2026-01-17T19:15:02Z
 **AGENT:** Claude Code (Sonnet 4.5)
 **STATUS:** ✅ COMPLETE
@@ -541,4 +765,45 @@ Built a comprehensive Duplicate Entity Resolver for detecting potential duplicat
   - None (Read-only analysis tool).
 
 **NOTES:**
-The tool generates `merge_proposals.md` at project root with human-reviewable merge proposals. Each cluster shows primary node, duplicate nodes, and specific reasons for matches. Wikidata aliases are fetched in 6 languages (en, la, it, fr, de, es). Designed for quality assurance phase before merging duplicate entities.
+The tool generates `merge_proposals.md` at project root with human-reviewable merge proposals. Each cluster shows primary node, duplicate nodes, and specific reasons for matches. Wikidata aliases are fetched in 6 languages (en, la, it, fr, de, es). Designed for quality assurance phase before merging duplicate entities.---
+**TIMESTAMP:** 2026-01-17T18:34:01Z
+**AGENT:** Gemini
+**STATUS:** ✅ COMPLETE
+
+**SUMMARY:**
+Architected the `CREATED_BY` relationship in the schema and generated a flight plan for its retroactive assignment to existing nodes.
+
+**ARTIFACTS:**
+- **MODIFIED:**
+  - `scripts/schema.py` (Added `Agent` model, `agent_unique` constraint, and `CREATED_BY` relationship type)
+- **CREATED:**
+  - `scripts/migration/migrate_add_created_by.py` (Script for retroactive assignment)
+  - `FLIGHT_PLAN_CREATED_BY.md` (Flight plan for Claude Code)
+- **DB_SCHEMA_CHANGE:**
+  - New `:Agent` node label with `name` uniqueness constraint.
+  - New `CREATED_BY` relationship type.
+
+**NOTES:**
+This establishes critical data provenance, linking all ingested nodes to the AI agent responsible for their creation. The generated `FLIGHT_PLAN_CREATED_BY.md` should be provided to Claude Code for execution.
+---
+**TIMESTAMP:** 2026-01-17T18:36:51Z
+**AGENT:** Claude Code (Sonnet 4.5)
+**STATUS:** ✅ COMPLETE
+
+**SUMMARY:**
+Implemented `CREATED_BY` relationship in the schema and retroactively assigned `CREATED_BY` relationships to existing nodes.
+
+**ARTIFACTS:**
+- **MODIFIED:**
+  - `scripts/schema.py` (Added `Agent` model, `agent_unique` constraint, and `CREATED_BY` relationship type)
+  - `scripts/migration/migrate_add_created_by.py` (Updated to include batches 7-11 and handle dict structure)
+- **CREATED:**
+  - `:Agent` nodes: "Claude Code (Sonnet 4.5)", "Claude Code (Haiku 4.5)"
+  - 299 `CREATED_BY` relationships (141 figures, 77 media, 81 characters)
+- **DB_SCHEMA_CHANGE:**
+  - New `:Agent` node label with `name` uniqueness constraint.
+  - New `CREATED_BY` relationship type.
+
+**NOTES:**
+This migration establishes critical data provenance, linking all ingested nodes to the AI agent responsible for their creation based on `CHRONOS_LOG.md`. Migration successfully processed batches 2-11, creating 2 Agent nodes and 299 CREATED_BY relationships.
+---
