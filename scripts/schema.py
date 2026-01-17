@@ -74,6 +74,30 @@ class Portrayal(BaseModel):
     )
 
 
+class ScholarlyWork(BaseModel):
+    """
+    A scholarly work (academic paper, book, research article).
+    Uses Wikidata Q-ID for canonical entity resolution.
+    """
+    title: str = Field(description="Title of the scholarly work")
+    author: str = Field(description="Author(s) of the work")
+    year: int = Field(description="Year of publication")
+    wikidata_id: str = Field(description="Wikidata Q-ID for entity resolution")
+    isbn: Optional[str] = Field(default=None, description="ISBN identifier if applicable")
+
+
+class FictionalCharacter(BaseModel):
+    """
+    A fictional character that appears in media works.
+    Linked to media works and their creators.
+    """
+    char_id: str = Field(description="Unique identifier for this fictional character")
+    name: str = Field(description="Name of the fictional character")
+    media_id: str = Field(description="Reference to MediaWork.media_id")
+    creator: Optional[str] = Field(default=None, description="Creator/Author of the character")
+    role_type: Optional[str] = Field(default=None, description="Type of role (e.g., 'Protagonist', 'Antagonist', 'Supporting')")
+
+
 # Neo4j Schema Constraints and Indexes
 SCHEMA_CONSTRAINTS = """
 // Master Entity Resolution: Ensure unique historical figures by canonical_id
@@ -88,10 +112,19 @@ FOR (m:MediaWork) REQUIRE m.media_id IS UNIQUE;
 CREATE CONSTRAINT media_wikidata_unique IF NOT EXISTS
 FOR (m:MediaWork) REQUIRE m.wikidata_id IS UNIQUE;
 
+// Ensure unique scholarly works by Wikidata Q-ID
+CREATE CONSTRAINT scholarly_work_wikidata_unique IF NOT EXISTS
+FOR (s:ScholarlyWork) REQUIRE s.wikidata_id IS UNIQUE;
+
+// Ensure unique fictional characters by ID
+CREATE CONSTRAINT fictional_character_unique IF NOT EXISTS
+FOR (c:FictionalCharacter) REQUIRE c.char_id IS UNIQUE;
+
 // Index for efficient lookups
 CREATE INDEX figure_name_idx IF NOT EXISTS FOR (f:HistoricalFigure) ON (f.name);
 CREATE INDEX media_title_idx IF NOT EXISTS FOR (m:MediaWork) ON (m.title);
 CREATE INDEX media_type_idx IF NOT EXISTS FOR (m:MediaWork) ON (m.media_type);
+CREATE INDEX fictional_character_name_idx IF NOT EXISTS FOR (c:FictionalCharacter) ON (c.name);
 """
 
 # Node Labels
@@ -106,4 +139,6 @@ RELATIONSHIP_TYPES = {
     "related_to": "RELATED_TO",       # Figure -> Figure (historical relationships)
     "same_era": "SAME_ERA",           # Figure -> Figure (contemporaries)
     "inspired_by": "INSPIRED_BY",     # Media -> Media (creative influence)
+    "interacted_with": "INTERACTED_WITH",  # Figure -> Figure (historical social connection)
+    "has_scholarly_basis": "HAS_SCHOLARLY_BASIS",  # HistoricalFigure/MediaWork -> ScholarlyWork
 }

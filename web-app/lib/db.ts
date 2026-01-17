@@ -204,6 +204,116 @@ export async function getMediaGraphData(wikidataId: string): Promise<{ nodes: Gr
   }
 }
 
+export async function getConflictingPortrayals() {
+  const session = await getSession();
+  try {
+    const result = await session.run(
+      `MATCH (f:HistoricalFigure)-[r:APPEARS_IN]->(m:MediaWork)
+       WHERE r.conflict_flag = true
+       WITH f, collect({
+         media: m,
+         sentiment: r.sentiment,
+         role_description: r.role_description,
+         conflict_notes: r.conflict_notes,
+         is_protagonist: r.is_protagonist
+       }) as conflicting_portrayals
+       WHERE size(conflicting_portrayals) > 0
+       RETURN f, conflicting_portrayals
+       ORDER BY f.name
+       LIMIT 20`
+    );
+
+    return result.records.map(record => {
+      const figureNode = record.get('f');
+      const portrayals = record.get('conflicting_portrayals');
+
+      return {
+        figure: {
+          canonical_id: figureNode.properties.canonical_id,
+          name: figureNode.properties.name,
+          era: figureNode.properties.era,
+          title: figureNode.properties.title,
+          historicity_status: figureNode.properties.historicity_status || 'Historical',
+        },
+        portrayals: portrayals.map((p: any) => ({
+          media: {
+            media_id: p.media.properties.media_id,
+            title: p.media.properties.title,
+            release_year: p.media.properties.release_year?.toNumber?.() ?? Number(p.media.properties.release_year),
+            media_type: p.media.properties.media_type,
+            creator: p.media.properties.creator,
+            wikidata_id: p.media.properties.wikidata_id,
+          },
+          sentiment: p.sentiment,
+          role_description: p.role_description,
+          conflict_notes: p.conflict_notes,
+          is_protagonist: p.is_protagonist || false,
+        })),
+      };
+    });
+  } finally {
+    await session.close();
+  }
+}
+
+export async function findShortestPath(startId: string, endId: string) {
+  const session = await getSession();
+  try {
+    const result = await session.run(
+      `MATCH (start:HistoricalFigure {canonical_id: $startId}),
+             (end:HistoricalFigure {canonical_id: $endId})
+       MATCH path = shortestPath(
+         (start)-[*..10]-(end)
+       )
+       WHERE ALL(rel IN relationships(path)
+         WHERE type(rel) IN ['INTERACTED_WITH', 'APPEARS_IN'])
+       RETURN path,
+              nodes(path) as path_nodes,
+              relationships(path) as path_rels,
+              length(path) as path_length
+       LIMIT 1`,
+      { startId, endId }
+    );
+
+    const record = result.single();
+    if (!record) return null;
+
+    const pathNodes = record.get('path_nodes');
+    const pathRels = record.get('path_rels');
+    const pathLength = record.get('path_length');
+
+    const nodes = pathNodes.map((node: any) => {
+      const labels = node.labels;
+      const nodeType = labels[0] || 'Unknown';
+      const props = node.properties;
+
+      return {
+        node_type: nodeType,
+        node_id: props.canonical_id || props.media_id || props.char_id,
+        name: props.name || props.title || 'Unknown',
+        properties: props,
+      };
+    });
+
+    const relationships = pathRels.map((rel: any, idx: number) => ({
+      rel_type: rel.type,
+      from_node: nodes[idx].node_id,
+      to_node: nodes[idx + 1].node_id,
+      context: rel.properties.context || rel.properties.sentiment,
+    }));
+
+    return {
+      start_node: startId,
+      end_node: endId,
+      path_length: pathLength,
+      nodes,
+      relationships,
+    };
+  } finally {
+    await session.close();
+  }
+}
+
 export async function getGraphData(canonicalId: string): Promise<{ nodes: GraphNode[]; links: GraphLink[] }> {
   const session = await getSession();
   try {
