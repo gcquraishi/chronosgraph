@@ -4,7 +4,12 @@ import SearchInput from '@/components/SearchInput';
 import ConflictFeed from '@/components/ConflictFeed';
 
 export default async function Dashboard() {
-  const conflicts = await getConflictingPortrayals();
+  let conflicts = [];
+  try {
+    conflicts = await getConflictingPortrayals();
+  } catch (error) {
+    console.error('Failed to fetch conflicts:', error);
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
