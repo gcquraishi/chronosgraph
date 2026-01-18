@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import AuthProvider from "@/components/AuthProvider";
 
 export const metadata: Metadata = {
   title: "ChronosGraph - Historical Figures Across Media",
@@ -16,7 +17,9 @@ export default function RootLayout({
       <body
         className="antialiased bg-background text-foreground"
       >
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
