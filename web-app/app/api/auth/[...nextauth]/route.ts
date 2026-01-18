@@ -36,7 +36,7 @@ async function upsertUserInNeo4j(user: any, account: any, profile: any) {
   }
 }
 
-const { handlers } = NextAuth({
+const { handlers, auth } = NextAuth({
   providers: [
     GitHub({
       clientId: process.env.GITHUB_ID!,
@@ -74,3 +74,4 @@ const { handlers } = NextAuth({
 });
 
 export const { GET, POST } = handlers;
+export { auth };

@@ -5,6 +5,7 @@ import ConflictRadar from '@/components/ConflictRadar';
 import MediaTimeline from '@/components/MediaTimeline';
 import GraphExplorer from '@/components/GraphExplorer';
 import HistoricityBadge from '@/components/HistoricityBadge';
+import AddAppearanceForm from '@/components/AddAppearanceForm';
 import { User } from 'lucide-react';
 
 export default async function FigurePage({
@@ -90,6 +91,11 @@ export default async function FigurePage({
                 )}
               </div>
             </div>
+          </div>
+
+          {/* Contribution Form */}
+          <div className="mt-8">
+            <AddAppearanceForm figureId={figure.canonical_id} />
           </div>
 
           {/* Media Timeline */}
