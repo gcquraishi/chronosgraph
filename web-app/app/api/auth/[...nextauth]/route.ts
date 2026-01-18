@@ -1,6 +1,7 @@
 // file: web-app/app/api/auth/[...nextauth]/route.ts
 import NextAuth from 'next-auth';
 import GitHub from 'next-auth/providers/github';
+import Google from 'next-auth/providers/google';
 import { getDriver } from '@/lib/neo4j';
 
 async function upsertUserInNeo4j(user: any, account: any, profile: any) {
@@ -8,6 +9,22 @@ async function upsertUserInNeo4j(user: any, account: any, profile: any) {
   const session = driver.session();
 
   try {
+    const params: any = {
+      provider: account.provider,
+      providerId: account.providerAccountId,
+      email: user.email,
+      name: user.name,
+      image: user.image,
+      updated_at: new Date().toISOString(),
+    };
+
+    // Add provider-specific fields
+    if (account.provider === 'github') {
+      params.github_username = profile?.login;
+    } else if (account.provider === 'google') {
+      params.google_email = profile?.email;
+    }
+
     await session.run(
       `
       MERGE (u:User {provider: $provider, providerId: $providerId})
@@ -16,16 +33,14 @@ async function upsertUserInNeo4j(user: any, account: any, profile: any) {
           u.name = $name,
           u.image = $image,
           u.github_username = $github_username,
+          u.google_email = $google_email,
           u.updated_at = datetime()
       RETURN u
       `,
       {
-        provider: account.provider,
-        providerId: account.providerAccountId,
-        email: user.email,
-        name: user.name || profile?.login,
-        image: user.image,
-        github_username: profile?.login,
+        ...params,
+        github_username: params.github_username || null,
+        google_email: params.google_email || null,
       }
     );
     console.log('✅ User stored in Neo4j:', user.email);
@@ -41,6 +56,10 @@ const { handlers, auth } = NextAuth({
     GitHub({
       clientId: process.env.GITHUB_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
+    }),
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
   session: {

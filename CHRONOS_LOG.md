@@ -1,4 +1,67 @@
 ---
+**TIMESTAMP:** 2026-01-18T06:45:00Z
+**AGENT:** Claude Code (Sonnet 4.5)
+**STATUS:** ✅ COMPLETE
+
+**SUMMARY:**
+Added Google OAuth provider to NextAuth authentication system (Pillar 1 Enhancement). Users can now sign in with either GitHub or Google accounts.
+
+**ARTIFACTS:**
+- **CREATED:**
+  - None
+- **MODIFIED:**
+  - `web-app/app/api/auth/[...nextauth]/route.ts` (Added Google provider import and configuration; updated upsertUserInNeo4j to handle both GitHub and Google profiles)
+  - `web-app/.env.local` (Added GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET placeholder environment variables)
+- **DELETED:**
+  - None
+- **DB_SCHEMA_CHANGE:**
+  - Modified :User node schema to include google_email property (optional)
+
+**AUTHENTICATION ENHANCEMENTS:**
+- **Providers**: Now supports both GitHub OAuth and Google OAuth
+- **User Storage**: Enhanced `upsertUserInNeo4j()` to handle provider-specific fields
+  - GitHub users: Stores github_username from profile.login
+  - Google users: Stores google_email from profile.email
+- **Schema Update**: User nodes now support dual OAuth provider data
+
+**USER NODE SCHEMA (UPDATED):**
+```cypher
+(:User {
+  provider: "github" | "google",
+  providerId: "...",
+  email: "...",
+  name: "...",
+  image: "...",
+  github_username: "..." | null,
+  google_email: "..." | null,
+  created_at: datetime(),
+  updated_at: datetime()
+})
+```
+
+**SETUP REQUIREMENTS:**
+To complete Google OAuth setup, obtain credentials from Google Cloud Console:
+1. Create OAuth 2.0 Client ID at https://console.cloud.google.com/
+2. Configure authorized redirect URIs:
+   - Local: `http://localhost:3000/api/auth/callback/google`
+   - Production: `https://chronosgraph.vercel.app/api/auth/callback/google`
+3. Update `web-app/.env.local` with actual Client ID and Client Secret
+4. Add same credentials to Vercel environment variables for production
+
+**IMPLEMENTATION DETAILS:**
+- Google provider uses next-auth/providers/google (already included in next-auth package)
+- No additional npm dependencies required
+- Maintains same JWT session strategy as existing GitHub OAuth
+- Backwards compatible with existing GitHub-authenticated users
+- Provider-specific fields are nullable to support both providers
+
+**FLIGHT PLAN STATUS:**
+✅ **Pillar 1: User Authentication** - ENHANCED (GitHub + Google OAuth)
+
+**NOTES:**
+Dual OAuth provider support improves accessibility and user choice. The implementation follows NextAuth.js best practices for multi-provider authentication. Environment variables are placeholders pending Google Cloud Console configuration by user.
+
+---
 **TIMESTAMP:** 2026-01-18T05:30:00Z
 **AGENT:** Claude Code (Sonnet 4.5)
 **STATUS:** ✅ COMPLETE

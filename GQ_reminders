@@ -10,3 +10,22 @@ Run the local/dev environment
 
 Redeploy
     vercel --prod
+
+
+Next steps for Google OAuth:
+                                                                                        
+  To complete the setup, you need to create Google OAuth credentials:                      
+                                                                                           
+  1. Go to https://console.cloud.google.com/                                               
+  2. Create a new project or select an existing one                                        
+  3. Enable the Google+ API (or Identity Toolkit API)                                      
+  4. Go to Credentials → Create Credentials → OAuth 2.0 Client ID                          
+  5. Configure the OAuth consent screen if prompted                                        
+  6. For Application type, select Web application                                          
+  7. Add these Authorized redirect URIs:                                                   
+    - http://localhost:3000/api/auth/callback/google (for local dev)                       
+    - https://yourdomain.com/api/auth/callback/google (for production)                     
+  8. Copy the Client ID and Client Secret                                                  
+  9. Update web-app/.env.local:                                                            
+    - Replace YOUR_GOOGLE_CLIENT_ID_HERE with your Client ID                               
+    - Replace YOUR_GOOGLE_CLIENT_SECRET_HERE with your Client Secret 
