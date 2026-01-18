@@ -3,6 +3,14 @@ import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/lib/neo4j';
 import { auth } from '@/app/api/auth/[...nextauth]/route';
+import { isInt } from 'neo4j-driver';
+
+function toNumber(value: any): number {
+  if (isInt(value)) {
+    return value.toNumber();
+  }
+  return Number(value);
+}
 
 function generateMediaId(title: string, year: number): string {
   // Create a slug-based ID: lowercase, replace spaces with hyphens, remove special chars
@@ -58,7 +66,7 @@ export async function POST(request: NextRequest) {
           existingMedia: {
             media_id: existing.get('media_id'),
             title: existing.get('title'),
-            year: existing.get('year')?.toNumber() ?? existing.get('year'),
+            year: toNumber(existing.get('year')),
           }
         },
         { status: 409 }
@@ -98,7 +106,7 @@ export async function POST(request: NextRequest) {
     const newMedia = {
       media_id: record.get('media_id'),
       title: record.get('title'),
-      year: record.get('year')?.toNumber() ?? record.get('year'),
+      year: toNumber(record.get('year')),
     };
 
     return NextResponse.json({ media: newMedia }, { status: 201 });

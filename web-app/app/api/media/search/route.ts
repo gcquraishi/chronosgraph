@@ -2,6 +2,14 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/lib/neo4j';
+import { isInt } from 'neo4j-driver';
+
+function toNumber(value: any): number {
+  if (isInt(value)) {
+    return value.toNumber();
+  }
+  return Number(value);
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -24,7 +32,7 @@ export async function GET(request: NextRequest) {
     const works = result.records.map((record) => ({
       media_id: record.get('media_id'),
       title: record.get('title'),
-      year: record.get('year')?.toNumber() ?? record.get('year'),
+      year: toNumber(record.get('year')),
     }));
 
     return NextResponse.json({ works });
