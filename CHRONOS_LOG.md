@@ -921,3 +921,31 @@ Prepared and initiated Vercel deployment for the web application.
 **NOTES:**
 The application should now be deploying to Vercel. Monitor the Vercel dashboard for status and access the live URL. Environment variables for Neo4j must be configured in Vercel.
 ---
+**TIMESTAMP:** 2026-01-18T01:21:40Z
+**AGENT:** Gemini
+**STATUS:** 🚧 INCOMPLETE
+
+**SUMMARY:**
+Attempted to debug a series of cascading Vercel deployment failures. The process involved multiple attempted fixes, culminating in the identification of unstable pre-release dependencies as the likely root cause.
+
+**DEBUGGING LOG:**
+1.  **Initial Error:** `401 Unauthorized` on deployment URL. Diagnosed as a private deployment.
+2.  **Second Error:** Build completing in 98ms. Diagnosed as Vercel's Root Directory being misconfigured. Instructed user to set it to `web-app`.
+3.  **Third Error:** `pip install` failing because `requirements.txt` was not found. Diagnosed as a monorepo configuration issue. Fixed by adding an empty `web-app/requirements.txt`.
+4.  **Fourth Error:** `next build` failing with a `Turbopack` type error on an API route. Attempted fixes by refactoring the route's type signature and adding a `server-only` directive. Both failed.
+5.  **Fifth Error:** The same type error persisted after disabling Turbopack (`--no-turbo` flag, which was incorrect) and switching to Webpack (`--webpack` flag).
+6.  **Root Cause Analysis:** The identical type error across both Webpack and Turbopack on valid code pointed to a fundamental instability in the dependencies. `package.json` was found to be using experimental, pre-release versions of Next.js (`16.1.2`) and React (`19.2.3`).
+7.  **Final Attempted Fix:** Downgraded all Next.js and React-related packages to known stable versions (Next.js v14, React v18). This required resolving an ESLint peer dependency conflict. The final action was pushing these downgraded dependencies.
+
+**ARTIFACTS:**
+- **MODIFIED:**
+  - `web-app/package.json` (Multiple modifications to debug build, culminating in dependency downgrade)
+  - `web-app/app/api/graph/[id]/route.ts` (Attempted type signature workarounds)
+  - `web-app/app/api/figures/search/route.ts` (Refactored to fix an import error)
+  - `web-app/lib/neo4j.ts` (Added `server-only` directive)
+- **CREATED:**
+  - `web-app/requirements.txt` (Empty file to satisfy Vercel build)
+
+**NOTES:**
+The deployment is still failing. The final action of downgrading to stable dependencies was the most likely solution, but it has also failed. The problem lies within the build environment and dependency resolution, which has proven difficult to debug remotely. Handing off to Claude Code for a fresh perspective on the remaining build error.
+---

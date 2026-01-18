@@ -275,7 +275,7 @@ export async function findShortestPath(startId: string, endId: string) {
       { startId, endId }
     );
 
-    const record = result.single();
+    const record = result.records[0];
     if (!record) return null;
 
     const pathNodes = record.get('path_nodes');

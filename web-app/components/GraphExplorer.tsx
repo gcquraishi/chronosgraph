@@ -10,7 +10,9 @@ const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
 });
 
 interface GraphExplorerProps {
-  canonicalId: string;
+  canonicalId?: string;
+  nodes?: GraphNode[];
+  links?: GraphLink[];
 }
 
 const SENTIMENT_COLORS = {
@@ -19,18 +21,31 @@ const SENTIMENT_COLORS = {
   Complex: '#eab308',
 };
 
-export default function GraphExplorer({ canonicalId }: GraphExplorerProps) {
+export default function GraphExplorer({ canonicalId, nodes: initialNodes, links: initialLinks }: GraphExplorerProps) {
   const router = useRouter();
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
-  const [nodes, setNodes] = useState<GraphNode[]>([]);
-  const [links, setLinks] = useState<GraphLink[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [nodes, setNodes] = useState<GraphNode[]>(initialNodes || []);
+  const [links, setLinks] = useState<GraphLink[]>(initialLinks || []);
+  const [isLoading, setIsLoading] = useState(!initialNodes && !initialLinks);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Fetch graph data on mount
+  // Fetch graph data on mount if not provided
   useEffect(() => {
+    if (initialNodes && initialLinks) {
+      setNodes(initialNodes);
+      setLinks(initialLinks);
+      setIsLoading(false);
+      return;
+    }
+
+    if (!canonicalId) {
+      setError('No canonical ID or graph data provided');
+      setIsLoading(false);
+      return;
+    }
+
     const fetchGraphData = async () => {
       setIsLoading(true);
       setError(null);
@@ -57,7 +72,7 @@ export default function GraphExplorer({ canonicalId }: GraphExplorerProps) {
     };
 
     fetchGraphData();
-  }, [canonicalId]);
+  }, [canonicalId, initialNodes, initialLinks]);
 
   // Handle responsive dimensions
   useEffect(() => {

@@ -1,6 +1,6 @@
 'use client';
 
-import { FigureDossier, DetailedPortrayal, ScholarlyWork } from '@/lib/types';
+import type { FigureDossier, DetailedPortrayal, ScholarlyWork } from '@/lib/types';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { Calendar, Award, Clock, BookOpen, Film, Gamepad2, Tv, AlertTriangle, ExternalLink } from 'lucide-react';
 
