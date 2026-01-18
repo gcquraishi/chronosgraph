@@ -1,19 +1,37 @@
 // file: web-app/app/api/auth/[...nextauth]/route.ts
 import NextAuth from 'next-auth';
 import GitHub from 'next-auth/providers/github';
-import { Neo4jAdapter } from '@auth/neo4j-adapter';
-import { getDriver } from '@/lib/neo4j';
-
-const driver = getDriver();
 
 const { handlers } = NextAuth({
   providers: [
     GitHub({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
+      clientId: process.env.GITHUB_ID!,
+      clientSecret: process.env.GITHUB_SECRET!,
     }),
   ],
-  adapter: Neo4jAdapter(driver),
+  session: {
+    strategy: 'jwt',
+  },
+  debug: true,
+  callbacks: {
+    async signIn({ user, account, profile }) {
+      console.log('Sign in callback:', { user, account, profile });
+      // TODO: Store user in Neo4j here manually
+      return true;
+    },
+    async jwt({ token, user, account }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+      }
+      return session;
+    },
+  },
 });
 
 export const { GET, POST } = handlers;
