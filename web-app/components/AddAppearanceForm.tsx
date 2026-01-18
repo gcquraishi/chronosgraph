@@ -33,6 +33,7 @@ export default function AddAppearanceForm({ figureId }: { figureId: string }) {
   const [sentiment, setSentiment] = useState('Complex');
   const [roleDescription, setRoleDescription] = useState('');
   const [isProtagonist, setIsProtagonist] = useState(false);
+  const [actorName, setActorName] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   // Series support state
@@ -140,6 +141,7 @@ export default function AddAppearanceForm({ figureId }: { figureId: string }) {
                 sentiment,
                 roleDescription,
                 isProtagonist,
+                actorName: actorName || null,
             }),
         });
 
@@ -420,6 +422,18 @@ export default function AddAppearanceForm({ figureId }: { figureId: string }) {
         <textarea id="role" value={roleDescription} onChange={e => setRoleDescription(e.target.value)}
           className="mt-1 w-full bg-gray-900 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white"
           rows={3} placeholder="Describe the figure's role in this work..."/>
+      </div>
+
+      <div>
+        <label htmlFor="actor-name" className="block text-sm font-medium text-gray-300">Actor Name (optional)</label>
+        <input
+          id="actor-name"
+          type="text"
+          value={actorName}
+          onChange={e => setActorName(e.target.value)}
+          className="mt-1 w-full bg-gray-900 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white"
+          placeholder="e.g., Joaquin Phoenix"
+        />
       </div>
 
       <div className="flex items-center">

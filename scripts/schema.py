@@ -69,6 +69,7 @@ class Portrayal(BaseModel):
     sentiment: Sentiment = Field(description="How the figure is portrayed")
     role_description: Optional[str] = Field(default=None, description="Character's role in the work")
     is_protagonist: bool = Field(default=False, description="Whether figure is a main character")
+    actor_name: Optional[str] = Field(default=None, description="Name of the actor portraying the figure")
     conflict_flag: bool = Field(
         default=False,
         description="True if this portrayal conflicts with other media portrayals"

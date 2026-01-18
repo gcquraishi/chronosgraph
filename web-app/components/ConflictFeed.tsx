@@ -73,20 +73,20 @@ export default function ConflictFeed({ conflicts }: ConflictFeedProps) {
   return (
     <div className="space-y-8">
       {/* Six Degrees Search Bar */}
-      <div className="bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-blue-700/50 rounded-lg p-6">
+      <div className="bg-white border border-brand-primary/30 rounded-lg p-6 shadow-sm">
         <div className="flex items-center gap-2 mb-4">
-          <TrendingUp className="w-6 h-6 text-blue-400" />
-          <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+          <TrendingUp className="w-6 h-6 text-brand-primary" />
+          <h2 className="text-2xl font-bold text-brand-primary">
             Six Degrees of Historiography
           </h2>
         </div>
-        <p className="text-gray-400 text-sm mb-4">
+        <p className="text-brand-text/70 text-sm mb-4">
           Discover unexpected connections between historical figures through media portrayals and historical interactions
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-brand-text mb-2">
               Start Figure
             </label>
             <FigureSearchInput
@@ -100,7 +100,7 @@ export default function ConflictFeed({ conflicts }: ConflictFeedProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-brand-text mb-2">
               End Figure
             </label>
             <FigureSearchInput
@@ -117,7 +117,7 @@ export default function ConflictFeed({ conflicts }: ConflictFeedProps) {
             <button
               onClick={handlePathSearch}
               disabled={isPending || !searchStart || !searchEnd}
-              className="w-full px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+              className="w-full px-6 py-2 bg-brand-accent hover:bg-brand-accent/90 disabled:bg-brand-primary/30 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm"
             >
               <Search className="w-4 h-4" />
               {isPending ? 'Searching...' : 'Find Path'}
@@ -127,7 +127,7 @@ export default function ConflictFeed({ conflicts }: ConflictFeedProps) {
 
         {/* Path Results */}
         {pathError && (
-          <div className="mt-4 p-4 bg-red-900/20 border border-red-700/50 rounded-lg text-red-400 text-sm">
+          <div className="mt-4 p-4 bg-brand-accent/10 border border-brand-accent/30 rounded-lg text-brand-accent text-sm">
             {pathError}
           </div>
         )}
@@ -140,10 +140,10 @@ export default function ConflictFeed({ conflicts }: ConflictFeedProps) {
       {/* Conflict Feed */}
       <div>
         <div className="flex items-center gap-2 mb-6">
-          <AlertTriangle className="w-6 h-6 text-orange-400" />
+          <AlertTriangle className="w-6 h-6 text-brand-accent" />
           <h2 className="text-2xl font-bold">Characterization Conflicts</h2>
         </div>
-        <p className="text-gray-400 text-sm mb-6">
+        <p className="text-brand-text/70 text-sm mb-6">
           Historical figures portrayed differently across media works, highlighting narrative disagreements
         </p>
 

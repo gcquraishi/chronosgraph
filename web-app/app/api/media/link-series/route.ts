@@ -2,7 +2,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/lib/neo4j';
-import { auth } from '@/app/api/auth/[...nextauth]/route';
+import { auth } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   const session = await auth();

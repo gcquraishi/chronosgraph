@@ -2,7 +2,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/lib/neo4j';
-import { auth } from '@/app/api/auth/[...nextauth]/route'; // Import auth from our handler
+import { auth } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   const session = await auth(); // Get the server-side session
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { figureId, mediaId, sentiment, roleDescription, isProtagonist } = body;
+    const { figureId, mediaId, sentiment, roleDescription, isProtagonist, actorName } = body;
 
     if (!figureId || !mediaId) {
       return NextResponse.json({ error: 'Figure ID and Media ID are required' }, { status: 400 });
@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
         r.sentiment = $sentiment,
         r.role_description = $roleDescription,
         r.is_protagonist = $isProtagonist,
+        r.actor_name = $actorName,
         r.created_at = timestamp(),
         r.created_by = u.email,
         r.created_by_name = u.name
@@ -36,6 +37,7 @@ export async function POST(request: NextRequest) {
         r.sentiment = $sentiment,
         r.role_description = $roleDescription,
         r.is_protagonist = $isProtagonist,
+        r.actor_name = $actorName,
         r.updated_at = timestamp(),
         r.updated_by = u.email,
         r.updated_by_name = u.name
@@ -49,6 +51,7 @@ export async function POST(request: NextRequest) {
       sentiment,
       roleDescription,
       isProtagonist,
+      actorName: actorName || null,
     });
 
     await dbSession.close();

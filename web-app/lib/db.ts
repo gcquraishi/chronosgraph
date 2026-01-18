@@ -299,6 +299,102 @@ export async function getConflictingPortrayals() {
   }
 }
 
+export async function getLandingGraphData(): Promise<{ nodes: GraphNode[]; links: GraphLink[] }> {
+  const session = await getSession();
+  try {
+    // Find 20 figures with conflict flags and all their media connections
+    const result = await session.run(
+      `MATCH (f:HistoricalFigure)-[r:APPEARS_IN]->(m:MediaWork)
+       WHERE r.conflict_flag = true
+       WITH DISTINCT f
+       LIMIT 20
+       MATCH (f)-[r2:APPEARS_IN]->(m2:MediaWork)
+       OPTIONAL MATCH (f)-[i:INTERACTED_WITH]-(other:HistoricalFigure)
+       RETURN f,
+              collect(DISTINCT {media: m2, sentiment: r2.sentiment}) as media_connections,
+              collect(DISTINCT other) as connected_figures`
+    );
+
+    const nodes: GraphNode[] = [];
+    const links: GraphLink[] = [];
+    const nodeIds = new Set<string>();
+
+    result.records.forEach(record => {
+      const figureNode = record.get('f');
+      const mediaConnections = record.get('media_connections');
+      const connectedFigures = record.get('connected_figures').filter((f: any) => f !== null);
+
+      const figureId = `figure-${figureNode.properties.canonical_id}`;
+
+      // Add figure node if not already added
+      if (!nodeIds.has(figureId)) {
+        nodes.push({
+          id: figureId,
+          name: figureNode.properties.name,
+          type: 'figure',
+        });
+        nodeIds.add(figureId);
+      }
+
+      // Add media nodes and links
+      mediaConnections.forEach((conn: any) => {
+        if (conn.media) {
+          const mediaId = `media-${conn.media.properties.wikidata_id}`;
+
+          if (!nodeIds.has(mediaId)) {
+            nodes.push({
+              id: mediaId,
+              name: conn.media.properties.title,
+              type: 'media',
+              sentiment: conn.sentiment || 'Complex',
+            });
+            nodeIds.add(mediaId);
+          }
+
+          links.push({
+            source: figureId,
+            target: mediaId,
+            sentiment: conn.sentiment || 'Complex',
+          });
+        }
+      });
+
+      // Add connected figures and interaction links
+      connectedFigures.forEach((otherFigure: any) => {
+        const otherId = `figure-${otherFigure.properties.canonical_id}`;
+
+        if (!nodeIds.has(otherId)) {
+          nodes.push({
+            id: otherId,
+            name: otherFigure.properties.name,
+            type: 'figure',
+          });
+          nodeIds.add(otherId);
+        }
+
+        // Add interaction link (avoid duplicates by checking both directions)
+        const linkExists = links.some(
+          link =>
+            (link.source === figureId && link.target === otherId) ||
+            (link.source === otherId && link.target === figureId)
+        );
+
+        if (!linkExists) {
+          links.push({
+            source: figureId,
+            target: otherId,
+            sentiment: 'Complex',
+          });
+        }
+      });
+    });
+
+    return { nodes, links };
+  } finally {
+    await session.close();
+  }
+}
+
 export async function findShortestPath(startId: string, endId: string) {
   const session = await getSession();
   try {
