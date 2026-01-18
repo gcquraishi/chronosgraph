@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSession } from '@/lib/db';
+import { searchFigures } from '@/lib/db';
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,29 +10,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ figures: [] });
     }
 
-    const session = await getSession();
+    const figures = await searchFigures(query);
 
-    try {
-      // Search for historical figures by name (case-insensitive, partial match)
-      const result = await session.run(
-        `MATCH (f:HistoricalFigure)
-         WHERE toLower(f.name) CONTAINS toLower($query)
-         RETURN f.canonical_id as canonical_id, f.name as name, f.era as era
-         ORDER BY f.name
-         LIMIT 10`,
-        { query: query.trim() }
-      );
-
-      const figures = result.records.map(record => ({
-        canonical_id: record.get('canonical_id'),
-        name: record.get('name'),
-        era: record.get('era'),
-      }));
-
-      return NextResponse.json({ figures });
-    } finally {
-      await session.close();
-    }
+    return NextResponse.json({ figures });
   } catch (error) {
     console.error('Error searching figures:', error);
     return NextResponse.json(
