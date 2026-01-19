@@ -17,7 +17,8 @@ import {
   Users,
   Eye,
   GitBranch,
-  Network
+  Network,
+  BookMarked
 } from 'lucide-react';
 
 export default function Navbar() {
@@ -152,6 +153,14 @@ export default function Navbar() {
                   >
                     <Network className="w-4 h-4" />
                     <span>Graph Explorer</span>
+                  </Link>
+                  <Link
+                    href="/series"
+                    className="flex items-center gap-3 px-4 py-2 text-brand-text hover:bg-brand-primary/5 transition-colors"
+                    onClick={() => setAnalyzeOpen(false)}
+                  >
+                    <BookMarked className="w-4 h-4" />
+                    <span>Browse Series</span>
                   </Link>
                 </div>
               )}
@@ -297,6 +306,14 @@ export default function Navbar() {
                 >
                   <Network className="w-4 h-4" />
                   <span>Graph Explorer</span>
+                </Link>
+                <Link
+                  href="/series"
+                  className="flex items-center gap-3 py-2 text-brand-text hover:text-brand-accent transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <BookMarked className="w-4 h-4" />
+                  <span>Browse Series</span>
                 </Link>
               </div>
             </div>

@@ -29,9 +29,9 @@ const SENTIMENT_COLORS = {
 const BACON_COLOR = '#dc2626'; // Red for Bacon nodes
 const BACON_SIZE = 1.5; // Scale multiplier for Bacon nodes
 
-// Helper function to check if a node is a Bacon
+// Helper function to check if a node is a Bacon (person, not media work about Bacon)
 const isBaconNode = (nodeId: string): boolean => {
-  return nodeId.includes('bacon');
+  return (nodeId.includes('bacon') && !nodeId.startsWith('media-'));
 };
 
 export default function GraphExplorer({ canonicalId, nodes: initialNodes, links: initialLinks }: GraphExplorerProps) {
@@ -43,7 +43,9 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
-  const [showAllEdges, setShowAllEdges] = useState(false);
+  const [showAllEdges, setShowAllEdges] = useState(true);
+  const [showAcademicWorks, setShowAcademicWorks] = useState(false);
+  const [showReferenceWorks, setShowReferenceWorks] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Fetch graph data on mount if not provided
@@ -104,23 +106,63 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
-  // Filter links based on featured path and expanded nodes
+  // Filter nodes based on media category
+  const visibleNodes = nodes.filter((node: GraphNode) => {
+    // Always show figure nodes
+    if (node.type === 'figure') return true;
+
+    // For media nodes, check category filters
+    if (node.type === 'media') {
+      // Default to 'primary' if no category specified
+      const category = node.mediaCategory || 'primary';
+
+      if (category === 'primary') return true;
+      if (category === 'academic') return showAcademicWorks;
+      if (category === 'reference') return showReferenceWorks;
+    }
+
+    return true;
+  });
+
+  // Create a set of visible node IDs for link filtering
+  const visibleNodeIds = new Set(visibleNodes.map(n => n.id));
+
+  // Filter links based on featured path, expanded nodes, and visible nodes
   const visibleLinks = links.filter((link: any) => {
+    // Handle both string IDs and object references (force-graph modifies links after first render)
+    const source = typeof link.source === 'object' ? link.source.id : link.source;
+    const target = typeof link.target === 'object' ? link.target.id : link.target;
+
+    // Check if this is a featured path link
+    const isFeatured = !!link.featured;
+
+    // Only show links where both nodes are visible (but allow featured links through)
+    const bothNodesVisible = visibleNodeIds.has(source) && visibleNodeIds.has(target);
+    if (!bothNodesVisible && !isFeatured) {
+      return false;
+    }
+
     // Always show featured links
-    if (link.featured === true) return true;
+    if (isFeatured) return true;
 
     // Show non-featured links if all edges are shown
     if (showAllEdges) return true;
 
     // Show links connected to expanded nodes
-    const source = link.source ? String(link.source) : '';
-    const target = link.target ? String(link.target) : '';
     if (expandedNodes.has(source) || expandedNodes.has(target)) {
       return true;
     }
 
     return false;
   });
+
+  // Clone links to ensure fresh data for force-graph (it mutates the objects)
+  const graphLinks = visibleLinks.map(link => ({
+    source: typeof link.source === 'object' ? link.source.id : link.source,
+    target: typeof link.target === 'object' ? link.target.id : link.target,
+    sentiment: link.sentiment,
+    featured: link.featured,
+  }));
 
   // Handle node click
   const handleNodeClick = (node: any) => {
@@ -194,18 +236,44 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
   return (
     <div className="relative">
       {/* Minimal Controls Overlay */}
-      <div className="absolute top-4 right-4 z-10 flex gap-2">
-        <button
-          onClick={() => setShowAllEdges(!showAllEdges)}
-          className={`px-4 py-2 rounded-lg text-sm font-medium shadow-lg transition-all ${
-            showAllEdges
-              ? 'bg-blue-600 text-white'
-              : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-          }`}
-          title={showAllEdges ? 'Hide non-path connections' : 'Show all connections'}
-        >
-          {showAllEdges ? 'Hide Extra' : 'Show All'}
-        </button>
+      <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowAllEdges(!showAllEdges)}
+            className={`px-4 py-2 rounded-lg text-sm font-medium shadow-lg transition-all ${
+              showAllEdges
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+            }`}
+            title={showAllEdges ? 'Hide non-path connections' : 'Show all connections'}
+          >
+            {showAllEdges ? 'Hide Extra' : 'Show All'}
+          </button>
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowAcademicWorks(!showAcademicWorks)}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium shadow-lg transition-all ${
+              showAcademicWorks
+                ? 'bg-purple-600 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+            }`}
+            title={showAcademicWorks ? 'Hide academic works (biographies, essays, documentaries)' : 'Show academic works'}
+          >
+            📚 Academic
+          </button>
+          <button
+            onClick={() => setShowReferenceWorks(!showReferenceWorks)}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium shadow-lg transition-all ${
+              showReferenceWorks
+                ? 'bg-amber-600 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+            }`}
+            title={showReferenceWorks ? 'Hide reference materials (encyclopedias, databases)' : 'Show reference materials'}
+          >
+            📖 Reference
+          </button>
+        </div>
       </div>
 
       {/* Inline Legend - Bottom Left */}
@@ -236,7 +304,8 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
       {/* Full-Bleed Graph */}
       <div ref={containerRef} className="bg-gray-50 overflow-hidden cursor-grab active:cursor-grabbing" style={{ minHeight: dimensions.height }}>
         <ForceGraph2D
-          graphData={{ nodes, links: visibleLinks }}
+          key={`${showAllEdges}-${showAcademicWorks}-${showReferenceWorks}-${visibleLinks.length}`}
+          graphData={{ nodes: visibleNodes, links: graphLinks }}
           width={dimensions.width}
           height={dimensions.height}
           nodeLabel="name"

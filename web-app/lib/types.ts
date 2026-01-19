@@ -10,6 +10,10 @@ export interface MediaWork {
   title: string;
   release_year: number;
   wikidata_id?: string;
+  publisher?: string;
+  translator?: string;
+  channel?: string;
+  production_studio?: string;
 }
 
 export interface Portrayal {
@@ -27,11 +31,14 @@ export interface SentimentDistribution {
   Complex: number;
 }
 
+export type MediaCategory = 'primary' | 'academic' | 'reference';
+
 export interface GraphNode {
   id: string;
   name: string;
   type: 'figure' | 'media';
   sentiment?: 'Heroic' | 'Villainous' | 'Complex';
+  mediaCategory?: MediaCategory; // Only applicable to media nodes
 }
 
 export interface GraphLink {
@@ -142,5 +149,31 @@ export interface MediaWorkWithSeries extends MediaWork {
     season_number?: number;
     episode_number?: number;
     relationship_type: string;
+  };
+}
+
+export interface CharacterAppearance {
+  canonical_id: string;
+  name: string;
+  appearances: number;
+  works: number[];
+}
+
+export interface SeriesMetadata {
+  series: MediaWork & {
+    media_id: string;
+    media_type: string;
+    creator?: string;
+  };
+  works: SeriesRelationship[];
+  characters: {
+    total: number;
+    roster: CharacterAppearance[];
+    matrix: Record<string, number[]>;
+  };
+  stats: {
+    yearRange: [number, number];
+    avgCharactersPerWork: number;
+    totalInteractions: number;
   };
 }

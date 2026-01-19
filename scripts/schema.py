@@ -57,6 +57,10 @@ class MediaWork(BaseModel):
     media_type: MediaType = Field(description="Type of media")
     release_year: Optional[int] = Field(default=None, description="Year of release")
     creator: Optional[str] = Field(default=None, description="Creator/Director/Author")
+    publisher: Optional[str] = Field(default=None, description="Publisher (for books)")
+    translator: Optional[str] = Field(default=None, description="Translator (for translated works)")
+    channel: Optional[str] = Field(default=None, description="Channel/Network (for TV)")
+    production_studio: Optional[str] = Field(default=None, description="Production studio (for film/TV)")
 
 
 class Portrayal(BaseModel):

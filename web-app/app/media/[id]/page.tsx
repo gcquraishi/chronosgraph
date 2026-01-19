@@ -54,6 +54,39 @@ export default async function MediaPage({
             </div>
           </div>
 
+          {/* Media Details Section */}
+          {(media.publisher || media.translator || media.channel || media.production_studio) && (
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-8">
+              <h2 className="text-xl font-semibold text-white mb-4">Media Details</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {media.publisher && (
+                  <div>
+                    <p className="text-sm text-gray-400 mb-1">Publisher</p>
+                    <p className="text-white font-medium">{media.publisher}</p>
+                  </div>
+                )}
+                {media.translator && (
+                  <div>
+                    <p className="text-sm text-gray-400 mb-1">Translator</p>
+                    <p className="text-white font-medium">{media.translator}</p>
+                  </div>
+                )}
+                {media.channel && (
+                  <div>
+                    <p className="text-sm text-gray-400 mb-1">Channel</p>
+                    <p className="text-white font-medium">{media.channel}</p>
+                  </div>
+                )}
+                {media.production_studio && (
+                  <div>
+                    <p className="text-sm text-gray-400 mb-1">Production Studio</p>
+                    <p className="text-white font-medium">{media.production_studio}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Series Hierarchy Section */}
           {(media.parent_series || (media.child_works && media.child_works.length > 0)) && (
             <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-8">

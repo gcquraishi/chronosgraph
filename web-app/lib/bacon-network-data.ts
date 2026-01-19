@@ -3,13 +3,19 @@
 
 import { GraphNode, GraphLink } from './types';
 
-// Featured path highlighting - elegant cross-media journey through the Bacons
-// Kevin Bacon (actor) → Love Is the Devil → Francis Bacon (painter) → Francis Bacon (statesman)
+// Featured path highlighting - demonstrating "Six Degrees" concept across 4 centuries
+// ChronosGraph connects historical figures through ALL media: films, novels, plays,
+// paintings, board games, TV series, poems, and more
+// Path: Kevin Bacon → Francis Bacon (statesman, 1561-1626)
 const FEATURED_PATH_IDS = [
   'actor-kevin-bacon',
-  'media-love-is-the-devil',
-  'figure-francis-bacon-painter',
-  'media-bacon-namesake',
+  'media-jfk',
+  'actor-jack-lemmon',
+  'media-hamlet',
+  'actor-derek-jacobi',
+  'media-elizabeth-r',
+  'figure-elizabeth-i',
+  'media-anonymous',
   'figure-francis-bacon-statesman',
 ];
 
@@ -70,6 +76,7 @@ export function getBaconNetworkData(): { nodes: GraphNode[]; links: GraphLink[] 
     name: 'JFK (1991)',
     type: 'media',
     sentiment: 'Complex',
+    mediaCategory: 'primary',
   };
 
   const hamlet: GraphNode = {
@@ -77,6 +84,7 @@ export function getBaconNetworkData(): { nodes: GraphNode[]; links: GraphLink[] 
     name: 'Hamlet (1996)',
     type: 'media',
     sentiment: 'Complex',
+    mediaCategory: 'primary',
   };
 
   const loveIsTheDevil: GraphNode = {
@@ -84,6 +92,7 @@ export function getBaconNetworkData(): { nodes: GraphNode[]; links: GraphLink[] 
     name: 'Love Is the Devil (1998)',
     type: 'media',
     sentiment: 'Complex',
+    mediaCategory: 'primary',
   };
 
   const apollo13: GraphNode = {
@@ -91,6 +100,7 @@ export function getBaconNetworkData(): { nodes: GraphNode[]; links: GraphLink[] 
     name: 'Apollo 13 (1995)',
     type: 'media',
     sentiment: 'Complex',
+    mediaCategory: 'primary',
   };
 
   const mysticRiver: GraphNode = {
@@ -98,6 +108,7 @@ export function getBaconNetworkData(): { nodes: GraphNode[]; links: GraphLink[] 
     name: 'Mystic River (2003)',
     type: 'media',
     sentiment: 'Complex',
+    mediaCategory: 'primary',
   };
 
   const aFewGoodMen: GraphNode = {
@@ -105,6 +116,7 @@ export function getBaconNetworkData(): { nodes: GraphNode[]; links: GraphLink[] 
     name: 'A Few Good Men (1992)',
     type: 'media',
     sentiment: 'Complex',
+    mediaCategory: 'primary',
   };
 
   const iClaudius: GraphNode = {
@@ -112,6 +124,7 @@ export function getBaconNetworkData(): { nodes: GraphNode[]; links: GraphLink[] 
     name: 'I, Claudius (1976)',
     type: 'media',
     sentiment: 'Complex',
+    mediaCategory: 'primary',
   };
 
   const cadfael: GraphNode = {
@@ -119,6 +132,23 @@ export function getBaconNetworkData(): { nodes: GraphNode[]; links: GraphLink[] 
     name: 'Cadfael (1995-1999)',
     type: 'media',
     sentiment: 'Complex',
+    mediaCategory: 'primary',
+  };
+
+  const elizabethR: GraphNode = {
+    id: 'media-elizabeth-r',
+    name: 'Elizabeth R (1971)',
+    type: 'media',
+    sentiment: 'Complex',
+    mediaCategory: 'primary',
+  };
+
+  const anonymousFilm: GraphNode = {
+    id: 'media-anonymous',
+    name: 'Anonymous (2011)',
+    type: 'media',
+    sentiment: 'Complex',
+    mediaCategory: 'primary',
   };
 
   const baconBiography: GraphNode = {
@@ -126,20 +156,23 @@ export function getBaconNetworkData(): { nodes: GraphNode[]; links: GraphLink[] 
     name: 'Francis Bacon: Anatomy of an Enigma (Book, 1996)',
     type: 'media',
     sentiment: 'Complex',
+    mediaCategory: 'academic',
   };
 
   const screamingPope: GraphNode = {
     id: 'media-screaming-pope',
-    name: 'The Screaming Pope (Painting, 1953)',
+    name: 'Study after Velázquez (Painting, 1953)',
     type: 'media',
     sentiment: 'Complex',
+    mediaCategory: 'primary',
   };
 
-  const baconNamesake: GraphNode = {
-    id: 'media-bacon-namesake',
-    name: 'The Two Francis Bacons (Essay)',
+  const velazquezPortrait: GraphNode = {
+    id: 'media-velazquez-portrait',
+    name: 'Portrait of Innocent X (Painting, 1650)',
     type: 'media',
     sentiment: 'Complex',
+    mediaCategory: 'primary',
   };
 
   // Historical Figures
@@ -164,29 +197,55 @@ export function getBaconNetworkData(): { nodes: GraphNode[]; links: GraphLink[] 
     sentiment: 'Complex',
   };
 
+  const diegoVelazquez: GraphNode = {
+    id: 'figure-diego-velazquez',
+    name: 'Diego Velázquez (Painter, 1599-1660)',
+    type: 'figure',
+    sentiment: 'Complex',
+  };
+
+  const philipIV: GraphNode = {
+    id: 'figure-philip-iv',
+    name: 'Philip IV of Spain (1605-1665)',
+    type: 'figure',
+    sentiment: 'Complex',
+  };
+
+  const elizabethI: GraphNode = {
+    id: 'figure-elizabeth-i',
+    name: 'Elizabeth I of England (1533-1603)',
+    type: 'figure',
+    sentiment: 'Complex',
+  };
+
   // All nodes
   const nodes: GraphNode[] = [
-    // Featured path actors and figures
+    // Featured path - actors and historical figures
     kevinBacon,
-    francisBaconPainter,
-    francisBaconStatesman,
-    // Other actors
     jackLemmon,
     derekJacobi,
+    elizabethI,
+    francisBaconStatesman,
+    // Other historical figures
+    francisBaconPainter,
+    popeInnocentX,
+    diegoVelazquez,
+    philipIV,
+    // Other actors
     danielCraig,
     tildaSwinton,
     tomHanks,
     jackNicholson,
-    // Historical figures
-    popeInnocentX,
     // Media in featured path
-    loveIsTheDevil,
-    baconNamesake,
-    // Other media
     jfk,
     hamlet,
-    baconBiography,
+    elizabethR,
+    anonymousFilm,
+    // Other media
+    loveIsTheDevil,
     screamingPope,
+    velazquezPortrait,
+    baconBiography,
     apollo13,
     mysticRiver,
     aFewGoodMen,
@@ -194,29 +253,54 @@ export function getBaconNetworkData(): { nodes: GraphNode[]; links: GraphLink[] 
     cadfael,
   ];
 
-  // Links - featured path: Kevin Bacon → Francis Bacon (painter) → Francis Bacon (statesman)
+  // Links - featured path: Person-media-person pattern bridging 4 centuries
+  // Kevin Bacon (20th c. actor) → Francis Bacon (16th c. statesman)
   const featuredLinks: GraphLink[] = [
-    // Kevin Bacon → Love Is the Devil (film about Francis Bacon the painter)
+    // Kevin Bacon → JFK (film)
     {
       source: 'actor-kevin-bacon',
-      target: 'media-love-is-the-devil',
+      target: 'media-jfk',
       sentiment: 'Complex',
     },
-    // Love Is the Devil → Francis Bacon (painter) - the subject of the film
+    // JFK → Jack Lemmon (co-star)
     {
-      source: 'media-love-is-the-devil',
-      target: 'figure-francis-bacon-painter',
+      source: 'media-jfk',
+      target: 'actor-jack-lemmon',
       sentiment: 'Complex',
     },
-    // Francis Bacon (painter) → Essay connecting the two Francis Bacons
+    // Jack Lemmon → Hamlet (film)
     {
-      source: 'figure-francis-bacon-painter',
-      target: 'media-bacon-namesake',
+      source: 'actor-jack-lemmon',
+      target: 'media-hamlet',
       sentiment: 'Complex',
     },
-    // Essay → Francis Bacon (statesman) - the historical namesake
+    // Hamlet → Derek Jacobi (co-star)
     {
-      source: 'media-bacon-namesake',
+      source: 'media-hamlet',
+      target: 'actor-derek-jacobi',
+      sentiment: 'Complex',
+    },
+    // Derek Jacobi → Elizabeth R (TV series)
+    {
+      source: 'actor-derek-jacobi',
+      target: 'media-elizabeth-r',
+      sentiment: 'Complex',
+    },
+    // Elizabeth R → Elizabeth I (historical subject)
+    {
+      source: 'media-elizabeth-r',
+      target: 'figure-elizabeth-i',
+      sentiment: 'Complex',
+    },
+    // Elizabeth I → Anonymous (film about Elizabethan era)
+    {
+      source: 'figure-elizabeth-i',
+      target: 'media-anonymous',
+      sentiment: 'Complex',
+    },
+    // Anonymous → Francis Bacon (statesman, character in film)
+    {
+      source: 'media-anonymous',
       target: 'figure-francis-bacon-statesman',
       sentiment: 'Complex',
     },
@@ -225,31 +309,6 @@ export function getBaconNetworkData(): { nodes: GraphNode[]; links: GraphLink[] 
   // Links - additional connections
   const otherLinks: GraphLink[] = [
     // Kevin Bacon in other films
-    {
-      source: 'actor-kevin-bacon',
-      target: 'media-jfk',
-      sentiment: 'Complex',
-    },
-    {
-      source: 'media-jfk',
-      target: 'actor-jack-lemmon',
-      sentiment: 'Complex',
-    },
-    {
-      source: 'actor-jack-lemmon',
-      target: 'media-hamlet',
-      sentiment: 'Complex',
-    },
-    {
-      source: 'media-hamlet',
-      target: 'actor-derek-jacobi',
-      sentiment: 'Complex',
-    },
-    {
-      source: 'actor-derek-jacobi',
-      target: 'media-love-is-the-devil',
-      sentiment: 'Complex',
-    },
     {
       source: 'actor-kevin-bacon',
       target: 'media-apollo-13',
@@ -297,7 +356,18 @@ export function getBaconNetworkData(): { nodes: GraphNode[]; links: GraphLink[] 
       target: 'actor-tilda-swinton',
       sentiment: 'Complex',
     },
-    // Francis Bacon (painter) connections
+    // Derek Jacobi → Francis Bacon (painter) connection
+    {
+      source: 'actor-derek-jacobi',
+      target: 'media-love-is-the-devil',
+      sentiment: 'Complex',
+    },
+    {
+      source: 'media-love-is-the-devil',
+      target: 'figure-francis-bacon-painter',
+      sentiment: 'Complex',
+    },
+    // Francis Bacon (painter) - additional connections
     {
       source: 'figure-francis-bacon-painter',
       target: 'media-screaming-pope',
@@ -306,6 +376,16 @@ export function getBaconNetworkData(): { nodes: GraphNode[]; links: GraphLink[] 
     {
       source: 'media-screaming-pope',
       target: 'figure-pope-innocent-x',
+      sentiment: 'Complex',
+    },
+    {
+      source: 'figure-pope-innocent-x',
+      target: 'media-velazquez-portrait',
+      sentiment: 'Complex',
+    },
+    {
+      source: 'media-velazquez-portrait',
+      target: 'figure-diego-velazquez',
       sentiment: 'Complex',
     },
     {

@@ -43,7 +43,11 @@ export async function POST(request: NextRequest) {
       seasonNumber,
       episodeNumber,
       relationshipType,
-      isMainSeries
+      isMainSeries,
+      publisher,
+      translator,
+      channel,
+      productionStudio
     } = body;
 
     if (!title || !mediaType || !releaseYear) {
@@ -96,6 +100,10 @@ export async function POST(request: NextRequest) {
         release_year: $releaseYear,
         creator: $creator,
         wikidata_id: $wikidataId,
+        publisher: $publisher,
+        translator: $translator,
+        channel: $channel,
+        production_studio: $productionStudio,
         created_at: timestamp(),
         created_by: u.email,
         created_by_name: u.name,
@@ -130,6 +138,10 @@ export async function POST(request: NextRequest) {
       releaseYear: parseInt(releaseYear),
       creator: creator || null,
       wikidataId: wikidataId || null,
+      publisher: publisher || null,
+      translator: translator || null,
+      channel: channel || null,
+      productionStudio: productionStudio || null,
       userEmail,
       batchId: batch_id,
       parentSeriesId: parentSeriesId || null,

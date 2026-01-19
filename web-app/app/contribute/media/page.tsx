@@ -15,6 +15,10 @@ export default function ContributeMediaPage() {
     creator: '',
     wikidataId: '',
     description: '',
+    publisher: '',
+    translator: '',
+    channel: '',
+    productionStudio: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -174,6 +178,78 @@ export default function ContributeMediaPage() {
               rows={4}
               className="w-full bg-white border border-brand-primary/30 rounded-md py-2 px-3 text-brand-text placeholder-brand-text/40 focus:outline-none focus:ring-2 focus:ring-brand-primary"
             />
+          </div>
+
+          {/* Conditional Metadata Fields */}
+          <div className="border-t border-brand-primary/20 pt-6">
+            <h3 className="text-sm font-semibold text-brand-text mb-4">Additional Metadata</h3>
+
+            {/* Book Fields */}
+            {(formData.mediaType === 'BOOK' || formData.mediaType === 'GAME_SERIES') && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-brand-text mb-2">
+                    Publisher
+                  </label>
+                  <input
+                    type="text"
+                    name="publisher"
+                    value={formData.publisher}
+                    onChange={handleChange}
+                    placeholder="e.g., Penguin Books, Harper Voyager"
+                    className="w-full bg-white border border-brand-primary/30 rounded-md py-2 px-3 text-brand-text placeholder-brand-text/40 focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                  />
+                </div>
+
+                <div className="mt-4">
+                  <label className="block text-sm font-medium text-brand-text mb-2">
+                    Translator
+                  </label>
+                  <input
+                    type="text"
+                    name="translator"
+                    value={formData.translator}
+                    onChange={handleChange}
+                    placeholder="e.g., John Smith (translated from French)"
+                    className="w-full bg-white border border-brand-primary/30 rounded-md py-2 px-3 text-brand-text placeholder-brand-text/40 focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                  />
+                </div>
+              </>
+            )}
+
+            {/* TV Series Fields */}
+            {formData.mediaType === 'TV_SERIES' && (
+              <div>
+                <label className="block text-sm font-medium text-brand-text mb-2">
+                  Channel / Network
+                </label>
+                <input
+                  type="text"
+                  name="channel"
+                  value={formData.channel}
+                  onChange={handleChange}
+                  placeholder="e.g., HBO, BBC, Netflix"
+                  className="w-full bg-white border border-brand-primary/30 rounded-md py-2 px-3 text-brand-text placeholder-brand-text/40 focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                />
+              </div>
+            )}
+
+            {/* Film & Game Fields */}
+            {(formData.mediaType === 'FILM' || formData.mediaType === 'GAME') && (
+              <div>
+                <label className="block text-sm font-medium text-brand-text mb-2">
+                  Production Studio
+                </label>
+                <input
+                  type="text"
+                  name="productionStudio"
+                  value={formData.productionStudio}
+                  onChange={handleChange}
+                  placeholder="e.g., Universal Pictures, Rockstar Games"
+                  className="w-full bg-white border border-brand-primary/30 rounded-md py-2 px-3 text-brand-text placeholder-brand-text/40 focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                />
+              </div>
+            )}
           </div>
 
           {/* Submit Button */}

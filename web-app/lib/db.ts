@@ -1,5 +1,5 @@
 import { getSession } from './neo4j';
-import { HistoricalFigure, FigureProfile, Portrayal, SentimentDistribution, GraphNode, GraphLink, SeriesRelationship } from './types';
+import { HistoricalFigure, FigureProfile, Portrayal, SentimentDistribution, GraphNode, GraphLink, SeriesRelationship, SeriesMetadata, CharacterAppearance } from './types';
 
 export async function searchFigures(query: string): Promise<HistoricalFigure[]> {
   const session = await getSession();
@@ -156,6 +156,10 @@ export async function getMediaById(wikidataId: string) {
       release_year: mediaNode.properties.release_year?.toNumber?.() ?? Number(mediaNode.properties.release_year),
       media_type: mediaNode.properties.media_type,
       creator: mediaNode.properties.creator,
+      publisher: mediaNode.properties.publisher,
+      translator: mediaNode.properties.translator,
+      channel: mediaNode.properties.channel,
+      production_studio: mediaNode.properties.production_studio,
       portrayals: portrayals.map((p: any) => ({
         figure: {
           canonical_id: p.figure.properties.canonical_id,
@@ -685,6 +689,143 @@ export async function getMediaParentSeries(wikidataId: string) {
         season_number: rel.properties.season_number,
         episode_number: rel.properties.episode_number,
         relationship_type: rel.properties.relationship_type,
+      },
+    };
+  } finally {
+    await session.close();
+  }
+}
+
+export async function getSeriesMetadata(seriesWikidataId: string): Promise<SeriesMetadata | null> {
+  const session = await getSession();
+  try {
+    // Fetch series and all its works
+    const seriesResult = await session.run(
+      `MATCH (series:MediaWork {wikidata_id: $seriesWikidataId})
+       OPTIONAL MATCH (work:MediaWork)-[r:PART_OF]->(series)
+       OPTIONAL MATCH (fig:HistoricalFigure)-[app:APPEARS_IN]->(work)
+       RETURN series,
+              collect(DISTINCT {
+                work: work,
+                relationship: r
+              })[0..500] as works,
+              collect(DISTINCT {
+                figure: fig,
+                work_index: r.sequence_number
+              })[0..1000] as character_appearances`,
+      { seriesWikidataId }
+    );
+
+    if (seriesResult.records.length === 0) return null;
+
+    const record = seriesResult.records[0];
+    const seriesNode = record.get('series');
+    const worksData = record.get('works').filter((w: any) => w.work !== null);
+    const characterAppearancesData = record.get('character_appearances').filter((c: any) => c.figure !== null);
+
+    // Build works array
+    const works: SeriesRelationship[] = worksData.map((w: any) => ({
+      media_id: w.work.properties.media_id || w.work.properties.wikidata_id,
+      title: w.work.properties.title,
+      release_year: w.work.properties.release_year?.toNumber?.() ?? Number(w.work.properties.release_year),
+      sequence_number: w.relationship?.properties?.sequence_number,
+      season_number: w.relationship?.properties?.season_number,
+      episode_number: w.relationship?.properties?.episode_number,
+      is_main_series: w.relationship?.properties?.is_main_series || false,
+      relationship_type: w.relationship?.properties?.relationship_type,
+    }));
+
+    // Build character roster with appearance matrix
+    const characterMap = new Map<string, CharacterAppearance>();
+    const workIndexMap = new Map<string, number>();
+
+    // Build work index map for matrix
+    works.forEach((work, idx) => {
+      workIndexMap.set(work.media_id, idx);
+    });
+
+    // Process character appearances
+    characterAppearancesData.forEach((ca: any) => {
+      const canonicalId = ca.figure.properties.canonical_id;
+      const name = ca.figure.properties.name;
+      const workIdx = ca.work_index !== null ? ca.work_index : 0;
+
+      if (!characterMap.has(canonicalId)) {
+        characterMap.set(canonicalId, {
+          canonical_id: canonicalId,
+          name: name,
+          appearances: 0,
+          works: [],
+        });
+      }
+
+      const char = characterMap.get(canonicalId)!;
+      char.appearances += 1;
+      if (!char.works.includes(workIdx)) {
+        char.works.push(workIdx);
+      }
+    });
+
+    const roster = Array.from(characterMap.values()).sort((a, b) => b.appearances - a.appearances);
+
+    // Build character matrix (Map of canonical_id to work indices)
+    const matrix: Record<string, number[]> = {};
+    characterMap.forEach((char, canonicalId) => {
+      matrix[canonicalId] = char.works.sort((a, b) => a - b);
+    });
+
+    // Calculate statistics
+    const years = works.map(w => w.release_year).filter(y => y);
+    const yearRange: [number, number] = years.length > 0
+      ? [Math.min(...years), Math.max(...years)]
+      : [0, 0];
+
+    const totalCharacters = characterMap.size;
+    const avgCharactersPerWork = works.length > 0
+      ? Math.round((totalCharacters / works.length) * 100) / 100
+      : 0;
+
+    // Count unique interactions (figures appearing together in works)
+    let totalInteractions = 0;
+    const figurePairs = new Set<string>();
+    works.forEach((work, workIdx) => {
+      const figuresInWork = roster.filter(r => r.works.includes(workIdx));
+      for (let i = 0; i < figuresInWork.length; i++) {
+        for (let j = i + 1; j < figuresInWork.length; j++) {
+          const pair = [figuresInWork[i].canonical_id, figuresInWork[j].canonical_id]
+            .sort()
+            .join('|');
+          if (!figurePairs.has(pair)) {
+            figurePairs.add(pair);
+            totalInteractions += 1;
+          }
+        }
+      }
+    });
+
+    return {
+      series: {
+        title: seriesNode.properties.title,
+        release_year: seriesNode.properties.release_year?.toNumber?.() ?? Number(seriesNode.properties.release_year),
+        wikidata_id: seriesNode.properties.wikidata_id,
+        media_id: seriesNode.properties.media_id,
+        media_type: seriesNode.properties.media_type,
+        creator: seriesNode.properties.creator,
+        publisher: seriesNode.properties.publisher,
+        translator: seriesNode.properties.translator,
+        channel: seriesNode.properties.channel,
+        production_studio: seriesNode.properties.production_studio,
+      },
+      works,
+      characters: {
+        total: totalCharacters,
+        roster,
+        matrix,
+      },
+      stats: {
+        yearRange,
+        avgCharactersPerWork,
+        totalInteractions,
       },
     };
   } finally {
