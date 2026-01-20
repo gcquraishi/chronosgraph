@@ -1,8 +1,15 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getMediaById, getMediaGraphData } from '@/lib/db';
+import { getMediaById, getMediaGraphData, getMediaLocationsAndEras } from '@/lib/db';
 import GraphExplorer from '@/components/GraphExplorer';
-import { BookOpen, Film, Tv, Gamepad2, User, List } from 'lucide-react';
+import { BookOpen, Film, Tv, Gamepad2, User, List, MapPin, Clock } from 'lucide-react';
+
+function formatYear(year: number): string {
+  if (year < 0) {
+    return `${Math.abs(year)} BCE`;
+  }
+  return `${year}`;
+}
 
 export default async function MediaPage({
   params,
@@ -17,6 +24,7 @@ export default async function MediaPage({
   }
 
   const graphData = await getMediaGraphData(id);
+  const { locations, eras } = await getMediaLocationsAndEras(id);
 
   const getIcon = (type: string) => {
     switch (type?.toUpperCase()) {
@@ -53,6 +61,62 @@ export default async function MediaPage({
               </div>
             </div>
           </div>
+
+          {/* Location & Era Section */}
+          {(locations.length > 0 || eras.length > 0) && (
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-8">
+              <h2 className="text-xl font-semibold text-white mb-4">Story Context</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Locations */}
+                {locations.length > 0 && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <MapPin className="w-5 h-5 text-blue-400" />
+                      <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">
+                        Locations
+                      </h3>
+                    </div>
+                    <div className="space-y-2">
+                      {locations.map(loc => (
+                        <Link
+                          key={loc.location_id}
+                          href={`/browse/location/${loc.location_id}`}
+                          className="block p-3 bg-gray-900 rounded-lg border border-gray-700 hover:border-blue-500 transition-all"
+                        >
+                          <p className="text-white font-medium hover:text-blue-400">{loc.name}</p>
+                          <p className="text-xs text-gray-500 capitalize">{loc.location_type}</p>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Eras */}
+                {eras.length > 0 && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Clock className="w-5 h-5 text-purple-400" />
+                      <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">
+                        Time Periods
+                      </h3>
+                    </div>
+                    <div className="space-y-2">
+                      {eras.map(era => (
+                        <Link
+                          key={era.era_id}
+                          href={`/browse/era/${era.era_id}`}
+                          className="block p-3 bg-gray-900 rounded-lg border border-gray-700 hover:border-purple-500 transition-all"
+                        >
+                          <p className="text-white font-medium hover:text-purple-400">{era.name}</p>
+                          <p className="text-xs text-gray-500">{formatYear(era.start_year)} – {formatYear(era.end_year)}</p>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Media Details Section */}
           {(media.publisher || media.translator || media.channel || media.production_studio) && (

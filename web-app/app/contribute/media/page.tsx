@@ -1,13 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Film, Plus, Loader2 } from 'lucide-react';
+import { Film, Plus, Loader2, MapPin, Clock } from 'lucide-react';
+import type { LocationWithStats, EraWithStats } from '@/lib/types';
 
 export default function ContributeMediaPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [locations, setLocations] = useState<LocationWithStats[]>([]);
+  const [eras, setEras] = useState<EraWithStats[]>([]);
+  const [loadingResources, setLoadingResources] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
     mediaType: 'FILM',
@@ -19,13 +23,61 @@ export default function ContributeMediaPage() {
     translator: '',
     channel: '',
     productionStudio: '',
+    locationIds: [] as string[],
+    eraIds: [] as string[],
   });
+
+  // Load available locations and eras
+  useEffect(() => {
+    const loadResources = async () => {
+      try {
+        const [locResponse, eraResponse] = await Promise.all([
+          fetch('/api/browse/locations'),
+          fetch('/api/browse/eras'),
+        ]);
+
+        if (locResponse.ok) {
+          const locData = await locResponse.json();
+          setLocations(locData.locations);
+        }
+
+        if (eraResponse.ok) {
+          const eraData = await eraResponse.json();
+          setEras(eraData.eras);
+        }
+      } catch (err) {
+        console.error('Failed to load locations/eras:', err);
+      } finally {
+        setLoadingResources(false);
+      }
+    };
+
+    loadResources();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: name === 'releaseYear' ? parseInt(value) : value,
+    }));
+  };
+
+  const handleLocationToggle = (locationId: string) => {
+    setFormData(prev => ({
+      ...prev,
+      locationIds: prev.locationIds.includes(locationId)
+        ? prev.locationIds.filter(id => id !== locationId)
+        : [...prev.locationIds, locationId],
+    }));
+  };
+
+  const handleEraToggle = (eraId: string) => {
+    setFormData(prev => ({
+      ...prev,
+      eraIds: prev.eraIds.includes(eraId)
+        ? prev.eraIds.filter(id => id !== eraId)
+        : [...prev.eraIds, eraId],
     }));
   };
 
@@ -178,6 +230,59 @@ export default function ContributeMediaPage() {
               rows={4}
               className="w-full bg-white border border-brand-primary/30 rounded-md py-2 px-3 text-brand-text placeholder-brand-text/40 focus:outline-none focus:ring-2 focus:ring-brand-primary"
             />
+          </div>
+
+          {/* Location & Era Section */}
+          <div className="border-t border-brand-primary/20 pt-6">
+            <h3 className="text-sm font-semibold text-brand-text mb-4 flex items-center gap-2">
+              <MapPin className="w-4 h-4" />
+              <Clock className="w-4 h-4" />
+              Story Location & Time Period (Optional)
+            </h3>
+
+            {/* Locations */}
+            {locations.length > 0 && (
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-brand-text mb-3">
+                  Where is this work set?
+                </label>
+                <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto p-2 bg-brand-text/5 rounded-md border border-brand-primary/10">
+                  {locations.map(loc => (
+                    <label key={loc.location_id} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={formData.locationIds.includes(loc.location_id)}
+                        onChange={() => handleLocationToggle(loc.location_id)}
+                        className="w-4 h-4 rounded"
+                      />
+                      <span className="text-sm text-brand-text">{loc.name}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Eras */}
+            {eras.length > 0 && (
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-brand-text mb-3">
+                  What time period is depicted?
+                </label>
+                <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto p-2 bg-brand-text/5 rounded-md border border-brand-primary/10">
+                  {eras.map(era => (
+                    <label key={era.era_id} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={formData.eraIds.includes(era.era_id)}
+                        onChange={() => handleEraToggle(era.era_id)}
+                        className="w-4 h-4 rounded"
+                      />
+                      <span className="text-sm text-brand-text">{era.name}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Conditional Metadata Fields */}

@@ -48,7 +48,11 @@ export async function POST(request: NextRequest) {
       publisher,
       translator,
       channel,
-      productionStudio
+      productionStudio,
+      locationIds,
+      eraIds,
+      locationProminence,
+      eraSettingType
     } = body;
 
     if (!title || !mediaType) {
@@ -144,6 +148,38 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate that all provided location IDs exist
+    if (locationIds && locationIds.length > 0) {
+      const locValidation = await dbSession.run(
+        `MATCH (l:Location) WHERE l.location_id IN $locationIds RETURN count(l) as count`,
+        { locationIds }
+      );
+      const locCount = locValidation.records[0]?.get('count')?.toNumber?.() ?? 0;
+      if (locCount !== locationIds.length) {
+        await dbSession.close();
+        return NextResponse.json(
+          { error: 'One or more location IDs do not exist' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Validate that all provided era IDs exist
+    if (eraIds && eraIds.length > 0) {
+      const eraValidation = await dbSession.run(
+        `MATCH (e:Era) WHERE e.era_id IN $eraIds RETURN count(e) as count`,
+        { eraIds }
+      );
+      const eraCount = eraValidation.records[0]?.get('count')?.toNumber?.() ?? 0;
+      if (eraCount !== eraIds.length) {
+        await dbSession.close();
+        return NextResponse.json(
+          { error: 'One or more era IDs do not exist' },
+          { status: 400 }
+        );
+      }
+    }
+
     // Create new media work
     const batch_id = `web_ui_${Date.now()}`;
     let query = `
@@ -183,6 +219,26 @@ export async function POST(request: NextRequest) {
       `;
     }
 
+    // Add SET_IN relationships for locations
+    if (locationIds && locationIds.length > 0) {
+      query += `
+      WITH m
+      UNWIND $locationIds AS locationId
+      MATCH (loc:Location {location_id: locationId})
+      CREATE (m)-[:SET_IN {prominence: $locationProminence}]->(loc)
+      `;
+    }
+
+    // Add SET_IN_ERA relationships for eras
+    if (eraIds && eraIds.length > 0) {
+      query += `
+      WITH m
+      UNWIND $eraIds AS eraId
+      MATCH (era:Era {era_id: eraId})
+      CREATE (m)-[:SET_IN_ERA {era_setting_type: $eraSettingType}]->(era)
+      `;
+    }
+
     query += `
       RETURN m.media_id AS media_id, m.title AS title, m.release_year AS year
     `;
@@ -207,6 +263,10 @@ export async function POST(request: NextRequest) {
       episodeNumber: episodeNumber ? parseInt(episodeNumber) : null,
       relationshipType: relationshipType || null,
       isMainSeries: isMainSeries !== undefined ? isMainSeries : true,
+      locationIds: locationIds || [],
+      eraIds: eraIds || [],
+      locationProminence: locationProminence || 'primary',
+      eraSettingType: eraSettingType || 'contemporary',
     });
 
     await dbSession.close();

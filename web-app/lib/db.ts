@@ -1,5 +1,5 @@
 import { getSession } from './neo4j';
-import { HistoricalFigure, FigureProfile, Portrayal, SentimentDistribution, GraphNode, GraphLink, SeriesRelationship, SeriesMetadata, CharacterAppearance } from './types';
+import { HistoricalFigure, FigureProfile, Portrayal, SentimentDistribution, GraphNode, GraphLink, SeriesRelationship, SeriesMetadata, CharacterAppearance, Location, LocationWithStats, Era, EraWithStats, LocationWorks, EraWorks, DiscoveryBrowseResult } from './types';
 
 export async function searchFigures(query: string): Promise<HistoricalFigure[]> {
   const session = await getSession();
@@ -1023,6 +1023,485 @@ export async function getSeriesMetadata(seriesWikidataId: string): Promise<Serie
         avgCharactersPerWork,
         totalInteractions,
       },
+    };
+  } finally {
+    await session.close();
+  }
+}
+
+// Location & Era Discovery Functions
+
+export async function getLocationsWithStats(): Promise<LocationWithStats[]> {
+  const session = await getSession();
+  try {
+    const result = await session.run(
+      `MATCH (l:Location)
+       OPTIONAL MATCH (m:MediaWork)-[:SET_IN]->(l)
+       OPTIONAL MATCH (f:HistoricalFigure)-[:LIVED_IN]->(l)
+       WITH l, count(DISTINCT m) as work_count, count(DISTINCT f) as figure_count
+       ORDER BY work_count DESC
+       RETURN l, work_count, figure_count
+       LIMIT 100`
+    );
+
+    return result.records.map(record => {
+      const node = record.get('l');
+      const workCount = record.get('work_count');
+      const figureCount = record.get('figure_count');
+      return {
+        location_id: node.properties.location_id,
+        name: node.properties.name,
+        location_type: node.properties.location_type,
+        wikidata_id: node.properties.wikidata_id,
+        parent_location: node.properties.parent_location,
+        coordinates: node.properties.coordinates,
+        description: node.properties.description,
+        work_count: workCount?.toNumber?.() ?? Number(workCount),
+        figure_count: figureCount?.toNumber?.() ?? Number(figureCount),
+      };
+    });
+  } finally {
+    await session.close();
+  }
+}
+
+export async function getWorksInLocation(
+  locationId: string,
+  limit: number = 50,
+  skip: number = 0
+): Promise<LocationWorks | null> {
+  const session = await getSession();
+  try {
+    // First query: Get location and work count
+    const countResult = await session.run(
+      `MATCH (l:Location {location_id: $locationId})
+       OPTIONAL MATCH (m:MediaWork)-[r:SET_IN]->(l)
+       OPTIONAL MATCH (f:HistoricalFigure)-[:LIVED_IN]->(l)
+       RETURN l, count(DISTINCT m) as work_count, count(DISTINCT f) as figure_count,
+              [m.release_year | m in COLLECT(m) WHERE m IS NOT NULL] as years`,
+      { locationId }
+    );
+
+    if (countResult.records.length === 0) {
+      // Location not found - return null instead of throwing
+      return null;
+    }
+
+    const countRecord = countResult.records[0];
+    const locationNode = countRecord.get('l');
+
+    // Second query: Get paginated works
+    const worksResult = await session.run(
+      `MATCH (l:Location {location_id: $locationId})
+       OPTIONAL MATCH (m:MediaWork)-[r:SET_IN]->(l)
+       WITH m ORDER BY m.release_year DESC, m.title ASC
+       SKIP $skip LIMIT $limit
+       RETURN collect(m) as paginated_works`,
+      { locationId, skip, limit }
+    );
+
+    // Third query: Get all figures
+    const figuresResult = await session.run(
+      `MATCH (l:Location {location_id: $locationId})
+       OPTIONAL MATCH (f:HistoricalFigure)-[:LIVED_IN]->(l)
+       RETURN collect(DISTINCT f) as figures`,
+      { locationId }
+    );
+
+    const worksData = worksResult.records[0]?.get('paginated_works')?.filter((w: any) => w !== null) || [];
+    const figuresData = figuresResult.records[0]?.get('figures')?.filter((f: any) => f !== null) || [];
+    const years = countRecord.get('years')?.filter((y: any) => y !== null) || [];
+
+    const timeSpan: [number, number] = years.length > 0
+      ? [Math.min(...years.map((y: any) => y.toNumber?.() ?? Number(y))), Math.max(...years.map((y: any) => y.toNumber?.() ?? Number(y)))]
+      : [0, 0];
+
+    const workCount = countRecord.get('work_count')?.toNumber?.() ?? Number(countRecord.get('work_count'));
+    const figureCount = countRecord.get('figure_count')?.toNumber?.() ?? Number(countRecord.get('figure_count'));
+
+    return {
+      location: {
+        location_id: locationNode.properties.location_id,
+        name: locationNode.properties.name,
+        location_type: locationNode.properties.location_type,
+        wikidata_id: locationNode.properties.wikidata_id,
+        parent_location: locationNode.properties.parent_location,
+        coordinates: locationNode.properties.coordinates,
+        description: locationNode.properties.description,
+      },
+      works: worksData.map((w: any) => ({
+        title: w.properties.title,
+        release_year: w.properties.release_year?.toNumber?.() ?? Number(w.properties.release_year),
+        wikidata_id: w.properties.wikidata_id,
+        media_id: w.properties.media_id,
+        media_type: w.properties.media_type,
+        creator: w.properties.creator,
+      })),
+      figures: figuresData.map((f: any) => ({
+        canonical_id: f.properties.canonical_id,
+        name: f.properties.name,
+        is_fictional: f.properties.is_fictional || false,
+        historicity_status: f.properties.historicity_status,
+        era: f.properties.era,
+      })),
+      stats: {
+        work_count: workCount,
+        figure_count: figureCount,
+        time_span: timeSpan,
+      },
+    };
+  } finally {
+    await session.close();
+  }
+}
+
+export async function getErasWithStats(): Promise<EraWithStats[]> {
+  const session = await getSession();
+  try {
+    const result = await session.run(
+      `MATCH (e:Era)
+       OPTIONAL MATCH (m:MediaWork)-[:SET_IN_ERA]->(e)
+       OPTIONAL MATCH (f:HistoricalFigure)-[:LIVED_IN_ERA]->(e)
+       WITH e, count(DISTINCT m) as work_count, count(DISTINCT f) as figure_count
+       ORDER BY work_count DESC, e.start_year DESC
+       RETURN e, work_count, figure_count
+       LIMIT 100`
+    );
+
+    return result.records.map(record => {
+      const node = record.get('e');
+      const workCount = record.get('work_count');
+      const figureCount = record.get('figure_count');
+      return {
+        era_id: node.properties.era_id,
+        name: node.properties.name,
+        start_year: node.properties.start_year?.toNumber?.() ?? Number(node.properties.start_year),
+        end_year: node.properties.end_year?.toNumber?.() ?? Number(node.properties.end_year),
+        era_type: node.properties.era_type,
+        wikidata_id: node.properties.wikidata_id,
+        parent_era: node.properties.parent_era,
+        description: node.properties.description,
+        work_count: workCount?.toNumber?.() ?? Number(workCount),
+        figure_count: figureCount?.toNumber?.() ?? Number(figureCount),
+      };
+    });
+  } finally {
+    await session.close();
+  }
+}
+
+export async function getWorksInEra(
+  eraId: string,
+  limit: number = 50
+): Promise<EraWorks | null> {
+  const session = await getSession();
+  try {
+    // First query: Get era and counts for all works
+    const countResult = await session.run(
+      `MATCH (e:Era {era_id: $eraId})
+       OPTIONAL MATCH (m:MediaWork)-[r:SET_IN_ERA]->(e)
+       OPTIONAL MATCH (f:HistoricalFigure)-[:LIVED_IN_ERA]->(e)
+       RETURN e, count(DISTINCT m) as work_count, count(DISTINCT f) as figure_count,
+              collect(DISTINCT m.release_year) as all_years`,
+      { eraId }
+    );
+
+    if (countResult.records.length === 0) {
+      // Era not found - return null instead of throwing
+      return null;
+    }
+
+    const countRecord = countResult.records[0];
+    const eraNode = countRecord.get('e');
+
+    // Second query: Get paginated works
+    const worksResult = await session.run(
+      `MATCH (e:Era {era_id: $eraId})
+       OPTIONAL MATCH (m:MediaWork)-[r:SET_IN_ERA]->(e)
+       WITH m ORDER BY m.release_year DESC, m.title ASC
+       LIMIT $limit
+       RETURN collect(m) as paginated_works`,
+      { eraId, limit }
+    );
+
+    // Third query: Get all figures
+    const figuresResult = await session.run(
+      `MATCH (e:Era {era_id: $eraId})
+       OPTIONAL MATCH (f:HistoricalFigure)-[:LIVED_IN_ERA]->(e)
+       RETURN collect(DISTINCT f) as figures`,
+      { eraId }
+    );
+
+    // Fourth query: Get timeline aggregation
+    const timelineResult = await session.run(
+      `MATCH (e:Era {era_id: $eraId})
+       OPTIONAL MATCH (m:MediaWork)-[r:SET_IN_ERA]->(e)
+       WITH DISTINCT m.release_year as year, count(m) as count
+       WHERE year IS NOT NULL
+       RETURN year, count ORDER BY year ASC`,
+      { eraId }
+    );
+
+    const worksData = worksResult.records[0]?.get('paginated_works')?.filter((w: any) => w !== null) || [];
+    const figuresData = figuresResult.records[0]?.get('figures')?.filter((f: any) => f !== null) || [];
+    const allYears = countRecord.get('all_years')?.filter((y: any) => y !== null) || [];
+
+    const timeline = timelineResult.records.map((record: any) => ({
+      year: record.get('year')?.toNumber?.() ?? Number(record.get('year')),
+      work_count: record.get('count')?.toNumber?.() ?? Number(record.get('count')),
+    }));
+
+    const yearRange: [number, number] = allYears.length > 0
+      ? [
+          Math.min(...allYears.map((y: any) => y.toNumber?.() ?? Number(y))),
+          Math.max(...allYears.map((y: any) => y.toNumber?.() ?? Number(y)))
+        ]
+      : [
+          eraNode.properties.start_year?.toNumber?.() ?? Number(eraNode.properties.start_year),
+          eraNode.properties.end_year?.toNumber?.() ?? Number(eraNode.properties.end_year)
+        ];
+
+    const workCount = countRecord.get('work_count')?.toNumber?.() ?? Number(countRecord.get('work_count'));
+    const figureCount = countRecord.get('figure_count')?.toNumber?.() ?? Number(countRecord.get('figure_count'));
+
+    return {
+      era: {
+        era_id: eraNode.properties.era_id,
+        name: eraNode.properties.name,
+        start_year: eraNode.properties.start_year?.toNumber?.() ?? Number(eraNode.properties.start_year),
+        end_year: eraNode.properties.end_year?.toNumber?.() ?? Number(eraNode.properties.end_year),
+        era_type: eraNode.properties.era_type,
+        wikidata_id: eraNode.properties.wikidata_id,
+        parent_era: eraNode.properties.parent_era,
+        description: eraNode.properties.description,
+      },
+      works: worksData.map((w: any) => ({
+        title: w.properties.title,
+        release_year: w.properties.release_year?.toNumber?.() ?? Number(w.properties.release_year),
+        wikidata_id: w.properties.wikidata_id,
+        media_id: w.properties.media_id,
+        media_type: w.properties.media_type,
+        creator: w.properties.creator,
+      })),
+      figures: figuresData.map((f: any) => ({
+        canonical_id: f.properties.canonical_id,
+        name: f.properties.name,
+        is_fictional: f.properties.is_fictional || false,
+        historicity_status: f.properties.historicity_status,
+        era: f.properties.era,
+      })),
+      timeline,
+      stats: {
+        work_count: workCount,
+        figure_count: figureCount,
+        year_range: yearRange,
+      },
+    };
+  } finally {
+    await session.close();
+  }
+}
+
+export async function searchLocationsAndEras(query: string): Promise<{
+  locations: LocationWithStats[];
+  eras: EraWithStats[];
+}> {
+  const session = await getSession();
+  try {
+    const locationResult = await session.run(
+      `MATCH (l:Location)
+       WHERE toLower(l.name) CONTAINS toLower($query)
+          OR (l.description IS NOT NULL AND toLower(l.description) CONTAINS toLower($query))
+       OPTIONAL MATCH (m:MediaWork)-[:SET_IN]->(l)
+       OPTIONAL MATCH (f:HistoricalFigure)-[:LIVED_IN]->(l)
+       WITH l, count(DISTINCT m) as work_count, count(DISTINCT f) as figure_count,
+            CASE WHEN toLower(l.name) CONTAINS toLower($query) THEN 10
+                 WHEN l.description IS NOT NULL AND toLower(l.description) CONTAINS toLower($query) THEN 5
+                 ELSE 0 END as relevance_score
+       RETURN l, work_count, figure_count, relevance_score
+       ORDER BY relevance_score DESC, work_count DESC
+       LIMIT 20`,
+      { query }
+    );
+
+    const eraResult = await session.run(
+      `MATCH (e:Era)
+       WHERE toLower(e.name) CONTAINS toLower($query)
+          OR (e.description IS NOT NULL AND toLower(e.description) CONTAINS toLower($query))
+       OPTIONAL MATCH (m:MediaWork)-[:SET_IN_ERA]->(e)
+       OPTIONAL MATCH (f:HistoricalFigure)-[:LIVED_IN_ERA]->(e)
+       WITH e, count(DISTINCT m) as work_count, count(DISTINCT f) as figure_count,
+            CASE WHEN toLower(e.name) CONTAINS toLower($query) THEN 10
+                 WHEN e.description IS NOT NULL AND toLower(e.description) CONTAINS toLower($query) THEN 5
+                 ELSE 0 END as relevance_score
+       RETURN e, work_count, figure_count, relevance_score
+       ORDER BY relevance_score DESC, work_count DESC
+       LIMIT 20`,
+      { query }
+    );
+
+    const locations = locationResult.records.map(record => {
+      const node = record.get('l');
+      return {
+        location_id: node.properties.location_id,
+        name: node.properties.name,
+        location_type: node.properties.location_type,
+        wikidata_id: node.properties.wikidata_id,
+        parent_location: node.properties.parent_location,
+        coordinates: node.properties.coordinates,
+        description: node.properties.description,
+        work_count: record.get('work_count')?.toNumber?.() ?? Number(record.get('work_count')),
+        figure_count: record.get('figure_count')?.toNumber?.() ?? Number(record.get('figure_count')),
+      };
+    });
+
+    const eras = eraResult.records.map(record => {
+      const node = record.get('e');
+      return {
+        era_id: node.properties.era_id,
+        name: node.properties.name,
+        start_year: node.properties.start_year?.toNumber?.() ?? Number(node.properties.start_year),
+        end_year: node.properties.end_year?.toNumber?.() ?? Number(node.properties.end_year),
+        era_type: node.properties.era_type,
+        wikidata_id: node.properties.wikidata_id,
+        parent_era: node.properties.parent_era,
+        description: node.properties.description,
+        work_count: record.get('work_count')?.toNumber?.() ?? Number(record.get('work_count')),
+        figure_count: record.get('figure_count')?.toNumber?.() ?? Number(record.get('figure_count')),
+      };
+    });
+
+    return { locations, eras };
+  } finally {
+    await session.close();
+  }
+}
+
+export async function getDiscoveryStats(): Promise<DiscoveryBrowseResult> {
+  const session = await getSession();
+  try {
+    const locationResult = await session.run(
+      `MATCH (l:Location)
+       OPTIONAL MATCH (m:MediaWork)-[:SET_IN]->(l)
+       OPTIONAL MATCH (f:HistoricalFigure)-[:LIVED_IN]->(l)
+       WITH l, count(DISTINCT m) as work_count, count(DISTINCT f) as figure_count
+       ORDER BY work_count DESC
+       LIMIT 12
+       RETURN l, work_count, figure_count`
+    );
+
+    const eraResult = await session.run(
+      `MATCH (e:Era)
+       OPTIONAL MATCH (m:MediaWork)-[:SET_IN_ERA]->(e)
+       OPTIONAL MATCH (f:HistoricalFigure)-[:LIVED_IN_ERA]->(e)
+       WITH e, count(DISTINCT m) as work_count, count(DISTINCT f) as figure_count
+       ORDER BY work_count DESC
+       LIMIT 12
+       RETURN e, work_count, figure_count`
+    );
+
+    const locations = locationResult.records.map(record => {
+      const node = record.get('l');
+      return {
+        location_id: node.properties.location_id,
+        name: node.properties.name,
+        location_type: node.properties.location_type,
+        wikidata_id: node.properties.wikidata_id,
+        parent_location: node.properties.parent_location,
+        coordinates: node.properties.coordinates,
+        description: node.properties.description,
+        work_count: record.get('work_count')?.toNumber?.() ?? Number(record.get('work_count')),
+        figure_count: record.get('figure_count')?.toNumber?.() ?? Number(record.get('figure_count')),
+      };
+    });
+
+    const eras = eraResult.records.map(record => {
+      const node = record.get('e');
+      return {
+        era_id: node.properties.era_id,
+        name: node.properties.name,
+        start_year: node.properties.start_year?.toNumber?.() ?? Number(node.properties.start_year),
+        end_year: node.properties.end_year?.toNumber?.() ?? Number(node.properties.end_year),
+        era_type: node.properties.era_type,
+        wikidata_id: node.properties.wikidata_id,
+        parent_era: node.properties.parent_era,
+        description: node.properties.description,
+        work_count: record.get('work_count')?.toNumber?.() ?? Number(record.get('work_count')),
+        figure_count: record.get('figure_count')?.toNumber?.() ?? Number(record.get('figure_count')),
+      };
+    });
+
+    // Get total counts
+    const totalLocResult = await session.run(
+      `MATCH (l:Location) RETURN count(l) as total`
+    );
+    const totalLocations = totalLocResult.records[0]?.get('total')?.toNumber?.() ?? 0;
+
+    const totalEraResult = await session.run(
+      `MATCH (e:Era) RETURN count(e) as total`
+    );
+    const totalEras = totalEraResult.records[0]?.get('total')?.toNumber?.() ?? 0;
+
+    const mostWorksLocation = locations.length > 0 ? locations[0].name : '';
+    const mostWorksEra = eras.length > 0 ? eras[0].name : '';
+
+    return {
+      locations,
+      eras,
+      stats: {
+        total_locations: totalLocations,
+        total_eras: totalEras,
+        most_works_location: mostWorksLocation,
+        most_works_era: mostWorksEra,
+      },
+    };
+  } finally {
+    await session.close();
+  }
+}
+
+export async function getMediaLocationsAndEras(wikidataId: string): Promise<{
+  locations: Location[];
+  eras: Era[];
+}> {
+  const session = await getSession();
+  try {
+    const result = await session.run(
+      `MATCH (m:MediaWork {wikidata_id: $wikidataId})
+       OPTIONAL MATCH (m)-[:SET_IN]->(l:Location)
+       OPTIONAL MATCH (m)-[:SET_IN_ERA]->(e:Era)
+       RETURN collect(DISTINCT l) as locations, collect(DISTINCT e) as eras`,
+      { wikidataId }
+    );
+
+    if (result.records.length === 0) {
+      return { locations: [], eras: [] };
+    }
+
+    const record = result.records[0];
+    const locationsData = record.get('locations').filter((l: any) => l !== null);
+    const erasData = record.get('eras').filter((e: any) => e !== null);
+
+    return {
+      locations: locationsData.map((l: any) => ({
+        location_id: l.properties.location_id,
+        name: l.properties.name,
+        location_type: l.properties.location_type,
+        wikidata_id: l.properties.wikidata_id,
+        parent_location: l.properties.parent_location,
+        coordinates: l.properties.coordinates,
+        description: l.properties.description,
+      })),
+      eras: erasData.map((e: any) => ({
+        era_id: e.properties.era_id,
+        name: e.properties.name,
+        start_year: e.properties.start_year?.toNumber?.() ?? Number(e.properties.start_year),
+        end_year: e.properties.end_year?.toNumber?.() ?? Number(e.properties.end_year),
+        era_type: e.properties.era_type,
+        wikidata_id: e.properties.wikidata_id,
+        parent_era: e.properties.parent_era,
+        description: e.properties.description,
+      })),
     };
   } finally {
     await session.close();

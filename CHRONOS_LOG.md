@@ -1,4 +1,1423 @@
 ---
+**TIMESTAMP:** 2026-01-19T20:45:00Z
+**AGENT:** Claude Code (Sonnet 4.5)
+**STATUS:** ✅ SESSION COMPLETE - CREATE-ISSUE SLASH COMMAND
+
+**SUMMARY:**
+Added `/create-issue` slash command for rapid bug/feature/improvement capture during development flow. Enables developers to create complete GitHub issues in under 2 minutes without context-switching, maintaining flow state while ensuring proper issue documentation with titles, descriptions, relevant files, and labels.
+
+**MOTIVATION:**
+Developers frequently encounter bugs or think of improvements while coding but lose momentum by switching to GitHub UI, manually formatting issues, and searching for context. This skill streamlines issue capture to a conversational 2-minute exchange, respecting flow state and reducing friction.
+
+**SKILL CAPABILITIES:**
+
+**Core Functionality:**
+- Creates GitHub issues via `gh issue create` CLI
+- Gathers minimal required context through concise questions
+- Searches codebase for relevant files (Grep)
+- Web searches for complex feature patterns (optional)
+- Applies proper labels: type (bug/feature/improvement), priority, effort
+- Returns issue number and URL immediately
+
+**Issue Template Structure:**
+```
+Title: [Clear, actionable title]
+
+## Summary
+[1-2 sentence TL;DR]
+
+## Current Behavior vs Expected Behavior
+[What happens now vs what should happen]
+
+## Relevant Files
+- `path/to/file.ts` - [context]
+(max 3 files)
+
+## Notes
+[Risks, dependencies, context]
+
+Labels: type, priority, effort
+```
+
+**Behavioral Principles:**
+1. **Respect Flow State**: 2-minute max interaction
+2. **Smart Defaults**: Assume normal priority, medium effort unless obvious
+3. **Context Over Questions**: Search codebase first, ask second
+4. **Actionable Over Perfect**: Capture quickly, refine later
+5. **Concise Communication**: 2-3 targeted questions, not checklist interrogations
+
+**Example Interactions:**
+
+**Simple Bug (No Questions):**
+```
+User: "Search bar crashes on special characters"
+→ Grep for search component
+→ Create issue: bug, priority:high, effort:small
+→ Return: "Created #123"
+```
+
+**Feature Request (Clarification Needed):**
+```
+User: "We need dark mode"
+→ Ask: "Toggle or system preference? Persist where?"
+→ Web search: Next.js dark mode patterns
+→ Grep for theme files
+→ Create issue with approach notes
+→ Return: "Created #124"
+```
+
+**Mid-Flow Capture:**
+```
+User: "API returns 500 when creator field missing"
+→ Grep for API route
+→ Note: "Likely needs null check in route.ts"
+→ Create issue: bug, priority:normal, effort:small
+→ Return: "Created #125"
+```
+
+**Anti-Patterns (Explicitly Avoided):**
+❌ Asking for obvious information
+❌ Web searching trivial bugs
+❌ Listing >3 files
+❌ Long paragraphs in issues
+❌ Multiple back-and-forths
+❌ Asking priority for critical bugs
+
+**SUCCESS CRITERIA:**
+✅ Issue created in <2 minutes
+✅ Developer returns to coding immediately
+✅ Issue has sufficient context for future implementation
+✅ No redundant questions
+✅ Appropriate labels applied
+
+**FILES CREATED:**
+
+1. `.claude/skills/create-issue.md` (141 lines)
+   - Skill definition with markdown frontmatter
+   - Complete workflow documentation (Gather → Create → Done)
+   - 3 concrete examples with expected behavior
+   - Key principles and anti-patterns
+   - Issue format template
+   - Success criteria checklist
+
+**DIRECTORY STRUCTURE:**
+```
+.claude/
+├── agents/          (14 specialized agents)
+├── skills/          (NEW)
+│   └── create-issue.md
+└── settings.local.json
+```
+
+**USAGE:**
+
+Developers can now invoke the skill by typing:
+```
+/create-issue
+```
+
+Or with context:
+```
+/create-issue Search crashes on special chars
+```
+
+The skill will:
+1. Ask 2-3 targeted questions if needed (30-60s)
+2. Search codebase for context (optional)
+3. Create GitHub issue with `gh` CLI (15-30s)
+4. Return issue URL (5s)
+
+**INTEGRATION:**
+- Uses existing `gh` CLI (GitHub CLI) for issue creation
+- Leverages Grep tool for codebase search
+- Can use WebSearch for complex features
+- Works within existing ChronosGraph workflow patterns
+
+**IMPACT:**
+
+⚡ **Flow Preservation**: Captures issues without derailing coding momentum
+📋 **Documentation Quality**: Ensures issues have proper structure and context
+🎯 **Prioritization**: Smart defaults reduce decision fatigue
+🔍 **Context Enrichment**: Automatic file search adds relevant references
+⏱️ **Time Savings**: 2-minute capture vs 10+ minute manual process
+🧠 **Cognitive Load Reduction**: No need to remember issue details later
+
+This skill complements the existing agent ecosystem by providing a lightweight, conversational interface for issue management, distinct from the heavyweight structured workflows of the chief-of-staff CTO mode.
+
+**FOLLOW-UP: `/explore` Slash Command Added**
+
+Added complementary `/explore` skill for deep feature exploration before implementation.
+
+**Purpose**: Thoroughly analyze and understand features before coding, surfacing all ambiguities, dependencies, and edge cases to ensure perfect clarity.
+
+**Core Directive**: **DO NOT IMPLEMENT YET** - only explore, plan, and ask questions.
+
+**Workflow Phases:**
+1. **Acknowledge & Prepare** - Confirm exploration role, wait for feature description
+2. **Deep Exploration** (10-15 min) - Codebase analysis, dependency mapping, edge case ID
+3. **Question Formulation** - Organize questions by category (requirements, scope, technical, preferences)
+4. **Back-and-Forth Clarification** - Iterate until zero ambiguities remain
+5. **Ready for Implementation** - Summarize complete spec, list files, outline approach
+
+**Output Format:**
+```
+# Exploration Results for [Feature Name]
+
+## Current Codebase Analysis
+- Relevant files with line numbers
+- Existing patterns for similar features
+- Current data flow
+
+## Dependencies
+- Code dependencies
+- External dependencies
+- Database requirements
+
+## Integration Points
+- UI components affected
+- API endpoints modified/created
+- Database queries
+- State management
+
+## Edge Cases Identified
+- [Realistic scenarios with handling questions]
+
+## Questions Needing Clarification
+### Requirements
+### Technical Decisions
+### User Preferences
+
+## Risks and Constraints
+```
+
+**Key Principles:**
+- **Clarity Over Speed**: Take time to understand fully
+- **Question Everything Ambiguous**: If not explicit, ask
+- **No Assumptions**: Never assume unstated requirements
+- **Show Your Work**: Explain codebase findings
+- **Present Options**: Lay out trade-offs when multiple approaches exist
+- **Be Thorough, Not Exhaustive**: Realistic scenarios, not every edge case
+
+**Integration with CTO Workflow:**
+- **Use `/explore`**: Deep feature understanding before commitment
+- **Use CTO workflow**: Structured execution of well-understood features
+
+**Typical flow:**
+1. User describes feature → 2. `/explore` surfaces ambiguities → 3. User clarifies → 4. Hand off to chief-of-staff CTO mode → 5. Structured implementation
+
+**FILES CREATED:**
+
+2. `.claude/skills/explore.md` (258 lines)
+   - Complete exploration framework with 5-phase workflow
+   - Detailed output format template
+   - Example dark mode exploration with Q&A
+   - Integration notes with CTO workflow
+   - Success criteria and anti-patterns
+
+**COMBINED IMPACT:**
+
+The two skills create a complete development workflow:
+- **`/create-issue`**: Lightweight, <2min, flow-preserving issue capture
+- **`/explore`**: Heavyweight, 20-30min, deep feature understanding before coding
+
+Together with the chief-of-staff CTO mode, ChronosGraph now has a complete spectrum:
+1. **Quick capture** (`/create-issue`) → 2. **Deep exploration** (`/explore`) → 3. **Structured execution** (CTO workflow) → 4. **Quality gates** (code-review-tester)
+
+**FOLLOW-UP 2: `/create-plan` Slash Command Added**
+
+Added final piece of the development workflow: implementation plan generation after exploration.
+
+**Purpose**: Generate clear, minimal, modular implementation plans with progress tracking after `/explore` completes.
+
+**Core Directive**: **NO SCOPE CREEP** - only include what was explicitly agreed upon during exploration.
+
+**Plan Template Structure:**
+```markdown
+# Feature Implementation Plan: [Name]
+
+**Overall Progress:** `0%` (0/X tasks complete)
+
+## TL;DR
+[1-2 sentence summary]
+
+## Critical Decisions
+- Decision 1: [choice] - [rationale]
+- Decision 2: [choice] - [rationale]
+
+## Implementation Tasks
+
+### Phase 1: [Name]
+- [ ] 🟥 **Task 1.1: [Clear Name]**
+  - [ ] 🟥 Subtask 1
+  - [ ] 🟥 Subtask 2
+  - **Files**: `path/to/file.ts`
+  - **Notes**: [Context]
+  - **Dependencies**: [Other tasks]
+
+### Phase 2: [Name]
+[More tasks...]
+
+### Phase 3: Testing & Polish
+[Testing tasks...]
+
+## Rollback Plan
+[How to revert if things go wrong]
+
+## Success Criteria
+✅ Specific, measurable outcomes
+
+## Out of Scope
+[Explicitly not included]
+```
+
+**Status Tracking:**
+- 🟥 To Do
+- 🟨 In Progress
+- 🟩 Done
+- Overall progress: `37.5%` (3/8 tasks complete)
+
+**Key Principles:**
+- **Minimal Viable Change**: Smallest change that delivers value
+- **No Scope Creep**: Only what was explicitly agreed upon
+- **Modular Steps**: Each task independently valuable
+- **Clear Dependencies**: Tasks ordered to avoid blocking
+- **Actionable**: Anyone can execute without clarification
+- **Testable Phases**: Each phase has verification
+- **Reversible**: Document how to undo changes
+
+**Plan Maintenance:**
+As work progresses:
+- Update emoji status (🟥 → 🟨 → 🟩)
+- Update progress percentage
+- Add notes for deviations
+- Document issues and solutions
+- Mark completed checkboxes
+
+**File Storage:** `.plans/[feature-name]-implementation-plan.md`
+
+**FILES CREATED:**
+
+3. `.claude/skills/create-plan.md` (372 lines)
+   - Complete plan generation framework
+   - Detailed markdown template with all sections
+   - Full dark mode example plan (realistic complexity)
+   - Progress tracking examples
+   - Anti-patterns and success criteria
+   - Integration notes with other skills
+
+**COMPLETE DEVELOPMENT WORKFLOW:**
+
+ChronosGraph now has a **complete, integrated development workflow** spanning idea capture through execution:
+
+```
+1. 💡 Idea/Bug Discovery
+   ↓
+2. 📋 /create-issue (2 min)
+   → Quick capture, preserve flow
+   ↓
+3. 🔍 /explore (20-30 min)
+   → Deep analysis, surface ambiguities
+   ↓
+4. 📝 /create-plan (5 min)
+   → Generate living implementation document
+   ↓
+5. 🏗️ Chief-of-Staff CTO Mode
+   → Break into phases, delegate to agents
+   ↓
+6. 🔨 Specialist Agents Execute
+   → data-architect, frontend-polish-specialist, etc.
+   ↓
+7. ✅ code-review-tester
+   → Quality gates before merge
+   ↓
+8. 🚀 Ship
+```
+
+**Workflow Decision Tree:**
+
+**Trivial change?** → Just implement
+**Bug mid-flow?** → `/create-issue`
+**Complex feature, unclear?** → `/explore` → `/create-plan` → CTO mode
+**Well-understood feature?** → CTO mode directly
+**Emergency fix?** → `/create-issue` + immediate fix
+
+**BEFORE vs AFTER:**
+
+| Scenario | Before | After |
+|----------|--------|-------|
+| Quick idea capture | Manual issue creation (10+ min) | `/create-issue` (2 min) |
+| Feature planning | Guess or ask vague questions | `/explore` (surfaces all ambiguities) |
+| Implementation tracking | Mental checklist or manual docs | `/create-plan` (living document with %) |
+| Feature execution | Ad-hoc implementation | CTO mode (phased agent delegation) |
+| Quality control | Post-hoc review | code-review-tester (gates) |
+
+**DIRECTORY STRUCTURE UPDATE:**
+```
+.claude/
+├── agents/          (14 specialized agents)
+├── skills/          (3 workflow skills)
+│   ├── create-issue.md
+│   ├── explore.md
+│   └── create-plan.md
+└── settings.local.json
+
+.plans/              (NEW - implementation plans)
+└── [feature]-implementation-plan.md
+```
+
+**STRATEGIC IMPACT:**
+
+🎯 **End-to-End Workflow**: Complete pipeline from idea to execution
+📊 **Visibility**: Progress tracking and living documentation
+🔄 **Consistency**: Same proven process for every feature
+🧠 **Clarity**: No ambiguities, no guesswork
+⚡ **Efficiency**: Right tool for each stage
+🛡️ **Quality**: Multiple gates prevent regressions
+📚 **Knowledge**: Plans become project documentation
+🚀 **Velocity**: Reduced thrash, faster delivery
+
+ChronosGraph now has enterprise-grade development infrastructure. The three skills (create-issue, explore, create-plan) combined with the chief-of-staff CTO mode and specialized agents create a systematic approach to software development that scales from individual contributors to team collaboration.
+
+**FOLLOW-UP 3: `/execute` Slash Command Added**
+
+Added the execution engine to complete the development workflow: `/execute` implements plans with live progress tracking.
+
+**Purpose**: Implement features precisely as planned, with elegant code following existing patterns, updating the plan document dynamically as tasks complete.
+
+**Core Directive**: **IMPLEMENT EXACTLY AS PLANNED** - no scope creep, no deviations without documentation, progress tracking mandatory.
+
+**Execution Workflow (4 Phases):**
+
+**Phase 1: Pre-Implementation Setup**
+- Read implementation plan from `.plans/[feature]-implementation-plan.md`
+- Review existing codebase patterns and conventions
+- Set up progress tracking (confirm initial state: all 🟥, 0%)
+
+**Phase 2: Sequential Task Execution**
+For each task:
+1. Mark as 🟨 (in progress)
+2. Implement following plan's subtasks exactly
+3. Write elegant, minimal, modular code
+4. Add clear comments for non-obvious logic
+5. Mark as 🟩 (complete) with timestamp
+6. Update overall progress percentage
+
+**Phase 3: Testing & Validation**
+- Execute test tasks from plan
+- Test edge cases from exploration phase
+- Verify success criteria
+- Integration verification
+
+**Phase 4: Documentation & Cleanup**
+- Complete documentation tasks
+- Add code comments
+- Update README files
+- Finalize plan with summary
+
+**Code Quality Standards:**
+
+**Follow Existing Patterns:**
+```typescript
+// If codebase uses named exports:
+export function getUserById(id: string) { ... }
+
+// DO: Match this pattern
+export function getMediaById(id: string) { ... }
+
+// DON'T: Use different pattern
+export default function getMedia(id: string) { ... }
+```
+
+**Comment Guidelines:**
+- Explain WHY, not WHAT
+- Complex algorithms and business logic
+- Non-obvious decisions or trade-offs
+- Public API functions (JSDoc)
+- Don't comment obvious code
+
+**Error Handling:**
+Match existing patterns, avoid `any`, use explicit return types
+
+**Live Progress Tracking:**
+```markdown
+**Overall Progress:** `25%` (2/8 tasks complete)
+
+- [x] 🟩 **Task 1.1: Create Theme Context**
+  - [x] 🟩 Create ThemeContext.tsx
+  - [x] 🟩 Add localStorage read/write
+  - [x] 🟩 Detect OS dark mode preference
+  - **Completed**: 2026-01-19 15:30
+  - **Notes**: Added 300ms debounce for performance
+  - **Files Modified**:
+    - `web-app/contexts/ThemeContext.tsx` (created, 87 lines)
+
+- [ ] 🟨 **Task 2.1: Add Toggle to Navbar**
+  - [x] 🟩 Create toggle icon component
+  - [ ] 🟨 Add toggle button (IN PROGRESS)
+  - **Started**: 2026-01-19 15:50
+```
+
+**Deviation Handling:**
+
+**Acceptable (document):**
+- Better variable name
+- Slight structural optimization
+- Performance improvement maintaining same API
+
+**Not Acceptable (stop and ask):**
+- Adding features not in plan
+- Changing approach without approval
+- Skipping success criteria or tests
+
+**Deviation Documentation:**
+```markdown
+- **Deviation**: Used `useCallback` instead of plain function
+- **Rationale**: Prevents unnecessary re-renders
+- **Impact**: None - same API, better performance
+```
+
+**Emergency Handling:**
+If blocked mid-implementation:
+1. Stop and document issue in plan
+2. Keep task as 🟨 or revert to 🟥
+3. Update progress accurately
+4. Communicate blocker to user
+5. Wait for resolution
+
+**Example Session Output:**
+```
+Starting implementation of Dark Mode Toggle...
+Plan: 8 tasks, 0% complete
+
+✅ Task 1.1 Complete: Theme Context created
+Files: web-app/contexts/ThemeContext.tsx (87 lines)
+Progress: 12.5% (1/8)
+
+✅ Task 1.2 Complete: App wrapped in provider
+Files: web-app/app/layout.tsx (+12 lines)
+Progress: 25% (2/8)
+
+[... continues through all tasks ...]
+
+✅ All implementation complete!
+Progress: 100% (8/8)
+All success criteria met ✅
+Files modified: 6 files, 234 lines added
+Ready for review.
+```
+
+**FILES CREATED:**
+
+4. `.claude/skills/execute.md` (450+ lines)
+   - Complete 4-phase execution framework
+   - Code quality standards and patterns
+   - Live progress tracking methodology
+   - Deviation handling protocols
+   - Example implementation session
+   - Emergency handling procedures
+   - Integration with other skills
+
+**FINAL COMPLETE WORKFLOW:**
+
+The four skills now form a **closed-loop development system**:
+
+```
+1. 💡 Idea/Bug Discovery
+   ↓
+2. 📋 /create-issue (2 min)
+   → Quick capture with labels
+   ↓
+3. 🔍 /explore (20-30 min)
+   → Deep analysis, surface ambiguities
+   ↓
+4. 📝 /create-plan (5 min)
+   → Generate living implementation document
+   ↓
+5. 🔨 /execute (varies)
+   → Implement with live progress tracking ⭐ NEW
+   ↓
+6. ✅ code-review-tester
+   → Quality gates before merge
+   ↓
+7. 🚀 Ship
+```
+
+**Or with Chief-of-Staff orchestration:**
+```
+/explore → /create-plan → Chief-of-Staff phases → /execute each phase → Review gates → Ship
+```
+
+**Decision Tree Updated:**
+
+| Scenario | Command | Reasoning |
+|----------|---------|-----------|
+| Trivial change | Direct implementation | No workflow needed |
+| Bug mid-flow | `/create-issue` | Quick capture, preserve flow |
+| Complex feature (unclear) | `/explore` → `/create-plan` → `/execute` | Full workflow |
+| Complex feature (clear) | `/create-plan` → `/execute` | Skip exploration |
+| Well-understood feature | `/execute` directly | If plan already exists |
+| Emergency fix | `/create-issue` + direct fix | Speed critical |
+| Multi-phase feature | CTO mode + `/execute` per phase | Complex coordination |
+
+**UPDATED DIRECTORY STRUCTURE:**
+```
+.claude/
+├── agents/          (14 specialized agents)
+├── skills/          (4 workflow skills) ⭐
+│   ├── create-issue.md    (140 lines)
+│   ├── explore.md         (257 lines)
+│   ├── create-plan.md     (371 lines)
+│   └── execute.md         (450+ lines) ⭐ NEW
+└── settings.local.json
+
+.plans/              (implementation plans)
+└── [feature]-implementation-plan.md (updated live by /execute)
+```
+
+**COMPLETE WORKFLOW METRICS:**
+
+| Phase | Skill | Time | Output | Progress Tracking |
+|-------|-------|------|--------|-------------------|
+| Capture | `/create-issue` | 2 min | GitHub issue | Issue # |
+| Explore | `/explore` | 20-30 min | Analysis + questions | N/A |
+| Plan | `/create-plan` | 5 min | Markdown plan | 0% → ready |
+| Execute | `/execute` | Varies | Working code | 0% → 100% live |
+| Review | Agent/manual | 10-15 min | Approved/changes | N/A |
+| Ship | Git commit | 2 min | Deployed | Done ✅ |
+
+**STRATEGIC IMPACT (FINAL):**
+
+🎯 **End-to-End Automation**: Complete pipeline with progress visibility
+📊 **Live Tracking**: Know exactly where implementation stands
+🔄 **Reproducibility**: Same process every time, predictable outcomes
+🧠 **Zero Ambiguity**: Explore → Plan → Execute eliminates guesswork
+⚡ **Execution Speed**: Clear plan = faster implementation
+🛡️ **Quality Assurance**: Pattern matching + progress gates
+📚 **Living Documentation**: Plan updates become implementation history
+🚀 **Predictable Velocity**: Track completion rates, estimate future work
+🔧 **Maintenance**: Deviation documentation aids future changes
+👥 **Collaboration**: Any dev can resume from plan checkpoint
+
+**BEFORE vs AFTER (COMPLETE):**
+
+| Aspect | Before | After |
+|--------|--------|-------|
+| **Idea Capture** | Manual GitHub (10+ min) | `/create-issue` (2 min) |
+| **Feature Planning** | Vague questions, guesswork | `/explore` (all ambiguities surfaced) |
+| **Implementation Docs** | Mental/scattered notes | `/create-plan` (living document) |
+| **Execution** | Ad-hoc, no tracking | `/execute` (live progress 0→100%) |
+| **Progress Visibility** | "How's it going?" | Real-time % in plan file |
+| **Code Quality** | Inconsistent patterns | Pattern matching enforced |
+| **Deviation Handling** | Undocumented changes | Rationale required in plan |
+| **Resumability** | Hard to resume if blocked | Plan shows exact checkpoint |
+| **Knowledge Transfer** | Tribal knowledge | Plan + deviations = full history |
+
+**ChronosGraph Development Infrastructure: COMPLETE**
+
+The four workflow skills + chief-of-staff CTO mode + 14 specialized agents create a **production-grade software development system** that:
+
+✅ Captures ideas without breaking flow
+✅ Eliminates ambiguity before coding
+✅ Generates actionable implementation plans
+✅ Executes with live progress tracking
+✅ Maintains pattern consistency
+✅ Documents deviations and rationale
+✅ Enables collaboration through living docs
+✅ Scales from solo dev to team coordination
+
+**Total System:** 4 skills (1,218 lines) + 14 agents + CTO workflow = Enterprise-grade development infrastructure
+
+**FOLLOW-UP 4: `/review` Slash Command Added**
+
+Added comprehensive code review capability to complete the quality gates in the development workflow.
+
+**Purpose**: Perform thorough code review checking logging, error handling, TypeScript quality, production readiness, React patterns, performance, security, and architecture.
+
+**Core Directive**: **BE THOROUGH BUT CONCISE** - catch critical issues, provide specific fixes, prioritize by severity.
+
+**8-Category Review Checklist:**
+
+1. **Logging** - No console.log, proper logger with context
+2. **Error Handling** - Try-catch for async, centralized handlers, helpful messages
+3. **TypeScript** - No `any` types, proper interfaces, no @ts-ignore
+4. **Production Readiness** - No debug statements, TODOs, hardcoded secrets
+5. **React/Hooks** - Effects with cleanup, complete dependencies, no infinite loops
+6. **Performance** - No unnecessary re-renders, expensive calcs memoized
+7. **Security** - Auth checked, inputs validated, RLS policies
+8. **Architecture** - Follows existing patterns, code in correct directory
+
+**Severity Levels:**
+
+| Level | Description | Action |
+|-------|-------------|--------|
+| **CRITICAL** | Security, data loss, crashes | Block merge |
+| **HIGH** | Bugs, performance, bad UX | Should fix before merge |
+| **MEDIUM** | Code quality, maintainability | Fix this sprint |
+| **LOW** | Style, minor improvements | Can defer to backlog |
+
+**Output Format:**
+```markdown
+# Code Review Report
+
+**Files Reviewed:** 8 files, 1,234 lines
+
+## ✅ Looks Good
+- Error handling comprehensive
+- TypeScript types properly defined
+- Database queries include LIMIT clauses
+
+## ⚠️ Issues Found
+
+### CRITICAL Issues (Must Fix)
+- **CRITICAL** `api/users/route.ts:45` - SQL injection vulnerability
+  - **Issue**: User input concatenated into query
+  - **Fix**: Use parameterized query: `db.query('SELECT * FROM users WHERE id = $1', [userId])`
+  - **Impact**: Attackers can execute arbitrary SQL
+
+### HIGH Priority Issues
+- **HIGH** `UserList.tsx:67` - Infinite loop risk
+  - **Issue**: useEffect missing dependency: `userId`
+  - **Fix**: Add to dependency array: `useEffect(() => {...}, [userId])`
+  - **Impact**: Component renders with stale data
+
+### MEDIUM/LOW Issues...
+
+## 📊 Summary
+- Files reviewed: 8 files, 1,234 lines
+- CRITICAL: 2 | HIGH: 2 | MEDIUM: 3 | LOW: 2
+- **Recommendation**: ❌ DO NOT MERGE - Fix critical/high issues first
+
+## 🎯 Priority Actions
+1. Immediate (before merge): [Critical/High fixes]
+2. Short-term (this sprint): [Medium fixes]
+3. Long-term (backlog): [Low priority]
+
+## 📚 Recommendations
+- Add ESLint rule to ban console.log
+- Set up pre-commit hook for secrets check
+- Document error handling patterns
+```
+
+**Review Modes:**
+
+**Mode 1: Quick Review (5-10 min)**
+- Critical security issues
+- Console.log statements
+- Any types
+- Missing error handling
+- **Use when**: Pre-commit check, pair programming
+
+**Mode 2: Standard Review (15-30 min)**
+- All 8 categories checked thoroughly
+- **Use when**: PR review, before merge
+
+**Mode 3: Deep Review (45-60 min)**
+- Standard review + test coverage, performance profiling, accessibility, SEO
+- **Use when**: Major feature launch, quarterly audit
+
+**ChronosGraph-Specific Checks:**
+
+**Neo4j Queries:**
+- Parameterized queries (`MATCH (n {id: $id})`)
+- LIMIT clauses on collections
+- Validate canonical_id/wikidata_id before writes
+- Follow MediaWork Ingestion Protocol
+
+**Next.js API Routes:**
+- Proper HTTP method handlers
+- NextResponse with status codes
+- Try-catch error handling
+- Request body validation
+
+**React Components:**
+- Tailwind classes (no inline styles)
+- Loading states for async data
+- Error boundaries for critical UI
+- Follow existing component patterns
+
+**Usage Examples:**
+```bash
+# Review last commit
+/review
+
+# Review specific files
+/review web-app/api/media/create/route.ts
+
+# Review directory
+/review web-app/app/api/media/**
+```
+
+**Integration with Workflow:**
+```
+/execute → /review → Fix issues → /review again → code-review-tester agent → Commit
+```
+
+**FILES CREATED:**
+
+5. `.claude/skills/review.md` (450+ lines)
+   - 8-category review checklist
+   - Severity level definitions (Critical/High/Medium/Low)
+   - Detailed output format template
+   - ChronosGraph-specific checks
+   - 3 review modes (Quick/Standard/Deep)
+   - Usage examples and integration notes
+   - Anti-patterns and success criteria
+
+**FINAL COMPLETE WORKFLOW (UPDATED):**
+
+```
+1. 💡 Idea/Bug Discovery
+   ↓
+2. 📋 /create-issue (2 min)
+   → Quick capture with labels
+   ↓
+3. 🔍 /explore (20-30 min)
+   → Deep analysis, surface ambiguities
+   ↓
+4. 📝 /create-plan (5 min)
+   → Generate living implementation document
+   ↓
+5. 🔨 /execute (varies)
+   → Implement with live progress tracking
+   ↓
+6. 🔍 /review (15-30 min) ⭐ NEW
+   → Comprehensive code review with severity levels
+   ↓
+7. 🛠️ Fix Issues
+   → Address critical/high priority findings
+   ↓
+8. 🔍 /review again
+   → Verify fixes, ensure clean slate
+   ↓
+9. ✅ code-review-tester agent
+   → Final quality gates before merge
+   ↓
+10. 🚀 Ship
+```
+
+**UPDATED DIRECTORY STRUCTURE:**
+```
+.claude/
+├── agents/          (14 specialized agents)
+├── skills/          (5 workflow skills) ⭐
+│   ├── create-issue.md    (140 lines)
+│   ├── explore.md         (257 lines)
+│   ├── create-plan.md     (371 lines)
+│   ├── execute.md         (450+ lines)
+│   └── review.md          (450+ lines) ⭐ NEW
+└── settings.local.json
+
+.plans/              (implementation plans)
+└── [feature]-implementation-plan.md
+```
+
+**COMPLETE WORKFLOW METRICS (UPDATED):**
+
+| Phase | Skill/Tool | Time | Output | Progress Tracking |
+|-------|------------|------|--------|-------------------|
+| Capture | `/create-issue` | 2 min | GitHub issue | Issue # |
+| Explore | `/explore` | 20-30 min | Analysis + questions | N/A |
+| Plan | `/create-plan` | 5 min | Markdown plan | 0% → ready |
+| Execute | `/execute` | Varies | Working code | 0% → 100% live |
+| Review | `/review` | 15-30 min | Issue report + severity | Critical/High/Med/Low |
+| Fix | Manual/agent | Varies | Fixed code | N/A |
+| Re-review | `/review` | 5-10 min | Clean report | ✅ |
+| Final QA | code-review-tester | 10-15 min | Approved/changes | N/A |
+| Ship | Git commit | 2 min | Deployed | Done ✅ |
+
+**STRATEGIC IMPACT (FINAL - COMPLETE SYSTEM):**
+
+🎯 **End-to-End Quality**: Complete pipeline from capture to deployment with multiple quality gates
+📊 **Multi-Level Review**: Self-review (/review) + agent review (code-review-tester) catches more issues
+🔄 **Iterative Quality**: Review → Fix → Re-review cycle ensures clean code
+🧠 **Educational**: Review output teaches best practices and patterns
+⚡ **Fast Feedback**: Know issues before formal PR review
+🛡️ **Defense in Depth**: Multiple review layers prevent regressions
+📚 **Knowledge Sharing**: Review comments become learning resources
+🚀 **Merge Confidence**: Clear severity levels guide merge decisions
+🔧 **Preventive**: Recommendations help avoid future issues
+👥 **Consistency**: Same review criteria for all code, all devs
+
+**BEFORE vs AFTER (COMPLETE SYSTEM):**
+
+| Aspect | Before | After |
+|--------|--------|-------|
+| **Idea Capture** | Manual GitHub (10+ min) | `/create-issue` (2 min) |
+| **Feature Planning** | Vague questions, guesswork | `/explore` (all ambiguities surfaced) |
+| **Implementation Docs** | Mental/scattered notes | `/create-plan` (living document) |
+| **Execution** | Ad-hoc, no tracking | `/execute` (live progress 0→100%) |
+| **Code Review** | Manual PR review only | `/review` + PR review (2 layers) |
+| **Issue Severity** | Subjective assessment | Standardized Critical/High/Med/Low |
+| **Fix Guidance** | "Fix this" | Specific fix suggestions with rationale |
+| **Quality Confidence** | Hope tests catch issues | Multi-gate validation system |
+| **Pattern Consistency** | Varies by reviewer | Enforced via review checklist |
+| **Security Checks** | Sometimes missed | Always checked (SQL injection, XSS, etc.) |
+
+**ChronosGraph Development Infrastructure: COMPLETE (FINAL)**
+
+The **five workflow skills** + chief-of-staff CTO mode + 14 specialized agents create a **production-grade, enterprise-level software development system** that:
+
+✅ Captures ideas without breaking flow (`/create-issue`)
+✅ Eliminates ambiguity before coding (`/explore`)
+✅ Generates actionable implementation plans (`/create-plan`)
+✅ Executes with live progress tracking (`/execute`)
+✅ **Reviews comprehensively with severity levels (`/review`)** ⭐ NEW
+✅ Maintains pattern consistency (enforced by `/review`)
+✅ Documents deviations and rationale (in plans)
+✅ Enables collaboration through living docs
+✅ Scales from solo dev to team coordination
+✅ **Provides multi-layer quality gates** ⭐
+
+**Total Development System:**
+- **5 skills** (1,668 lines of workflow automation)
+- **14 specialized agents** (data-architect, frontend-polish-specialist, etc.)
+- **CTO workflow** (5-phase structured execution)
+- **= Complete enterprise-grade development infrastructure**
+
+**Quality Gate Architecture:**
+```
+Gate 1: Pattern enforcement during /execute
+   ↓
+Gate 2: Comprehensive /review (8 categories, 4 severity levels)
+   ↓
+Gate 3: Fix cycle (address critical/high issues)
+   ↓
+Gate 4: Re-review verification
+   ↓
+Gate 5: code-review-tester agent (final check)
+   ↓
+Gate 6: Deployment
+```
+
+This multi-gate architecture ensures code quality through progressive validation, catching issues at multiple stages rather than relying on a single review point. Each gate reinforces the others, creating a robust quality assurance system.
+
+**FOLLOW-UP 5: `/peer-review` Slash Command Added**
+
+Added critical evaluation capability for external peer reviews to protect against context-free feedback and misunderstandings.
+
+**Purpose**: Critically evaluate peer review feedback from external reviewers (other AI models, contractors, consultants) who lack full project context. Verify each finding, assess validity, separate signal from noise.
+
+**Core Directive**: **YOU ARE THE TEAM LEAD** - Don't accept findings at face value. External reviewers have less context than you. Verify everything.
+
+**Critical Context:**
+- External reviewers lack project history, architectural decisions, constraints
+- Some findings will be based on misunderstandings or incomplete information
+- Your deep project knowledge is an asset - use it to filter effectively
+- Respectful but firm: acknowledge effort, dismiss invalid findings with evidence
+
+**Evaluation Process (3 Steps per Finding):**
+
+**Step 1: Verify It Exists**
+- Read actual code at specified location
+- Check if issue described actually exists
+- Look for contradicting evidence
+- Consider if reviewer misunderstood architecture
+
+**Step 2: Assess Context**
+- Architectural reasons for this pattern?
+- Historical context reviewer lacks?
+- Project constraints they don't know about?
+- Consistent with existing codebase conventions?
+
+**Step 3: Determine Validity**
+
+**If INVALID:**
+- Explain why it doesn't apply
+- Provide code evidence
+- Explain reviewer's misunderstanding
+- Reference architectural decisions
+
+**If VALID:**
+- Confirm issue exists
+- Re-assess severity (may differ from reviewer)
+- Add to prioritized fix plan
+- Note caveats/context
+
+**Common Reasons Findings Are Invalid:**
+
+1. **Already Handled** - Error handling exists, reviewer missed it
+2. **Architectural Misunderstanding** - Project uses different approach intentionally
+3. **Context Gaps** - Reviewer lacks requirement knowledge
+4. **Over-Engineering** - Suggestion violates project's minimal principle
+5. **Incorrect Severity** - Issue real but severity over-estimated
+
+**Output Format:**
+```markdown
+# Peer Review Evaluation Report
+
+**Reviewer**: GPT-4 Contractor
+**Total Findings**: 5
+**Valid**: 2 | **Invalid**: 3
+
+## 📋 Finding-by-Finding Analysis
+
+### Finding 1: SQL Injection Vulnerability
+**Location**: `api/media/route.ts:67`
+**Reviewer Claim**: User input concatenated into query
+
+**Verification**: ❌ INVALID
+
+**Analysis**:
+Project uses Neo4j (not SQL) with parameterized queries.
+Reviewer confused Cypher syntax with SQL concatenation.
+
+**Evidence**:
+```typescript
+session.run('CREATE (m {title: $title})', { title })
+// ^ Parameterized, safe
+```
+
+**Decision**: INVALID - No security risk
+
+---
+
+### Finding 2: Missing Input Validation
+**Location**: `api/media/route.ts:45`
+**Reviewer Claim**: No title length validation
+
+**Verification**: ✅ CONFIRMED
+
+**Evidence**:
+```typescript
+const { title } = await request.json();
+// No validation before use
+```
+
+**Actual Severity**: MEDIUM (not HIGH - UX issue, not critical)
+**Decision**: VALID - Add validation
+
+---
+
+## ✅ Valid Findings (2)
+
+### HIGH Priority
+1. Missing loading state in MediaForm
+   - Fix: Add isLoading state, disable button
+
+### MEDIUM Priority
+2. Missing input validation on title
+   - Fix: Add length check (1-255 chars)
+
+---
+
+## ❌ Invalid Findings (3)
+
+### SQL Injection (DISMISSED)
+- Project uses Neo4j, not SQL
+- Parameterized queries used correctly
+- Reviewer confused Cypher syntax
+
+### useEffect Dependency (DISMISSED)
+- Effect doesn't use userId (line 234)
+- Reviewer reviewed wrong code section
+
+---
+
+## 📊 Summary
+- Valid: 2/5 (40%)
+- Invalid: 3/5 (60%)
+- Reviewer blind spots: Unfamiliar with Neo4j, rushed review
+
+## 🎯 Action Plan
+1. Immediate: Add loading state
+2. Short-term: Add validation
+3. Not planned: Invalid findings
+```
+
+**Re-Severity Assessment:**
+External reviewers often misassess severity due to context gaps:
+- CRITICAL → might be MEDIUM in project context
+- HIGH → might be LOW due to rare edge case
+- MEDIUM → might be CRITICAL if affects core flow
+
+Your job: apply project knowledge to correct severity levels.
+
+**Key Principles:**
+
+1. **Trust But Verify** - External reviewers skilled but lack context
+2. **Context Matters** - Architectural decisions have reasons
+3. **Separate Signal from Noise** - Filter effectively
+4. **Respectful but Firm** - Provide evidence, not opinions
+5. **Re-Assess Severity** - Reviewer levels may be inaccurate
+
+**FILES CREATED:**
+
+6. `.claude/skills/peer-review.md` (550+ lines)
+   - 3-step evaluation process per finding
+   - Valid/invalid determination criteria
+   - Common invalidity patterns (5 categories)
+   - Detailed output format with examples
+   - Full example evaluation (5 findings analyzed)
+   - Re-severity assessment guidelines
+   - Key principles and anti-patterns
+
+**FINAL COMPLETE WORKFLOW (UPDATED AGAIN):**
+
+```
+1. 💡 Idea/Bug Discovery
+   ↓
+2. 📋 /create-issue (2 min)
+   ↓
+3. 🔍 /explore (20-30 min)
+   ↓
+4. 📝 /create-plan (5 min)
+   ↓
+5. 🔨 /execute (varies)
+   ↓
+6. 🔍 /review (15-30 min)
+   ↓
+7. 🛠️ Fix Issues
+   ↓
+8. 🔍 /review again
+   ↓
+9. ✅ code-review-tester agent
+   ↓
+10. 📝 /peer-review (external feedback) ⭐ OPTIONAL
+   ↓
+11. 🛠️ Address valid findings
+   ↓
+12. 🚀 Ship
+```
+
+**FINAL DIRECTORY STRUCTURE:**
+```
+.claude/
+├── agents/          (14 specialized agents)
+├── skills/          (6 workflow skills) ⭐ COMPLETE
+│   ├── create-issue.md    (140 lines)  - Rapid capture
+│   ├── explore.md         (257 lines)  - Deep analysis
+│   ├── create-plan.md     (371 lines)  - Plan generation
+│   ├── execute.md         (450+ lines) - Implementation
+│   ├── review.md          (450+ lines) - Self-review
+│   └── peer-review.md     (550+ lines) - External review eval ⭐ NEW
+└── settings.local.json
+
+.plans/              (implementation plans)
+└── [feature]-implementation-plan.md
+```
+
+**COMPLETE SKILL SUITE METRICS:**
+
+| Skill | Lines | Purpose | Time | When to Use |
+|-------|-------|---------|------|-------------|
+| `/create-issue` | 140 | Rapid capture | 2 min | Mid-flow idea/bug |
+| `/explore` | 257 | Deep analysis | 20-30 min | Complex unclear feature |
+| `/create-plan` | 371 | Plan generation | 5 min | After exploration |
+| `/execute` | 450+ | Implementation | Varies | Execute plan |
+| `/review` | 450+ | Self-review | 15-30 min | After implementation |
+| `/peer-review` | 550+ | External eval | 20-40 min | External feedback received |
+| **TOTAL** | **2,218** | **Full workflow** | **~2-4 hours** | **Idea → Ship** |
+
+**STRATEGIC IMPACT (FINAL - COMPLETE):**
+
+🎯 **End-to-End Coverage**: Every phase from capture to deployment covered
+📊 **Multi-Layer Defense**: Self-review + agent review + peer review evaluation
+🔄 **Context Protection**: Peer review skill protects against uninformed feedback
+🧠 **Knowledge Leverage**: Deep project context used to filter external noise
+⚡ **Efficient Filtering**: Valid findings actioned, invalid dismissed with evidence
+🛡️ **Quality Assurance**: 6 gates ensure code quality at every stage
+📚 **Institutional Knowledge**: Review evaluations document architectural decisions
+🚀 **Confidence**: Clear validity assessment guides merge decisions
+🔧 **Learning Loop**: Reviewer blind spots identified and fed back
+👥 **Collaboration**: Respectful evaluation maintains external relationships
+
+**USE CASES FOR PEER-REVIEW:**
+
+| Scenario | Action |
+|----------|--------|
+| Contractor submitted code review | `/peer-review` their findings |
+| Different AI model reviewed code | `/peer-review` to verify claims |
+| Security audit report received | `/peer-review` to assess validity |
+| Cross-team review from another dept | `/peer-review` their feedback |
+| Third-party consultant findings | `/peer-review` before taking action |
+| Internal team review | Use `/review` instead (not peer-review) |
+| User bug reports | Use `/create-issue` instead |
+| Automated tool output | Handle directly (ESLint, TS errors) |
+
+**PROTECTION AGAINST:**
+
+❌ **Context-Free Criticism** - Reviewer doesn't know architectural reasons
+❌ **Technology Confusion** - Mistakes Neo4j for SQL, Next.js for React-only
+❌ **Severity Inflation** - Labels everything CRITICAL without project context
+❌ **Pattern Misunderstanding** - Criticizes intentional patterns as bugs
+❌ **Over-Engineering Suggestions** - Proposes complex fixes for simple problems
+❌ **Historical Ignorance** - Suggests "improvements" that were already tried/rejected
+❌ **Requirements Gaps** - Proposes changes that violate actual requirements
+
+**BEFORE vs AFTER (FINAL - EXTERNAL REVIEWS):**
+
+| Aspect | Before | After |
+|--------|--------|-------|
+| **External Feedback** | Accept all findings | Critically evaluate with context |
+| **Validity Assessment** | Assume reviewer is right | Verify each finding exists |
+| **Severity Levels** | Use reviewer's assessment | Re-assess with project knowledge |
+| **Action Plan** | Fix everything mentioned | Fix only valid, prioritized issues |
+| **Context Gaps** | Unknown to reviewer | Explained clearly in evaluation |
+| **Wasted Effort** | Fix invalid "issues" | Dismiss with evidence |
+| **Reviewer Quality** | Unknown | Measured (valid/invalid ratio) |
+| **Blind Spots** | Unidentified | Documented for future reviews |
+| **Team Relations** | Defensive arguments | Respectful, evidence-based responses |
+
+**ChronosGraph Development Infrastructure: FINAL COMPLETE**
+
+The **six workflow skills** + chief-of-staff CTO mode + 14 specialized agents create a **bulletproof, enterprise-level software development system** that:
+
+✅ Captures ideas without breaking flow (`/create-issue`)
+✅ Eliminates ambiguity before coding (`/explore`)
+✅ Generates actionable implementation plans (`/create-plan`)
+✅ Executes with live progress tracking (`/execute`)
+✅ Reviews comprehensively with severity levels (`/review`)
+✅ **Critically evaluates external feedback (`/peer-review`)** ⭐ NEW
+✅ Maintains pattern consistency (enforced by `/review`)
+✅ Documents deviations and rationale (in plans)
+✅ **Protects against context-free criticism** ⭐
+✅ Enables collaboration through living docs
+✅ Scales from solo dev to team coordination
+✅ **Filters signal from noise in external reviews** ⭐
+✅ Provides multi-layer quality gates
+
+**Total Development System (FINAL):**
+- **6 skills** (2,218 lines of workflow automation)
+- **14 specialized agents** (data-architect, frontend-polish-specialist, etc.)
+- **CTO workflow** (5-phase structured execution)
+- **= Bulletproof enterprise-grade development infrastructure**
+
+**Quality + Review Architecture:**
+```
+Gate 1: Pattern enforcement during /execute
+   ↓
+Gate 2: Comprehensive /review (8 categories, 4 severity levels)
+   ↓
+Gate 3: Fix cycle (address critical/high issues)
+   ↓
+Gate 4: Re-review verification
+   ↓
+Gate 5: code-review-tester agent (final internal check)
+   ↓
+Gate 6: /peer-review (if external feedback received) ⭐ NEW
+   ↓
+Gate 7: Address valid external findings
+   ↓
+Gate 8: Deployment
+```
+
+This **8-gate architecture** ensures code quality through:
+- **Progressive validation** (catch issues at multiple stages)
+- **Defense in depth** (multiple review layers)
+- **Context protection** (filter uninformed external feedback)
+- **Evidence-based decisions** (verify before acting)
+
+ChronosGraph now has a **complete, bulletproof development infrastructure** that handles every phase from idea capture through deployment, including protection against context-free external feedback. The system scales from solo development to team collaboration while maintaining enterprise-grade quality standards.
+
+---
+**TIMESTAMP:** 2026-01-19T20:30:00Z
+**AGENT:** Claude Code (Sonnet 4.5)
+**STATUS:** ✅ SESSION COMPLETE - CHIEF-OF-STAFF CTO OPERATIONAL MODE
+
+**SUMMARY:**
+Enhanced the chief-of-staff agent with comprehensive CTO-level operational protocols for structured feature development workflow. Integrated a 5-phase methodology (Clarification → Discovery → Analysis → Execution → Review) adapted from industry-standard product engineering practices, enabling systematic delegation to specialized agents with clear success criteria, rollback strategies, and status reporting requirements.
+
+**MOTIVATION:**
+The chief-of-staff agent previously focused solely on strategic prioritization and workflow optimization. This enhancement adds a structured workflow for translating product requirements into actionable implementation plans, ensuring clarity and reducing ambiguity in feature development.
+
+**SESSION DELIVERABLES:**
+
+**CTO Operational Mode Section Added**
+
+Added comprehensive operational framework to `/Users/gcquraishi/Documents/chronosgraph/.claude/agents/chief-of-staff.md` covering:
+
+**1. Role Definition**
+- Technical co-leader of ChronosGraph (historical data viz platform)
+- Partners with product lead to translate vision into architecture
+- Goals: ship fast, maintain data integrity, preserve graph schema consistency, keep costs low
+- **Critical directive**: Push back when necessary, challenge assumptions, refuse poor tradeoffs
+
+**2. Tech Stack Context**
+Documented ChronosGraph-specific technology stack:
+- **Frontend**: Next.js (React), TypeScript, Tailwind CSS
+- **Database**: Neo4j Aura (c78564a4) with `:HistoricalFigure` (canonical_id) and `:MediaWork` (wikidata_id)
+- **Backend**: Python scripts for ingestion, Next.js API routes
+- **Entity Resolution**: Wikidata MCP integration
+- **Data Protocols**: MediaWork Ingestion Protocol (5-step Q-ID validation)
+- **Available Agents**: data-architect, research-analyst, frontend-polish-specialist, devops-infrastructure-engineer, code-review-tester
+
+**3. Response Guidelines**
+- Push back when necessary (challenge assumptions, highlight risks)
+- Confirm understanding in 1-2 sentences first
+- Default to high-level plans before concrete steps
+- **Ask clarifying questions instead of guessing** (critical behavior)
+- Concise bullets with file references (e.g., `web-app/lib/db.ts:42`)
+- Minimal diff blocks for code proposals
+- Cypher migrations with `// MIGRATION UP` and `// ROLLBACK` comments
+- Automated tests and rollback plans for all changes
+- Keep responses under ~400 words unless deep dive requested
+
+**4. 5-Phase Structured Workflow**
+
+**Phase 1: Clarification & Requirements Gathering**
+- Confirm understanding in 1-2 sentences
+- Ask all clarifying questions until certain about:
+  - User-facing behavior expectations
+  - Data model implications (Neo4j schema changes?)
+  - UI/UX requirements (new components, pages, modifications?)
+  - Integration points (Wikidata, existing APIs, external services?)
+  - Performance/scale considerations
+  - Success criteria and acceptance tests
+- Do not proceed until all ambiguities resolved
+
+**Phase 2: Discovery Prompt Generation**
+Create structured discovery prompts for specialist agents including:
+- Specific files to examine
+- Functions/components to analyze
+- Current schema/structure to understand
+- Integration points to map
+- Relevant patterns or conventions to identify
+
+Example format:
+```
+Please analyze the following to help plan [feature name]:
+1. Review `[file paths]` and identify:
+   - Current implementation of [relevant feature]
+   - Data flow from [source] to [destination]
+   - Schema for [entity types]
+2. Search for existing patterns for [similar functionality]
+3. Identify integration points with [external system]
+4. Report back on:
+   - Current architecture approach
+   - Potential conflict points
+   - Suggested modification strategy
+```
+
+**Phase 3: Analysis & Phase Breakdown**
+Once discovery results return:
+1. Request any missing information not covered in discovery
+2. Break implementation into logical phases (single phase if simple):
+   - Phase 1: [e.g., "Database schema migration and Cypher query updates"]
+   - Phase 2: [e.g., "API endpoint implementation with validation"]
+   - Phase 3: [e.g., "Frontend component and integration"]
+3. For each phase specify:
+   - Which agent should execute (data-architect, frontend-polish-specialist, etc.)
+   - Dependencies on previous phases
+   - Rollback strategy if phase fails
+   - Success criteria
+
+**Phase 4: Agent Prompt Creation**
+For each phase, create detailed execution prompts requesting:
+- Full context from discovery
+- Exact files to modify
+- Expected changes (without prescribing exact code)
+- Status report including:
+  - Files modified with line ranges
+  - Schema changes (if applicable)
+  - Tests added/updated
+  - Deviations from plan with rationale
+  - Confirmation of success criteria met
+
+**Phase 5: Review & Iteration**
+As agent status reports return:
+1. Review for correctness, completeness, alignment with requirements
+2. Identify mistakes, gaps, or risks
+3. If issues found, create corrective prompts for agent
+4. Once validated, proceed to next phase or mark complete
+
+**5. Key Behavioral Principles**
+- **Never guess**: If requirements ambiguous, ask. If discovery incomplete, request more.
+- **Think systemically**: Consider Neo4j schema consistency, Wikidata entity resolution, MediaWork Ingestion Protocol compliance
+- **Optimize for correctness first, speed second**: Data integrity violations in knowledge graphs are expensive to fix
+- **Empower specialists**: Delegate to the right agent with clear, actionable prompts
+- **Maintain architectural coherence**: Follow existing patterns (canonical_id for HistoricalFigure, wikidata_id for MediaWork)
+
+**INTEGRATION WITH EXISTING CHIEF-OF-STAFF ROLE:**
+
+The CTO operational mode complements (not replaces) the existing strategic orchestration capabilities:
+
+**Existing Mode**: Strategic prioritization and workflow optimization
+- Triggered: Session start, milestone completion, bottleneck detection
+- Output: High-leverage task recommendations, dependency analysis, work sequencing
+
+**New CTO Mode**: Feature development workflow management
+- Triggered: Feature requests, bug fixes, technical decision-making
+- Output: Clarification questions, discovery prompts, phased execution plans, agent delegation
+
+Both modes coexist - the agent dynamically adopts the appropriate mode based on user request context.
+
+**ARCHITECTURAL RATIONALE:**
+
+**Why Chief-of-Staff for CTO Role?**
+1. **Context Awareness**: Chief-of-staff already maintains comprehensive project state knowledge
+2. **Agent Ecosystem Mastery**: Already knows capabilities of all specialized agents
+3. **Delegation Authority**: Natural fit for orchestrating multi-agent workflows
+4. **Strategic Alignment**: CTO decisions must align with strategic priorities
+
+**Why 5-Phase Workflow?**
+1. **Prevents Ambiguity**: Phase 1 forces clarification before any work begins
+2. **Enables Discovery**: Phase 2 ensures decisions are informed by actual codebase state
+3. **Reduces Rework**: Phase 3 breaks complex tasks into manageable, validated chunks
+4. **Clear Success Criteria**: Phase 4 prompts define exactly what "done" means
+5. **Quality Gates**: Phase 5 catches mistakes before they compound
+
+**IMPACT:**
+
+🎯 **Clarity**: Structured workflow eliminates guesswork in feature development
+🔄 **Consistency**: All features developed using the same proven methodology
+🛡️ **Quality**: Multi-phase validation catches errors early
+📋 **Documentation**: Status reports create automatic audit trail
+⚡ **Efficiency**: Specialist agents receive precise, actionable prompts
+🧠 **Knowledge Retention**: Phased approach builds institutional memory
+
+**USAGE PATTERN:**
+
+When user says: "Add dark mode to the app"
+Chief-of-staff responds with:
+1. **Confirmation**: "I understand you want dark mode. Let me clarify..."
+2. **Questions**: "Should this be a toggle or system preference? Persist in DB or localStorage? Apply to all pages or specific sections?"
+3. **Discovery Prompt**: "Analyze current theme system in `web-app/...`, identify CSS-in-JS patterns..."
+4. **Phase Breakdown**: "Phase 1: Theme context + state management. Phase 2: Component updates. Phase 3: Toggle UI."
+5. **Agent Delegation**: "frontend-polish-specialist, implement Phase 1 and report back with..."
+
+**BEFORE vs AFTER:**
+
+| Scenario | Before | After |
+|----------|--------|-------|
+| Feature Request | Direct implementation or vague questions | 5-phase structured workflow |
+| Requirements | Agent guesses or asks one question | Comprehensive clarification checklist |
+| Delegation | Generic "go build this" prompts | Precise prompts with success criteria |
+| Quality Control | Post-hoc review | Phase gates with rollback strategies |
+| Documentation | Manual session logs | Automatic status reports |
+
+**FILES MODIFIED:**
+
+1. `/Users/gcquraishi/Documents/chronosgraph/.claude/agents/chief-of-staff.md`
+   - Added "CTO Operational Mode" section (~130 lines)
+   - Documented role definition, tech stack, response guidelines
+   - Implemented 5-phase structured workflow
+   - Added key behavioral principles
+   - No changes to existing strategic orchestration mode
+
+**VERIFICATION:**
+
+✅ No breaking changes to existing chief-of-staff behavior
+✅ CTO mode coexists with strategic prioritization mode
+✅ All ChronosGraph-specific tech stack documented
+✅ Workflow phases include concrete examples
+✅ Behavioral principles emphasize correctness and clarity
+✅ Agent delegation patterns clearly defined
+
+**NEXT STEPS:**
+
+**Test the Workflow:**
+1. Trigger chief-of-staff with a feature request to validate Phase 1 clarification
+2. Verify discovery prompts are sufficiently detailed for specialist agents
+3. Confirm agent delegation produces actionable status reports
+4. Iterate on prompt templates based on real usage
+
+**Potential Enhancements:**
+- Add phase templates library for common patterns (schema migrations, API endpoints, UI components)
+- Create checklist automation for common success criteria
+- Integrate with code-review-tester for automatic quality gates
+- Build phase timing/cost estimation based on historical data
+
+---
 **TIMESTAMP:** 2026-01-20T00:55:00Z
 **AGENT:** Claude Code (Sonnet 4.5)
 **STATUS:** ✅ SESSION COMPLETE - COMPREHENSIVE DATA QUALITY INFRASTRUCTURE

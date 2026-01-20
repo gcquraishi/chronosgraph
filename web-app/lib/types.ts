@@ -184,3 +184,78 @@ export interface SeriesMetadata {
     totalInteractions: number;
   };
 }
+
+// Location & Era Discovery Types
+
+export interface Location {
+  location_id: string;
+  name: string;
+  location_type: 'city' | 'region' | 'country' | 'fictional_place';
+  wikidata_id?: string;
+  parent_location?: string;
+  coordinates?: { latitude: number; longitude: number };
+  description?: string;
+}
+
+export interface LocationWithStats extends Location {
+  work_count: number;
+  figure_count: number;
+}
+
+export interface Era {
+  era_id: string;
+  name: string;
+  start_year: number;
+  end_year: number;
+  era_type: 'historical_period' | 'literary_period' | 'dynasty' | 'reign';
+  wikidata_id?: string;
+  parent_era?: string;
+  description?: string;
+}
+
+export interface EraWithStats extends Era {
+  work_count: number;
+  figure_count: number;
+}
+
+export interface LocationWorks {
+  location: Location;
+  works: (MediaWork & {
+    media_id: string;
+    media_type: string;
+    creator?: string;
+  })[];
+  figures: HistoricalFigure[];
+  stats: {
+    work_count: number;
+    figure_count: number;
+    time_span: [number, number];
+  };
+}
+
+export interface EraWorks {
+  era: Era;
+  works: (MediaWork & {
+    media_id: string;
+    media_type: string;
+    creator?: string;
+  })[];
+  figures: HistoricalFigure[];
+  timeline?: Array<{ year: number; work_count: number }>;
+  stats: {
+    work_count: number;
+    figure_count: number;
+    year_range: [number, number];
+  };
+}
+
+export interface DiscoveryBrowseResult {
+  locations: LocationWithStats[];
+  eras: EraWithStats[];
+  stats: {
+    total_locations: number;
+    total_eras: number;
+    most_works_location: string;
+    most_works_era: string;
+  };
+}

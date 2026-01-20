@@ -113,6 +113,56 @@ class Agent(BaseModel):
     name: str = Field(description="Unique name of the agent (e.g., 'Claude', 'Gemini', 'GCQ')")
 
 
+class LocationType(str, Enum):
+    """Types of geographic locations."""
+    CITY = "city"
+    REGION = "region"
+    COUNTRY = "country"
+    FICTIONAL_PLACE = "fictional_place"
+
+
+class Location(BaseModel):
+    """
+    A geographic location where stories are set or where historical figures lived.
+    Uses optional Wikidata Q-ID for real-world locations.
+    """
+    location_id: str = Field(description="Unique identifier (e.g., 'location-london')")
+    name: str = Field(description="Display name (e.g., 'London', 'The Midlands')")
+    location_type: LocationType = Field(description="Type of location")
+    wikidata_id: Optional[str] = Field(default=None, description="Wikidata Q-ID for real places")
+    parent_location: Optional[str] = Field(
+        default=None,
+        description="location_id of parent location (e.g., 'London' -> 'England')"
+    )
+    coordinates: Optional[dict] = Field(
+        default=None,
+        description="Geographic coordinates {latitude: float, longitude: float}"
+    )
+    description: Optional[str] = Field(default=None, description="Brief description of the location")
+
+
+class EraType(str, Enum):
+    """Types of historical/literary eras."""
+    HISTORICAL_PERIOD = "historical_period"
+    LITERARY_PERIOD = "literary_period"
+    DYNASTY = "dynasty"
+    REIGN = "reign"
+
+
+class Era(BaseModel):
+    """
+    A time period during which stories are set or in which historical figures lived.
+    """
+    era_id: str = Field(description="Unique identifier (e.g., 'era-regency')")
+    name: str = Field(description="Display name (e.g., 'Regency Era', 'Victorian Era')")
+    start_year: int = Field(description="Start year of era (negative for BCE)")
+    end_year: int = Field(description="End year of era (negative for BCE)")
+    era_type: EraType = Field(description="Type of era")
+    wikidata_id: Optional[str] = Field(default=None, description="Wikidata Q-ID for named periods")
+    parent_era: Optional[str] = Field(default=None, description="era_id of parent era")
+    description: Optional[str] = Field(default=None, description="Historical context")
+
+
 
 # Neo4j Schema Constraints and Indexes
 SCHEMA_CONSTRAINTS = """
@@ -140,17 +190,34 @@ FOR (c:FictionalCharacter) REQUIRE c.char_id IS UNIQUE;
 CREATE CONSTRAINT agent_unique IF NOT EXISTS
 FOR (a:Agent) REQUIRE a.name IS UNIQUE;
 
+// Location & Era Discovery: Ensure unique locations and eras
+CREATE CONSTRAINT location_unique IF NOT EXISTS
+FOR (l:Location) REQUIRE l.location_id IS UNIQUE;
+
+CREATE CONSTRAINT era_unique IF NOT EXISTS
+FOR (e:Era) REQUIRE e.era_id IS UNIQUE;
+
 // Index for efficient lookups
 CREATE INDEX figure_name_idx IF NOT EXISTS FOR (f:HistoricalFigure) ON (f.name);
 CREATE INDEX media_title_idx IF NOT EXISTS FOR (m:MediaWork) ON (m.title);
 CREATE INDEX media_type_idx IF NOT EXISTS FOR (m:MediaWork) ON (m.media_type);
 CREATE INDEX fictional_character_name_idx IF NOT EXISTS FOR (c:FictionalCharacter) ON (c.name);
+CREATE INDEX location_name_idx IF NOT EXISTS FOR (l:Location) ON (l.name);
+CREATE INDEX location_type_idx IF NOT EXISTS FOR (l:Location) ON (l.location_type);
+CREATE INDEX era_name_idx IF NOT EXISTS FOR (e:Era) ON (e.name);
+CREATE INDEX era_years_idx IF NOT EXISTS FOR (e:Era) ON (e.start_year, e.end_year);
+
+// Composite indexes for efficient filtering and discovery
+CREATE INDEX location_type_name_idx IF NOT EXISTS FOR (l:Location) ON (l.location_type, l.name);
+CREATE INDEX era_type_name_idx IF NOT EXISTS FOR (e:Era) ON (e.era_type, e.name);
 """
 
 # Node Labels
 NODE_LABELS = {
     "figure": "HistoricalFigure",
     "media": "MediaWork",
+    "location": "Location",
+    "era": "Era",
 }
 
 # Relationship Types
@@ -165,4 +232,9 @@ RELATIONSHIP_TYPES = {
     "part_of": "PART_OF",            # MediaWork -> MediaWork (series membership)
                                      # Properties: sequence_number, season_number, episode_number,
                                      # is_main_series, relationship_type (sequel/prequel/expansion/episode/part/season)
+    # Location & Era Discovery relationships:
+    "set_in": "SET_IN",              # MediaWork -> Location (with prominence: primary|secondary)
+    "set_in_era": "SET_IN_ERA",      # MediaWork -> Era (with era_setting_type: contemporary|historical|alternate)
+    "lived_in": "LIVED_IN",          # HistoricalFigure -> Location (with period: birth|primary_residence|active|death)
+    "lived_in_era": "LIVED_IN_ERA",  # HistoricalFigure -> Era (with era_type: lived_through|primarily_active|associated_with)
 }
