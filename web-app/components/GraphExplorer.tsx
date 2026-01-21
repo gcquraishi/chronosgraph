@@ -139,6 +139,12 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
     centerNodeId ? [centerNodeId] : []
   );
 
+  // Phase 2: Navigation History Stack (Task 2.1)
+  const [navigationHistory, setNavigationHistory] = useState<string[]>(
+    centerNodeId ? [centerNodeId] : []
+  );
+  const [historyIndex, setHistoryIndex] = useState<number>(0);
+
   // Camera control helper - smoothly centers camera on a node
   const centerCameraOnNode = (node: GraphNode & { x?: number; y?: number }) => {
     if (!forceGraphRef.current || typeof node.x !== 'number' || typeof node.y !== 'number') {
@@ -242,6 +248,215 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
       toRemove.forEach(id => newSet.delete(id));
       return newSet;
     });
+  };
+
+  // Task 2.2: Back navigation with re-expand
+  const navigateBack = async () => {
+    if (historyIndex === 0) {
+      devWarn('⚠️ Already at the beginning of history');
+      return;
+    }
+
+    const newIndex = historyIndex - 1;
+    const previousNodeId = navigationHistory[newIndex];
+
+    if (!previousNodeId) {
+      devError('❌ Invalid history state: no node at index', newIndex);
+      return;
+    }
+
+    devLog(`⬅️ Navigating back to: ${previousNodeId} (${newIndex + 1}/${navigationHistory.length})`);
+
+    // Update history index
+    setHistoryIndex(newIndex);
+
+    // Find the node in current graph state
+    const previousNode = nodes.find(n => n.id === previousNodeId);
+
+    if (!previousNode) {
+      devWarn(`⚠️ Node ${previousNodeId} not in current graph, will need to re-expand`);
+      // TODO: Re-expand from parent if needed (for now, just log)
+      return;
+    }
+
+    // Center camera on previous node
+    setCenterNodeId(previousNodeId);
+    centerCameraOnNode(previousNode);
+
+    // Auto-collapse the current node
+    if (currentlyExpandedNode && currentlyExpandedNode !== previousNodeId) {
+      devLog(`Auto-collapsing current node: ${currentlyExpandedNode}`);
+      collapseNode(currentlyExpandedNode, visitedCenters);
+    }
+
+    // Re-expand the previous node if it was collapsed
+    if (!expandedNodes.has(previousNodeId)) {
+      devLog(`Re-expanding previous node: ${previousNodeId}`);
+
+      // Determine node type and call appropriate expansion API
+      if (previousNodeId.startsWith('figure-')) {
+        const canonicalIdToExpand = previousNodeId.replace('figure-', '');
+        try {
+          setLoadingNodes((prev) => new Set(prev).add(previousNodeId));
+
+          const response = await fetch(`/api/graph/expand/${canonicalIdToExpand}?type=figure`);
+          if (!response.ok) throw new Error('Failed to re-expand figure node');
+
+          const data = await response.json();
+          setExpandedNodes((prev) => new Set(prev).add(previousNodeId));
+          setCurrentlyExpandedNode(previousNodeId);
+
+          // Add neighbors back to graph (same logic as handleNodeClick)
+          const parentDepth = nodeDepths.get(previousNodeId) ?? 0;
+          const newDepth = parentDepth + 1;
+
+          setNodes(prev => {
+            const existingIds = new Set(prev.map(n => n.id));
+            const newNodes = data.nodes.filter((n: GraphNode) => !existingIds.has(n.id));
+            const limitedNodes = newNodes.slice(0, MAX_NEIGHBORS);
+
+            if (newNodes.length > MAX_NEIGHBORS) {
+              devWarn(`⚠️ High-degree node: showing ${MAX_NEIGHBORS} of ${newNodes.length} neighbors`);
+            }
+
+            return [...prev, ...limitedNodes];
+          });
+
+          setLinks((prevLinks) => {
+            const existingLinks = new Set(
+              prevLinks.flatMap(l => {
+                const source = typeof l.source === 'object' ? l.source.id : l.source;
+                const target = typeof l.target === 'object' ? l.target.id : l.target;
+                return [`${source}-${target}`, `${target}-${source}`];
+              })
+            );
+            const newLinks = data.links.filter((l: GraphLink) =>
+              !existingLinks.has(`${l.source}-${l.target}`) && !existingLinks.has(`${l.target}-${l.source}`)
+            );
+            return [...prevLinks, ...newLinks];
+          });
+
+          setLoadingNodes((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(previousNodeId);
+            return newSet;
+          });
+        } catch (err: any) {
+          devError('Error re-expanding figure node:', err);
+          setError(`Failed to navigate back: ${err.message}`);
+          setLoadingNodes((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(previousNodeId);
+            return newSet;
+          });
+        }
+      } else if (previousNodeId.startsWith('media-')) {
+        const wikidataId = previousNodeId.replace('media-', '');
+        try {
+          setLoadingNodes((prev) => new Set(prev).add(previousNodeId));
+
+          const response = await fetch(`/api/graph/expand/${wikidataId}?type=media`);
+          if (!response.ok) throw new Error('Failed to re-expand media node');
+
+          const data = await response.json();
+          setExpandedNodes((prev) => new Set(prev).add(previousNodeId));
+          setCurrentlyExpandedNode(previousNodeId);
+
+          // Add neighbors back to graph
+          const parentDepth = nodeDepths.get(previousNodeId) ?? 0;
+          const newDepth = parentDepth + 1;
+
+          setNodes(prev => {
+            const existingIds = new Set(prev.map(n => n.id));
+            const newNodes = data.nodes.filter((n: GraphNode) => !existingIds.has(n.id));
+            const limitedNodes = newNodes.slice(0, MAX_NEIGHBORS);
+
+            if (newNodes.length > MAX_NEIGHBORS) {
+              devWarn(`⚠️ High-degree node: showing ${MAX_NEIGHBORS} of ${newNodes.length} neighbors`);
+            }
+
+            return [...prev, ...limitedNodes];
+          });
+
+          setLinks((prevLinks) => {
+            const existingLinks = new Set(
+              prevLinks.flatMap(l => {
+                const source = typeof l.source === 'object' ? l.source.id : l.source;
+                const target = typeof l.target === 'object' ? l.target.id : l.target;
+                return [`${source}-${target}`, `${target}-${source}`];
+              })
+            );
+            const newLinks = data.links.filter((l: GraphLink) =>
+              !existingLinks.has(`${l.source}-${l.target}`) && !existingLinks.has(`${l.target}-${l.source}`)
+            );
+            return [...prevLinks, ...newLinks];
+          });
+
+          setLoadingNodes((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(previousNodeId);
+            return newSet;
+          });
+        } catch (err: any) {
+          devError('Error re-expanding media node:', err);
+          setError(`Failed to navigate back: ${err.message}`);
+          setLoadingNodes((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(previousNodeId);
+            return newSet;
+          });
+        }
+      }
+    } else {
+      // Node is already expanded, just update currentlyExpandedNode
+      setCurrentlyExpandedNode(previousNodeId);
+    }
+  };
+
+  // Task 2.4: Reset view to starting state
+  const resetView = () => {
+    const startingNodeId = canonicalId ? `figure-${canonicalId}` : null;
+
+    if (!startingNodeId) {
+      devWarn('⚠️ Cannot reset: no starting node');
+      return;
+    }
+
+    devLog(`🔄 Resetting view to starting node: ${startingNodeId}`);
+
+    // Reset navigation history to starting node only
+    setNavigationHistory([startingNodeId]);
+    setHistoryIndex(0);
+
+    // Reset exploration path
+    setExplorationPath([startingNodeId]);
+
+    // Clear all expanded nodes except starting node
+    setExpandedNodes(new Set([startingNodeId]));
+    setCurrentlyExpandedNode(startingNodeId);
+
+    // Reset to initial graph state (starting node + immediate neighbors)
+    // This will be handled by re-fetching the initial graph data
+    setNodes(initialNodes || []);
+    setLinks(initialLinks || []);
+
+    // Reset visited centers to starting node only
+    setVisitedCenters(new Set([startingNodeId]));
+
+    // Reset node depths
+    setNodeDepths(new Map([[startingNodeId, 0]]));
+
+    // Clear node children tracking (will be rebuilt on next expansion)
+    setNodeChildren(new Map());
+
+    // Center camera on starting node
+    setCenterNodeId(startingNodeId);
+    const startingNode = (initialNodes || []).find(n => n.id === startingNodeId);
+    if (startingNode) {
+      centerCameraOnNode(startingNode);
+    }
+
+    devLog('✅ View reset complete');
   };
 
   // Initialize depth tracking and expansion state for starting node (Task 1.6)
@@ -472,6 +687,23 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
         // New node - add to end of path
         return [...prev, node.id];
       });
+
+      // Task 2.1: Update navigation history for back button support
+      // Only add to history when expanding a node (not collapsing)
+      if (!isClickingCurrentlyExpanded) {
+        setNavigationHistory((prev) => {
+          // If we're not at the end of history (user went back), truncate forward history
+          const truncated = historyIndex < prev.length - 1 ? prev.slice(0, historyIndex + 1) : prev;
+
+          // Add new node to history
+          const updated = [...truncated, node.id];
+          devLog(`📚 Navigation history updated: ${updated.length} steps`);
+          return updated;
+        });
+
+        // Move history index forward
+        setHistoryIndex((prev) => prev + 1);
+      }
 
       // Check depth before expansion (Task 1.7)
       const currentDepth = nodeDepths.get(node.id) ?? 0;
@@ -771,14 +1003,42 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
         </div>
       )}
 
+      {/* Task 2.3 & 2.4: Navigation Controls - Top Left */}
+      {isBloomMode && (
+        <div className="absolute top-20 left-4 z-10 flex gap-2">
+          <button
+            onClick={navigateBack}
+            disabled={historyIndex === 0}
+            className={`px-3 py-2 rounded-lg text-sm font-medium shadow-lg transition-all flex items-center gap-2 ${
+              historyIndex === 0
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 hover:border-gray-300'
+            }`}
+            title={historyIndex === 0 ? 'At beginning of exploration' : 'Go back to previous node'}
+            aria-label="Navigate back"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back
+          </button>
+          <button
+            onClick={resetView}
+            className="px-3 py-2 rounded-lg text-sm font-medium shadow-lg transition-all flex items-center gap-2 bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 hover:border-gray-300"
+            title="Reset to starting view"
+            aria-label="Reset view"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Reset
+          </button>
+        </div>
+      )}
 
       {/* Inline Legend - Bottom Left */}
       <div className="absolute bottom-4 left-4 z-10 bg-white/95 backdrop-blur-sm rounded-lg border border-gray-200 shadow-lg p-4">
         <div className="flex flex-col gap-2 text-xs">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: BACON_COLOR }}></div>
-            <span className="text-gray-800 font-semibold">The Bacons</span>
-          </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-blue-500"></div>
             <span className="text-gray-700">Historical Figure</span>
