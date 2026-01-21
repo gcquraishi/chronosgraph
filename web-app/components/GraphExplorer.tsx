@@ -109,6 +109,9 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
   const [showReferenceWorks, setShowReferenceWorks] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Feature flag for Bloom Exploration mode (Task 1.13)
+  const isBloomMode = process.env.NEXT_PUBLIC_BLOOM_MODE === 'true';
+
   // Phase 1: Bloom Exploration - Camera control and center node tracking
   const forceGraphRef = useRef<any>(null);
   const [centerNodeId, setCenterNodeId] = useState<string | null>(
@@ -271,26 +274,28 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
 
   // Handle node click
   const handleNodeClick = async (node: any) => {
-    // Phase 1: Camera centering on click (Tasks 1.2 & 1.3)
-    setCenterNodeId(node.id);
-    centerCameraOnNode(node);
+    // Phase 1: Camera centering on click (Tasks 1.2 & 1.3) - only in bloom mode
+    if (isBloomMode) {
+      setCenterNodeId(node.id);
+      centerCameraOnNode(node);
 
-    // Check depth before expansion (Task 1.7)
-    const currentDepth = nodeDepths.get(node.id) ?? 0;
-    const potentialDepth = currentDepth + 1;
+      // Check depth before expansion (Task 1.7)
+      const currentDepth = nodeDepths.get(node.id) ?? 0;
+      const potentialDepth = currentDepth + 1;
 
-    if (potentialDepth >= MAX_DEPTH) {
-      console.warn(
-        `⚠️ Approaching depth limit (${potentialDepth}/${MAX_DEPTH} hops). Consider collapsing distant nodes.`
-      );
+      if (potentialDepth >= MAX_DEPTH) {
+        console.warn(
+          `⚠️ Approaching depth limit (${potentialDepth}/${MAX_DEPTH} hops). Consider collapsing distant nodes.`
+        );
+      }
+
+      console.log('Node clicked:', {
+        id: node.id,
+        name: node.name,
+        currentDepth,
+        potentialNewNodeDepth: potentialDepth
+      });
     }
-
-    console.log('Node clicked:', {
-      id: node.id,
-      name: node.name,
-      currentDepth,
-      potentialNewNodeDepth: potentialDepth
-    });
 
     // Handle media node expansion
     if (node.type === 'media' && typeof node.id === 'string' && node.id.startsWith('media-')) {
@@ -378,6 +383,12 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
     // Handle figure node expansion (Task 1.4 - expand in place instead of navigate)
     if (node.type === 'figure' && typeof node.id === 'string' && node.id.startsWith('figure-')) {
       const canonicalId = node.id.replace('figure-', '');
+
+      // In non-bloom mode, navigate to figure page (old behavior)
+      if (!isBloomMode) {
+        router.push(`/figure/${canonicalId}`);
+        return;
+      }
 
       // If already expanded, collapse it
       if (expandedNodes.has(node.id)) {
@@ -610,7 +621,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
               const baseSize = isBaconNode(node.id) ? 8 : 6;
               const isHighlighted = highlightedPath?.pathIds.includes(node.id) || false;
               const isLoading = loadingNodes.has(node.id);
-              const isCenterNode = centerNodeId === node.id;
+              const isCenterNode = isBloomMode && centerNodeId === node.id;
 
               // Apply size multipliers (center node gets special treatment)
               let nodeSize = baseSize;
