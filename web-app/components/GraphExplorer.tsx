@@ -144,7 +144,14 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
   // Collapse helper - recursively removes a node and all its descendants (Task 1.8)
   // Smart collapse: preserves nodes that are part of the exploration path (visited centers)
   const collapseNode = (nodeId: string) => {
-    const toRemove = new Set<string>([nodeId]);
+    const isInPath = visitedCenters.has(nodeId);
+    const toRemove = new Set<string>();
+
+    // If the node itself is in the exploration path, don't remove it - only its side branches
+    if (!isInPath) {
+      toRemove.add(nodeId);
+    }
+
     const queue = [nodeId];
 
     // BFS to find all descendants, but skip nodes in the exploration path
@@ -168,7 +175,11 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
       }
     }
 
-    console.log(`Collapsing node ${nodeId} - removing ${toRemove.size} nodes (preserving exploration path):`, Array.from(toRemove));
+    if (isInPath) {
+      console.log(`Smart collapsing ${nodeId} (in path) - removing ${toRemove.size} side branches, keeping node itself:`, Array.from(toRemove));
+    } else {
+      console.log(`Collapsing ${nodeId} - removing ${toRemove.size} nodes (preserving exploration path):`, Array.from(toRemove));
+    }
 
     // Remove nodes from graph state
     setNodes(prevNodes => prevNodes.filter(n => !toRemove.has(n.id)));
