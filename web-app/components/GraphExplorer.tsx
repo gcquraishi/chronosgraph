@@ -721,7 +721,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
         name: node.name,
         currentDepth,
         potentialNewNodeDepth: potentialDepth,
-        isCurrentlyExpanded: isClickingCurrentlyExpanded
+        isCurrentlyExpanded: isClickingExpandedNode
       });
 
       // Auto-collapse the previously expanded node (if different from current)
