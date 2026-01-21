@@ -299,9 +299,15 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
       });
     }
 
-    // Re-expand the previous node if it was collapsed
-    if (!expandedNodes.has(previousNodeId)) {
-      devLog(`Re-expanding previous node: ${previousNodeId}`);
+    // Re-expand the previous node ONLY if its children are actually missing from graph
+    // (not just because it was marked as unexpanded during collapse)
+    const hasChildrenOnGraph = nodeChildren.has(previousNodeId) &&
+      Array.from(nodeChildren.get(previousNodeId) || []).some(childId =>
+        nodes.some(n => n.id === childId)
+      );
+
+    if (!hasChildrenOnGraph) {
+      devLog(`Re-expanding previous node (children missing): ${previousNodeId}`);
 
       // Determine node type and call appropriate expansion API
       if (previousNodeId.startsWith('figure-')) {
@@ -418,7 +424,9 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
         }
       }
     } else {
-      // Node is already expanded, just update currentlyExpandedNode
+      // Node's children are already on graph, just mark as expanded and update current
+      devLog(`Previous node already has children on graph, skipping re-expand`);
+      setExpandedNodes((prev) => new Set(prev).add(previousNodeId));
       setCurrentlyExpandedNode(previousNodeId);
     }
   };
