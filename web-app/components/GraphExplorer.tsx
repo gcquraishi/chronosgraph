@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useRef, useState, useTransition } from 'reac
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { GraphNode, GraphLink, PathVisualization } from '@/lib/types';
+import { devLog, devWarn, devError } from '@/utils/devLog';
 
 const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
   ssr: false,
@@ -40,7 +41,10 @@ class ForceGraphErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('ForceGraph rendering error:', error, errorInfo);
+    // Only log in development to avoid console pollution
+    if (process.env.NODE_ENV === 'development') {
+      console.error('ForceGraph rendering error:', error, errorInfo);
+    }
   }
 
   render() {
@@ -113,6 +117,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
   const isBloomMode = process.env.NEXT_PUBLIC_BLOOM_MODE === 'true';
 
   // Phase 1: Bloom Exploration - Camera control and center node tracking
+  // Using any for ForceGraph ref due to complex library types
   const forceGraphRef = useRef<any>(null);
   const [centerNodeId, setCenterNodeId] = useState<string | null>(
     canonicalId ? `figure-${canonicalId}` : null
@@ -132,18 +137,18 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
   );
 
   // Camera control helper - smoothly centers camera on a node
-  const centerCameraOnNode = (node: any) => {
+  const centerCameraOnNode = (node: GraphNode & { x?: number; y?: number }) => {
     if (!forceGraphRef.current || typeof node.x !== 'number' || typeof node.y !== 'number') {
-      console.warn('Cannot center camera: missing ref or node coordinates', { node });
+      devWarn('Cannot center camera: missing ref or node coordinates', { node });
       return;
     }
 
     try {
       // Use 1000ms duration for smooth pan (as specified in plan)
-      forceGraphRef.current.centerAt(node.x, node.y, 1000);
-      console.log('Camera centered on node:', { id: node.id, name: node.name, x: node.x, y: node.y });
+      forceGraphRef.current.centerAt?.(node.x, node.y, 1000);
+      devLog('Camera centered on node:', { id: node.id, name: node.name, x: node.x, y: node.y });
     } catch (error) {
-      console.error('Error centering camera:', error);
+      devError('Error centering camera:', error);
     }
   };
 
@@ -169,7 +174,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
         children.forEach(childId => {
           // Skip if this child was clicked/centered (part of exploration path)
           if (preserveNodeIds.has(childId)) {
-            console.log(`  Preserving ${childId} - part of exploration path`);
+            devLog(`  Preserving ${childId} - part of exploration path`);
             return;
           }
 
@@ -182,9 +187,9 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
     }
 
     if (isInPath) {
-      console.log(`Smart collapsing ${nodeId} (in path) - removing ${toRemove.size} side branches, keeping node itself:`, Array.from(toRemove));
+      devLog(`Smart collapsing ${nodeId} (in path) - removing ${toRemove.size} side branches, keeping node itself:`, Array.from(toRemove));
     } else {
-      console.log(`Collapsing ${nodeId} - removing ${toRemove.size} nodes (preserving exploration path):`, Array.from(toRemove));
+      devLog(`Collapsing ${nodeId} - removing ${toRemove.size} nodes (preserving exploration path):`, Array.from(toRemove));
     }
 
     // Remove nodes from graph state
@@ -233,7 +238,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
       setNodeDepths(new Map([[centerNodeId, 0]]));
       // Mark starting node as expanded so it can be collapsed later
       setExpandedNodes((prev) => new Set(prev).add(centerNodeId));
-      console.log('Initialized starting node - depth 0, marked as expanded:', centerNodeId);
+      devLog('Initialized starting node - depth 0, marked as expanded:', centerNodeId);
     }
   }, [centerNodeId, nodeDepths.size]);
 
@@ -269,7 +274,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
           return updated;
         });
 
-        console.log(`Tracked ${connectedNodeIds.size} initial neighbors of starting node:`, Array.from(connectedNodeIds));
+        devLog(`Tracked ${connectedNodeIds.size} initial neighbors of starting node:`, Array.from(connectedNodeIds));
       }
     }
   }, [centerNodeId, nodes.length, links.length, nodeChildren.size]);
@@ -422,7 +427,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
   });
 
   // Handle node click
-  const handleNodeClick = async (node: any) => {
+  const handleNodeClick = async (node: GraphNode & { x?: number; y?: number }) => {
     // Check if clicking the currently expanded node (to collapse it)
     const isClickingCurrentlyExpanded = currentlyExpandedNode === node.id;
 
@@ -450,12 +455,13 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
       const potentialDepth = currentDepth + 1;
 
       if (potentialDepth >= MAX_DEPTH) {
-        console.warn(
+        devWarn(
           `⚠️ Approaching depth limit (${potentialDepth}/${MAX_DEPTH} hops). Consider collapsing distant nodes.`
         );
+        // TODO: Add user-facing toast notification in Phase 2
       }
 
-      console.log('Node clicked:', {
+      devLog('Node clicked:', {
         id: node.id,
         name: node.name,
         currentDepth,
@@ -466,7 +472,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
       // Auto-collapse the previously expanded node (if different from current)
       // Pass the updated visited centers to ensure the newly clicked node is preserved
       if (currentlyExpandedNode && currentlyExpandedNode !== node.id) {
-        console.log(`Auto-collapsing previous node: ${currentlyExpandedNode}`);
+        devLog(`Auto-collapsing previous node: ${currentlyExpandedNode}`);
         collapseNode(currentlyExpandedNode, updatedVisitedCenters);
       }
     }
@@ -509,7 +515,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
           computedNewNodes = data.nodes.filter((n: GraphNode) => !existingIds.has(n.id));
           computedChildIds = new Set(computedNewNodes.map(n => n.id));
 
-          console.log(`Added ${computedNewNodes.length} nodes at depth ${newDepth}:`, computedNewNodes.map((n: GraphNode) => n.name));
+          devLog(`Added ${computedNewNodes.length} nodes at depth ${newDepth}:`, computedNewNodes.map((n: GraphNode) => n.name));
           return [...prev, ...computedNewNodes];
         });
 
@@ -545,7 +551,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
           return [...prevLinks, ...newLinks];
         });
       } catch (err) {
-        console.error('Error expanding node:', err);
+        devError('Error expanding node:', err);
         // Revert expansion state on error
         setExpandedNodes((prev) => {
           const newSet = new Set(prev);
@@ -606,7 +612,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
           computedNewNodes = data.nodes.filter((n: GraphNode) => !existingIds.has(n.id));
           computedChildIds = new Set(computedNewNodes.map(n => n.id));
 
-          console.log(`Added ${computedNewNodes.length} nodes at depth ${newDepth}:`, computedNewNodes.map((n: GraphNode) => n.name));
+          devLog(`Added ${computedNewNodes.length} nodes at depth ${newDepth}:`, computedNewNodes.map((n: GraphNode) => n.name));
           return [...prev, ...computedNewNodes];
         });
 
@@ -642,7 +648,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
           return [...prevLinks, ...newLinks];
         });
       } catch (err) {
-        console.error('Error expanding node:', err);
+        devError('Error expanding node:', err);
         // Revert expansion state on error
         setExpandedNodes((prev) => {
           const newSet = new Set(prev);
@@ -707,6 +713,29 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
 
   return (
     <div className="relative">
+      {/* Error Banner */}
+      {error && (
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 max-w-md w-full">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3 shadow-lg flex items-start gap-2">
+            <svg className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            </svg>
+            <div className="flex-1">
+              <p className="text-sm text-red-800 font-medium">{error}</p>
+            </div>
+            <button
+              onClick={() => setError(null)}
+              className="text-red-400 hover:text-red-600 transition-colors"
+              aria-label="Dismiss error"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Minimal Controls Overlay */}
       <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
         <div className="flex gap-2">
@@ -796,8 +825,8 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
             return `${relType} (${link.sentiment})`;
           }}
           backgroundColor="#f9fafb"
-          onNodeClick={handleNodeClick}
-          nodeCanvasObject={(node: any, ctx, globalScale) => {
+          onNodeClick={handleNodeClick as any}
+          nodeCanvasObject={(node: any, ctx: any, globalScale: number) => {
             try {
               const label = node?.name || '';
               if (!label || !ctx || typeof node.x !== 'number' || typeof node.y !== 'number') return;
@@ -879,8 +908,10 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
               ctx.font = `bold ${fontSize}px Sans-Serif`;
               ctx.fillText(label, node.x, node.y + nodeSize + 12);
             } catch (e) {
-              // Silently fail if canvas rendering has issues
-              console.warn('Canvas rendering error:', e);
+              // Silently fail if canvas rendering has issues (only log in development)
+              if (process.env.NODE_ENV === 'development') {
+                console.warn('Canvas rendering error:', e);
+              }
             }
           }}
         />
