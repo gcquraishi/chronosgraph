@@ -288,31 +288,45 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
     if (nodesToCollapse.length > 0) {
       devLog(`🧹 Collapsing ${nodesToCollapse.length} forward nodes:`, nodesToCollapse);
 
-      // For each forward node, remove its immediate children from the graph
+      // For each forward node, find and remove its neighbors from the current graph
       nodesToCollapse.forEach(nodeId => {
-        if (expandedNodes.has(nodeId)) {
-          const children = nodeChildren.get(nodeId);
-          if (children && children.size > 0) {
-            devLog(`  Removing ${children.size} children of ${nodeId}:`, Array.from(children));
+        // Find all nodes connected to this forward node by looking at current links
+        const connectedNodeIds = new Set<string>();
+        links.forEach(link => {
+          const source = typeof link.source === 'object' ? link.source.id : link.source;
+          const target = typeof link.target === 'object' ? link.target.id : link.target;
 
-            // Remove children from nodes array
-            setNodes(prev => prev.filter(n => !children.has(n.id)));
-
-            // Remove children's links
-            setLinks(prev => prev.filter(l => {
-              const source = typeof l.source === 'object' ? l.source.id : l.source;
-              const target = typeof l.target === 'object' ? l.target.id : l.target;
-              return !children.has(source) && !children.has(target);
-            }));
-
-            // Mark as collapsed
-            setExpandedNodes(prev => {
-              const newSet = new Set(prev);
-              newSet.delete(nodeId);
-              children.forEach(id => newSet.delete(id));
-              return newSet;
-            });
+          if (source === nodeId && target !== nodeId) {
+            connectedNodeIds.add(target);
+          } else if (target === nodeId && source !== nodeId) {
+            connectedNodeIds.add(source);
           }
+        });
+
+        // Don't remove nodes that are part of the remaining history path
+        const historyPathIds = new Set(navigationHistory.slice(0, newIndex + 1));
+        const childrenToRemove = Array.from(connectedNodeIds).filter(id => !historyPathIds.has(id));
+
+        if (childrenToRemove.length > 0) {
+          devLog(`  Removing ${childrenToRemove.length} neighbors of ${nodeId}:`, childrenToRemove);
+
+          // Remove children from nodes array
+          setNodes(prev => prev.filter(n => !childrenToRemove.includes(n.id)));
+
+          // Remove children's links
+          setLinks(prev => prev.filter(l => {
+            const source = typeof l.source === 'object' ? l.source.id : l.source;
+            const target = typeof l.target === 'object' ? l.target.id : l.target;
+            return !childrenToRemove.includes(source) && !childrenToRemove.includes(target);
+          }));
+
+          // Mark as collapsed
+          setExpandedNodes(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(nodeId);
+            childrenToRemove.forEach(id => newSet.delete(id));
+            return newSet;
+          });
         }
       });
     }
