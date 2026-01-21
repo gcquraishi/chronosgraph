@@ -233,6 +233,43 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
     }
   }, [centerNodeId, nodeDepths.size]);
 
+  // Track initial neighbors of starting node for collapse functionality
+  useEffect(() => {
+    if (centerNodeId && nodes.length > 0 && links.length > 0 && nodeChildren.size === 0) {
+      // Find all nodes connected to the starting node
+      const connectedNodeIds = new Set<string>();
+
+      links.forEach((link: ForceGraphLink) => {
+        const source = typeof link.source === 'object' ? link.source.id : link.source;
+        const target = typeof link.target === 'object' ? link.target.id : link.target;
+
+        if (source === centerNodeId && target !== centerNodeId) {
+          connectedNodeIds.add(target);
+        } else if (target === centerNodeId && source !== centerNodeId) {
+          connectedNodeIds.add(source);
+        }
+      });
+
+      if (connectedNodeIds.size > 0) {
+        // Track these as children of the starting node
+        setNodeChildren(new Map([[centerNodeId, connectedNodeIds]]));
+
+        // Set depth for these initial neighbors
+        setNodeDepths((prev) => {
+          const updated = new Map(prev);
+          connectedNodeIds.forEach(id => {
+            if (!updated.has(id)) {
+              updated.set(id, 1); // Initial neighbors are 1 hop away
+            }
+          });
+          return updated;
+        });
+
+        console.log(`Tracked ${connectedNodeIds.size} initial neighbors of starting node:`, Array.from(connectedNodeIds));
+      }
+    }
+  }, [centerNodeId, nodes.length, links.length, nodeChildren.size]);
+
   // Fetch graph data on mount if not provided
   useEffect(() => {
     if (initialNodes && initialLinks) {
