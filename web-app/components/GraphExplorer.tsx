@@ -126,6 +126,10 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
   );
   // Track the currently expanded node (only one at a time)
   const [currentlyExpandedNode, setCurrentlyExpandedNode] = useState<string | null>(centerNodeId);
+  // Track the ordered exploration path for visual highlighting
+  const [explorationPath, setExplorationPath] = useState<string[]>(
+    centerNodeId ? [centerNodeId] : []
+  );
 
   // Camera control helper - smoothly centers camera on a node
   const centerCameraOnNode = (node: any) => {
@@ -383,18 +387,35 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
     const source = typeof link.source === 'object' ? link.source.id : link.source;
     const target = typeof link.target === 'object' ? link.target.id : link.target;
 
-    // Check if this link is part of the highlighted path
+    // Check if this link is part of the highlighted path (from highlightedPath prop)
     const isHighlighted = highlightedPath?.pathLinks.some(
       pathLink =>
         (pathLink.source === source && pathLink.target === target) ||
         (pathLink.source === target && pathLink.target === source) // Handle bidirectional
     ) || false;
 
+    // Check if this link is part of the exploration path (bloom mode)
+    let isExplorationPath = false;
+    if (isBloomMode && explorationPath.length > 1) {
+      // Check if this link connects consecutive nodes in the exploration path
+      for (let i = 0; i < explorationPath.length - 1; i++) {
+        const pathSource = explorationPath[i];
+        const pathTarget = explorationPath[i + 1];
+        if (
+          (source === pathSource && target === pathTarget) ||
+          (source === pathTarget && target === pathSource)
+        ) {
+          isExplorationPath = true;
+          break;
+        }
+      }
+    }
+
     return {
       source,
       target,
       sentiment: link.sentiment,
-      featured: link.featured || isHighlighted,
+      featured: link.featured || isHighlighted || isExplorationPath,
       relationshipType: link.relationshipType,
     };
   });
@@ -413,6 +434,15 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
       // Create updated set NOW before collapsing, to avoid state timing issues
       const updatedVisitedCenters = new Set(visitedCenters).add(node.id);
       setVisitedCenters(updatedVisitedCenters);
+
+      // Add to ordered exploration path for visual highlighting
+      // Only add if it's not already the last node (avoid duplicates on re-click)
+      setExplorationPath((prev) => {
+        if (prev[prev.length - 1] === node.id) {
+          return prev; // Already the last node, don't duplicate
+        }
+        return [...prev, node.id];
+      });
 
       // Check depth before expansion (Task 1.7)
       const currentDepth = nodeDepths.get(node.id) ?? 0;
