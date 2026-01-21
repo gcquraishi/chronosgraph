@@ -1,4 +1,5 @@
 import { getSession } from './neo4j';
+import neo4j from 'neo4j-driver';
 import { HistoricalFigure, FigureProfile, Portrayal, SentimentDistribution, GraphNode, GraphLink, SeriesRelationship, SeriesMetadata, CharacterAppearance, Location, LocationWithStats, Era, EraWithStats, LocationWorks, EraWorks, DiscoveryBrowseResult } from './types';
 
 export async function searchFigures(query: string): Promise<HistoricalFigure[]> {
@@ -687,7 +688,7 @@ export async function getHighDegreeNetwork(limit: number = 50): Promise<{ nodes:
        MATCH (f)-[r:APPEARS_IN|INTERACTED_WITH]-(connected)
        RETURN f, r, connected, type(r) as relType
        LIMIT 500`,
-      { limit }
+      { limit: neo4j.int(limit) }
     );
 
     const nodes: GraphNode[] = [];
@@ -1097,7 +1098,7 @@ export async function getWorksInLocation(
        WITH m ORDER BY m.release_year DESC, m.title ASC
        SKIP $skip LIMIT $limit
        RETURN collect(m) as paginated_works`,
-      { locationId, skip, limit }
+      { locationId, skip: neo4j.int(skip), limit: neo4j.int(limit) }
     );
 
     // Third query: Get all figures
@@ -1221,7 +1222,7 @@ export async function getWorksInEra(
        WITH m ORDER BY m.release_year DESC, m.title ASC
        LIMIT $limit
        RETURN collect(m) as paginated_works`,
-      { eraId, limit }
+      { eraId, limit: neo4j.int(limit) }
     );
 
     // Third query: Get all figures
