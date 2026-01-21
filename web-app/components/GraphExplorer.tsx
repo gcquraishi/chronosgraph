@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useTransition } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { GraphNode, GraphLink, PathVisualization } from '@/lib/types';
@@ -382,6 +382,21 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
     return false;
   });
 
+  // Memoize exploration path edges for O(1) lookup performance
+  const explorationPathEdges = useMemo(() => {
+    const edges = new Set<string>();
+    if (isBloomMode && explorationPath.length > 1) {
+      for (let i = 0; i < explorationPath.length - 1; i++) {
+        const a = explorationPath[i];
+        const b = explorationPath[i + 1];
+        // Store both directions for bidirectional matching
+        edges.add(`${a}-${b}`);
+        edges.add(`${b}-${a}`);
+      }
+    }
+    return edges;
+  }, [isBloomMode, explorationPath]);
+
   // Clone links and mark highlighted path links as featured
   const graphLinks = visibleLinks.map((link: ForceGraphLink) => {
     const source = typeof link.source === 'object' ? link.source.id : link.source;
@@ -394,22 +409,8 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
         (pathLink.source === target && pathLink.target === source) // Handle bidirectional
     ) || false;
 
-    // Check if this link is part of the exploration path (bloom mode)
-    let isExplorationPath = false;
-    if (isBloomMode && explorationPath.length > 1) {
-      // Check if this link connects consecutive nodes in the exploration path
-      for (let i = 0; i < explorationPath.length - 1; i++) {
-        const pathSource = explorationPath[i];
-        const pathTarget = explorationPath[i + 1];
-        if (
-          (source === pathSource && target === pathTarget) ||
-          (source === pathTarget && target === pathSource)
-        ) {
-          isExplorationPath = true;
-          break;
-        }
-      }
-    }
+    // Check if this link is part of the exploration path (O(1) lookup via memoized Set)
+    const isExplorationPath = explorationPathEdges.has(`${source}-${target}`);
 
     return {
       source,
@@ -499,32 +500,34 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
         const parentDepth = nodeDepths.get(node.id) ?? 0;
         const newDepth = parentDepth + 1;
 
-        // Merge new nodes (avoiding duplicates)
-        setNodes((prevNodes) => {
-          const existingIds = new Set(prevNodes.map(n => n.id));
-          const newNodes = data.nodes.filter((n: GraphNode) => !existingIds.has(n.id));
+        // Compute new nodes using setState callback to get latest state (prevents duplicates)
+        let computedNewNodes: GraphNode[] = [];
+        let computedChildIds: Set<string> = new Set();
 
-          // Track depths for new nodes
-          setNodeDepths((prevDepths) => {
-            const updatedDepths = new Map(prevDepths);
-            newNodes.forEach((n: GraphNode) => {
-              if (!updatedDepths.has(n.id)) {
-                updatedDepths.set(n.id, newDepth);
-              }
-            });
-            console.log(`Added ${newNodes.length} nodes at depth ${newDepth}:`, newNodes.map((n: GraphNode) => n.name));
-            return updatedDepths;
+        setNodes(prev => {
+          const existingIds = new Set(prev.map(n => n.id));
+          computedNewNodes = data.nodes.filter((n: GraphNode) => !existingIds.has(n.id));
+          computedChildIds = new Set(computedNewNodes.map(n => n.id));
+
+          console.log(`Added ${computedNewNodes.length} nodes at depth ${newDepth}:`, computedNewNodes.map((n: GraphNode) => n.name));
+          return [...prev, ...computedNewNodes];
+        });
+
+        // Use computed values for other state updates (not nested, but uses latest data)
+        setNodeDepths(prev => {
+          const updated = new Map(prev);
+          computedNewNodes.forEach((n: GraphNode) => {
+            if (!updated.has(n.id)) {
+              updated.set(n.id, newDepth);
+            }
           });
+          return updated;
+        });
 
-          // Track parent-child relationships for collapse (Task 1.8)
-          setNodeChildren((prevChildren) => {
-            const updatedChildren = new Map(prevChildren);
-            const childIds = new Set(newNodes.map((n: GraphNode) => n.id));
-            updatedChildren.set(node.id, childIds);
-            return updatedChildren;
-          });
-
-          return [...prevNodes, ...newNodes];
+        setNodeChildren(prev => {
+          const updated = new Map(prev);
+          updated.set(node.id, computedChildIds);
+          return updated;
         });
 
         // Merge new links (avoiding duplicates)
@@ -594,32 +597,34 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
         const parentDepth = nodeDepths.get(node.id) ?? 0;
         const newDepth = parentDepth + 1;
 
-        // Merge new nodes (avoiding duplicates)
-        setNodes((prevNodes) => {
-          const existingIds = new Set(prevNodes.map(n => n.id));
-          const newNodes = data.nodes.filter((n: GraphNode) => !existingIds.has(n.id));
+        // Compute new nodes using setState callback to get latest state (prevents duplicates)
+        let computedNewNodes: GraphNode[] = [];
+        let computedChildIds: Set<string> = new Set();
 
-          // Track depths for new nodes
-          setNodeDepths((prevDepths) => {
-            const updatedDepths = new Map(prevDepths);
-            newNodes.forEach((n: GraphNode) => {
-              if (!updatedDepths.has(n.id)) {
-                updatedDepths.set(n.id, newDepth);
-              }
-            });
-            console.log(`Added ${newNodes.length} nodes at depth ${newDepth}:`, newNodes.map((n: GraphNode) => n.name));
-            return updatedDepths;
+        setNodes(prev => {
+          const existingIds = new Set(prev.map(n => n.id));
+          computedNewNodes = data.nodes.filter((n: GraphNode) => !existingIds.has(n.id));
+          computedChildIds = new Set(computedNewNodes.map(n => n.id));
+
+          console.log(`Added ${computedNewNodes.length} nodes at depth ${newDepth}:`, computedNewNodes.map((n: GraphNode) => n.name));
+          return [...prev, ...computedNewNodes];
+        });
+
+        // Use computed values for other state updates (not nested, but uses latest data)
+        setNodeDepths(prev => {
+          const updated = new Map(prev);
+          computedNewNodes.forEach((n: GraphNode) => {
+            if (!updated.has(n.id)) {
+              updated.set(n.id, newDepth);
+            }
           });
+          return updated;
+        });
 
-          // Track parent-child relationships for collapse (Task 1.8)
-          setNodeChildren((prevChildren) => {
-            const updatedChildren = new Map(prevChildren);
-            const childIds = new Set(newNodes.map((n: GraphNode) => n.id));
-            updatedChildren.set(node.id, childIds);
-            return updatedChildren;
-          });
-
-          return [...prevNodes, ...newNodes];
+        setNodeChildren(prev => {
+          const updated = new Map(prev);
+          updated.set(node.id, computedChildIds);
+          return updated;
         });
 
         // Merge new links (avoiding duplicates)
