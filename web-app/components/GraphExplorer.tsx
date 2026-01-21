@@ -356,8 +356,13 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
 
   // Handle node click
   const handleNodeClick = async (node: any) => {
+    // Check for collapse FIRST before updating center tracking
+    // This prevents the node from being added to visitedCenters before collapsing
+    const shouldCollapse = expandedNodes.has(node.id);
+
     // Phase 1: Camera centering on click (Tasks 1.2 & 1.3) - only in bloom mode
-    if (isBloomMode) {
+    // Only update center if NOT collapsing
+    if (isBloomMode && !shouldCollapse) {
       setCenterNodeId(node.id);
       centerCameraOnNode(node);
 
@@ -387,7 +392,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
       const wikidataId = node.id.replace('media-', '');
 
       // If already expanded, collapse it (Task 1.8)
-      if (expandedNodes.has(node.id)) {
+      if (shouldCollapse) {
         collapseNode(node.id);
         return;
       }
@@ -480,7 +485,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
       }
 
       // If already expanded, collapse it (Task 1.8)
-      if (expandedNodes.has(node.id)) {
+      if (shouldCollapse) {
         collapseNode(node.id);
         return;
       }
