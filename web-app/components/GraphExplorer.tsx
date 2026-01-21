@@ -145,8 +145,8 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
 
   // Collapse helper - recursively removes a node and all its descendants (Task 1.8)
   // Smart collapse: preserves nodes that are part of the exploration path (visited centers)
-  const collapseNode = (nodeId: string) => {
-    const isInPath = visitedCenters.has(nodeId);
+  const collapseNode = (nodeId: string, preserveNodeIds: Set<string> = visitedCenters) => {
+    const isInPath = preserveNodeIds.has(nodeId);
     const toRemove = new Set<string>();
 
     // If the node itself is in the exploration path, don't remove it - only its side branches
@@ -164,7 +164,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
       if (children) {
         children.forEach(childId => {
           // Skip if this child was clicked/centered (part of exploration path)
-          if (visitedCenters.has(childId)) {
+          if (preserveNodeIds.has(childId)) {
             console.log(`  Preserving ${childId} - part of exploration path`);
             return;
           }
@@ -410,7 +410,9 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
       centerCameraOnNode(node);
 
       // Track this node as part of exploration path (for smart collapse)
-      setVisitedCenters((prev) => new Set(prev).add(node.id));
+      // Create updated set NOW before collapsing, to avoid state timing issues
+      const updatedVisitedCenters = new Set(visitedCenters).add(node.id);
+      setVisitedCenters(updatedVisitedCenters);
 
       // Check depth before expansion (Task 1.7)
       const currentDepth = nodeDepths.get(node.id) ?? 0;
@@ -431,9 +433,10 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
       });
 
       // Auto-collapse the previously expanded node (if different from current)
+      // Pass the updated visited centers to ensure the newly clicked node is preserved
       if (currentlyExpandedNode && currentlyExpandedNode !== node.id) {
         console.log(`Auto-collapsing previous node: ${currentlyExpandedNode}`);
-        collapseNode(currentlyExpandedNode);
+        collapseNode(currentlyExpandedNode, updatedVisitedCenters);
       }
     }
 
