@@ -192,9 +192,12 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
     }));
 
     // Clean up tracking state
+    // IMPORTANT: Always remove the collapsed node from expandedNodes (even if in path)
+    // so it can be re-expanded later
     setExpandedNodes(prev => {
       const newSet = new Set(prev);
-      toRemove.forEach(id => newSet.delete(id));
+      newSet.delete(nodeId); // Remove the collapsed node itself
+      toRemove.forEach(id => newSet.delete(id)); // Remove its children
       return newSet;
     });
 
@@ -206,7 +209,8 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
 
     setNodeChildren(prev => {
       const newMap = new Map(prev);
-      toRemove.forEach(id => newMap.delete(id));
+      newMap.delete(nodeId); // Remove the collapsed node's children tracking
+      toRemove.forEach(id => newMap.delete(id)); // Remove children's tracking
       return newMap;
     });
 
