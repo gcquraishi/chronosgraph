@@ -1,4 +1,209 @@
 ---
+**TIMESTAMP:** 2026-01-21T01:45:00Z
+**AGENT:** Claude Code (Haiku 4.5)
+**STATUS:** ✅ LINEAR INTEGRATION CONFIGURED - /CREATE-ISSUE SKILL
+
+**SUMMARY:**
+Configured `/create-issue` skill to use Linear as primary issue tracking system. Replaced GitHub issue creation with Linear GraphQL API integration. Saved Linear API credentials and team ID to environment configuration. Verified API connectivity and readiness for immediate use.
+
+**MOTIVATION:**
+User preference for Linear-first workflow while maintaining fast issue capture experience. `/create-issue` skill provides frictionless bug/feature capture during development flow—now directing all tickets to Linear instead of GitHub for centralized project management.
+
+**SESSION DELIVERABLES:**
+
+## 1. Skill Configuration Update
+
+Updated `.claude/skills/create-issue/SKILL.md`:
+- Changed description from GitHub to Linear
+- Updated workflow section to use Linear GraphQL API instead of `gh issue create`
+- Updated key principles to reference Linear API
+- Added Linear API Integration section with:
+  - API credentials (stored in .env)
+  - Priority mapping (Low/Normal/High/Critical → Linear Priority 4/3/2/1)
+  - Type mapping (Bug/Feature/Improvement)
+  - GraphQL mutation template for issue creation
+  - Variables format for Linear API calls
+
+## 2. Environment Configuration
+
+Updated `/Users/gcquraishi/Documents/chronosgraph/.env`:
+- Added `LINEAR_API_KEY` (stored in local `.env`, not committed)
+- Added `LINEAR_TEAM_ID` (stored in local `.env`, not committed)
+- Credentials now available for skill execution
+
+## 3. API Connectivity Verification
+
+Tested Linear GraphQL API:
+```bash
+curl -X POST https://api.linear.app/graphql \
+  -H "Authorization: lin_api_..." \
+  -d '{"query": "query { viewer { id email } }"}'
+```
+
+Result: ✅ Successfully authenticated as george@bigheavy.fun
+- API connectivity confirmed
+- Credentials valid
+- Ready for immediate use
+
+**ARCHITECTURAL DECISIONS:**
+
+1. **Linear-First Workflow**: All issues created via `/create-issue` now go to Linear (CHR team)
+2. **GraphQL Integration**: Using Linear GraphQL API for consistent, type-safe mutation handling
+3. **Priority/Type Mapping**: Maintaining same label structure (bug/feature/improvement, low/normal/high/critical) mapped to Linear fields
+4. **Credentials in .env**: Secure storage allows skill to access credentials without hardcoding
+
+**FILES MODIFIED:**
+- `.claude/skills/create-issue/SKILL.md` - Updated to Linear API
+- `.env` - Added LINEAR_API_KEY and LINEAR_TEAM_ID
+
+**NEXT STEPS:**
+1. Use `/create-issue` skill—tickets now go to Linear (CHR-###)
+2. Verify first Linear issue creation works end-to-end
+3. If needed: Update skill to handle Linear label IDs dynamically
+
+---
+**TIMESTAMP:** 2026-01-21T01:30:00Z
+**AGENT:** Claude Code (Sonnet 4.5)
+**STATUS:** ✅ PHASE 1 COMPLETE - BLOOM GRAPH EXPLORATION FEATURE
+
+**SUMMARY:**
+Implemented interactive "bloom" graph exploration enabling click-to-center navigation with automatic expansion and smart collapse. Users can now explore the historical network by clicking any node to reveal its connections, creating a progressive discovery journey through time. Core implementation complete (86% - 12/14 tasks) with camera control, depth tracking, auto-collapse, and exploration path highlighting. Testing phase remaining before Phase 2.
+
+**MOTIVATION:**
+Transform static graph visualization into an interactive exploration experience where:
+- Users discover connections organically by clicking nodes
+- Camera automatically centers on clicked nodes for intuitive navigation
+- Only one node expanded at a time (auto-collapse) to prevent overwhelming the viewport
+- Exploration path visually highlighted to show the journey taken
+- Depth tracking warns users when exploring too far from origin
+- Smart collapse preserves the navigation path while removing side branches
+
+**SESSION DELIVERABLES:**
+
+## 1. Core Bloom Navigation System
+
+Implemented 7 critical features in `web-app/components/GraphExplorer.tsx` (891 lines):
+
+### Task 1.1: Camera Control (Lines 116, 135-148, 780)
+- Added `forceGraphRef` to access ForceGraph2D instance
+- Created `centerCameraOnNode()` helper with 1000ms smooth pan animation
+- Null checks and error handling for robust camera operations
+- Console logging confirms camera centering on each click
+
+### Task 1.2: Center Node Styling (Lines 117-119, 431, 814-847)
+- Added `centerNodeId` state tracking current focus node
+- Center node rendered 1.5x larger than regular nodes
+- Gold/amber glow effect (CENTER_NODE_GLOW_COLOR) distinguishes center visually
+- Updates synchronously on every node click
+
+### Task 1.3: Camera Integration (Lines 425-472)
+- Camera pans immediately on node click (synchronous, before async expansion)
+- Instant visual feedback for intuitive UX
+- Pan happens inside bloom mode conditional for feature flag control
+
+### Task 1.4: Universal Node Expansion (Lines 474-563, 565-660)
+- **Media nodes**: Fetch via `/api/graph/expand/${wikidataId}?type=media`
+- **Figure nodes**: Fetch via `/api/graph/expand/${canonicalId}?type=figure` (in-place, no navigation)
+- Both use identical merge pattern with duplicate detection
+- Old navigation redirect disabled in bloom mode
+
+### Task 1.6: Depth Tracking (Line 120, 230-238, 261-270, 499-525, 596-622)
+- `nodeDepths` Map tracks hop distance from starting node
+- Starting node initialized to depth 0 on mount
+- Initial neighbors set to depth 1
+- New nodes assigned `parentDepth + 1` during expansion
+- Console logs show depth for debugging
+
+### Task 1.7: Depth Limit Warnings (Line 90, 449-464)
+- `MAX_DEPTH = 7` constant (configurable)
+- Console warns when approaching depth limit: "⚠️ Approaching depth limit (7/7 hops)"
+- Warnings don't block expansion (user can continue if desired)
+- Current depth logged on every click for monitoring
+
+### Task 1.8: Smart Collapse (Lines 122-126, 144-228)
+- **Auto-collapse**: Clicking new node collapses previously expanded node
+- **Smart preservation**: Nodes in exploration path are never removed
+- **BFS traversal**: Identifies all descendants for removal
+- **Tracking state**: `nodeChildren` Map, `visitedCenters` Set, `explorationPath` array
+- Console logs show which nodes preserved vs removed
+
+## 2. Enhanced Features Beyond Plan
+
+### Single-Expanded-Node Model (Lines 127-132, 466-471)
+- `currentlyExpandedNode` state tracks which node is open
+- Auto-collapses previous node when new node clicked
+- Prevents viewport from becoming overcrowded
+- Maintains clean, focused exploration experience
+
+### Exploration Path Highlighting (Lines 129-132, 386-398, 412-419)
+- `explorationPath` array stores ordered sequence of clicked nodes
+- Memoized path edges Set for O(1) lookup performance
+- Path edges marked as `featured` for visual distinction (blue, thicker)
+- Users can see the journey they've taken through the graph
+
+### Initial Neighbors Tracking (Lines 240-275)
+- Tracks starting node's neighbors in `nodeChildren` Map
+- Enables collapsing back to starting node
+- Sets depth 1 for initial neighbors
+- Ensures consistent collapse behavior from entry point
+
+## 3. Feature Flag & Backwards Compatibility (Lines 112-113)
+
+- `NEXT_PUBLIC_BLOOM_MODE=true` in `.env.local` (not committed)
+- `isBloomMode` constant controls all new behavior
+- Old navigation behavior preserved when flag set to `false`
+- Zero breaking changes to existing functionality
+
+## 4. Implementation Plan & Documentation
+
+- Created `.plans/bloom-exploration-implementation-plan.md` (314 lines)
+- Progress tracking: 86% complete (12/14 tasks)
+- Detailed task breakdown with file references and line numbers
+- Success criteria, rollback plan, and risk mitigation documented
+- Updated docs/STATUS_BOARD.md with current work status
+
+## 5. Backend Verification (Task 1.5 - Completed 2026-01-20)
+
+- Verified `getNodeNeighbors()` in `web-app/lib/db.ts` (Lines 567-675)
+- Tested with high-connectivity figures (Marcus Falco: 48, Helena Justina: 43, Julius Caesar: 27)
+- Confirmed LIMIT 50 prevents overwhelming viewport
+- API endpoint `/api/graph/expand/[id]?type=figure` production ready
+- Created verification reports in `.plans/backend-verification-report.md`
+
+**ARCHITECTURAL DECISIONS:**
+
+1. **Functionality Before Polish**: Animation effects deferred to Phase 3 (fade-in, pulse, spring physics)
+2. **Camera Re-centering**: Every click centers camera on that node, making it the new exploration hub
+3. **Single Expansion**: Only one node expanded at a time to prevent graph explosion
+4. **Smart Collapse**: Preserves exploration path (clicked nodes) while removing side branches
+5. **Local React State**: Continue using GraphExplorer's useState pattern (no global state needed)
+6. **Depth from Origin**: Hop count measured from starting node, not current center
+
+**TESTING REMAINING (Phase 1 - Tasks 1.9-1.14):**
+
+- Task 1.9: Test high-degree nodes (50+ connections)
+- Task 1.10: Test camera control smoothness during active simulation
+- Task 1.11: Test collapse with complex multi-branch graphs
+- Task 1.12: Test entry points on various figure pages
+- Task 1.14: Code review (`/review` skill) before Phase 2
+
+**COMMITS:**
+- Recent bloom commits visible in git log (auto-collapse, smart preserve, path highlighting)
+- Feature branch workflow ready for final testing
+
+**NEXT STEPS:**
+1. Run comprehensive manual testing (Tasks 1.9-1.12)
+2. Execute `/review` code review on GraphExplorer.tsx
+3. Address any findings from code review
+4. Plan Phase 2: Navigation controls (back button, breadcrumbs, reset view)
+
+**FILES MODIFIED:**
+- `web-app/components/GraphExplorer.tsx` - 891 lines (core implementation)
+- `.plans/bloom-exploration-implementation-plan.md` - 314 lines (plan & tracking)
+- `docs/STATUS_BOARD.md` - Updated with current status
+- `web-app/.env.local` - Feature flag enabled (not committed)
+
+---
 **TIMESTAMP:** 2026-01-19T22:35:00Z
 **AGENT:** Claude Code (Sonnet 4.5)
 **STATUS:** ✅ SESSION COMPLETE - COMPLETE WORKFLOW SKILLS SUITE

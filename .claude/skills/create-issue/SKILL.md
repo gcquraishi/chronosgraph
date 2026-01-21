@@ -1,6 +1,6 @@
 ---
 name: create-issue
-description: "Quickly capture bugs, features, or improvements when you're mid-development. Creates a complete GitHub issue with title, description, context, and labels in under 2 minutes."
+description: "Quickly capture bugs, features, or improvements when you're mid-development. Creates a complete Linear issue with title, description, context, and labels in under 2 minutes."
 ---
 
 # Create Issue
@@ -9,7 +9,7 @@ User is mid-development and thought of a bug/feature/improvement. Capture it fas
 
 ## Your Goal
 
-Create a complete GitHub issue with:
+Create a complete Linear issue with:
 - Clear title
 - TL;DR of what this is about
 - Current state vs expected outcome
@@ -76,13 +76,13 @@ Labels: [type: bug/feature/improvement], [priority: low/normal/high/critical], [
    - Web search for complex features (optional)
 
 2. **Create Issue** (15-30s)
-   - Use `gh issue create --title "..." --body "..."`
-   - Add labels with `--label` flags
-   - Confirm issue number to user
+   - Use Linear GraphQL API to create issue
+   - Map issue details to Linear fields (title, description, priority, labels)
+   - Get Linear issue URL from response
 
 3. **Done** (5s)
-   - Return issue URL
-   - Keep it brief: "Created #123 - [title]"
+   - Return Linear issue URL
+   - Keep it brief: "Created CHR-123 - [title]"
 
 ## Examples
 
@@ -115,13 +115,57 @@ Response:
 - Create issue with validation fix suggestion
 - Label: bug, priority:normal, effort:small
 
+## Linear API Integration
+
+**Credentials:**
+- API Key: `${LINEAR_API_KEY}` (store in `.env`, never commit)
+- Team ID: `${LINEAR_TEAM_ID}` (store in `.env`, never commit)
+
+**Priority Mapping (Linear → labels):**
+- `priority: low` → Priority 4
+- `priority: normal` → Priority 3
+- `priority: high` → Priority 2
+- `priority: critical` → Priority 1 (URGENT)
+
+**Type Mapping (Linear labels):**
+- Bug → use Linear issue type field if available, otherwise label
+- Feature → use Linear issue type field if available, otherwise label
+- Improvement → use Linear issue type field if available, otherwise label
+
+**GraphQL Mutation Template:**
+```graphql
+mutation CreateIssue($input: IssueCreateInput!) {
+  issueCreate(input: $input) {
+    issue {
+      id
+      identifier
+      title
+      url
+    }
+  }
+}
+```
+
+**Variables for mutation:**
+```json
+{
+  "input": {
+    "teamId": "CHR",
+    "title": "...",
+    "description": "...",
+    "priority": 3,
+    "labelIds": ["..."]
+  }
+}
+```
+
 ## Key Principles
 
 1. **Respect Flow State**: User is coding. Don't derail them. 2min max.
 2. **Smart Defaults**: Assume normal priority, medium effort unless obvious.
 3. **Context Over Questions**: Search codebase first, ask second.
 4. **Actionable Over Perfect**: Issue doesn't need to be perfect, needs to be captured.
-5. **Use GitHub CLI**: Always use `gh issue create` - faster than web UI.
+5. **Use Linear API**: Always use Linear GraphQL API for creation - ensures Linear-first tracking.
 
 ## Anti-Patterns (Don't Do This)
 
