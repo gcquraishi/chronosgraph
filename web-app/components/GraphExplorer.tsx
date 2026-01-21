@@ -464,10 +464,10 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
   };
 
   // Task 2.4: Reset view to starting state
-  const resetView = () => {
+  const resetView = async () => {
     const startingNodeId = canonicalId ? `figure-${canonicalId}` : null;
 
-    if (!startingNodeId) {
+    if (!startingNodeId || !canonicalId) {
       devWarn('⚠️ Cannot reset: no starting node');
       return;
     }
@@ -481,28 +481,9 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
     // Reset exploration path
     setExplorationPath([startingNodeId]);
 
-    // Clear all expanded nodes except starting node
-    setExpandedNodes(new Set([startingNodeId]));
-    setCurrentlyExpandedNode(startingNodeId);
-
-    // Reset to initial graph state (starting node + immediate neighbors)
-    // Keep nodes that are the starting node or directly connected to it
-    const immediateNeighborIds = new Set<string>();
-    links.forEach(link => {
-      const source = typeof link.source === 'object' ? link.source.id : link.source;
-      const target = typeof link.target === 'object' ? link.target.id : link.target;
-
-      if (source === startingNodeId) immediateNeighborIds.add(target);
-      if (target === startingNodeId) immediateNeighborIds.add(source);
-    });
-
-    setNodes(prev => prev.filter(n => n.id === startingNodeId || immediateNeighborIds.has(n.id)));
-    setLinks(prev => prev.filter(l => {
-      const source = typeof l.source === 'object' ? l.source.id : l.source;
-      const target = typeof l.target === 'object' ? l.target.id : l.target;
-      return (source === startingNodeId || target === startingNodeId) ||
-             (immediateNeighborIds.has(source) && immediateNeighborIds.has(target));
-    }));
+    // Clear all expanded nodes
+    setExpandedNodes(new Set());
+    setCurrentlyExpandedNode(null);
 
     // Reset visited centers to starting node only
     setVisitedCenters(new Set([startingNodeId]));
@@ -510,17 +491,68 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
     // Reset node depths
     setNodeDepths(new Map([[startingNodeId, 0]]));
 
-    // Clear node children tracking (will be rebuilt on next expansion)
+    // Clear node children tracking
     setNodeChildren(new Map());
+
+    // Find the starting node from current nodes
+    const startingNode = nodes.find(n => n.id === startingNodeId);
+    if (!startingNode) {
+      devWarn('⚠️ Starting node not found in current graph');
+      return;
+    }
+
+    // Clear graph to just starting node
+    setNodes([startingNode]);
+    setLinks([]);
+
+    // Re-fetch starting node's neighbors from API to get fresh initial state
+    try {
+      setLoadingNodes((prev) => new Set(prev).add(startingNodeId));
+
+      const response = await fetch(`/api/graph/expand/${canonicalId}?type=figure`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch neighbors');
+      }
+
+      const data = await response.json();
+
+      // Add neighbors (limited to MAX_NEIGHBORS)
+      const newNodes = data.nodes.slice(0, MAX_NEIGHBORS);
+      setNodes([startingNode, ...newNodes]);
+      setLinks(data.links);
+
+      // Mark starting node as expanded with its fresh neighbors
+      setExpandedNodes(new Set([startingNodeId]));
+      setCurrentlyExpandedNode(startingNodeId);
+
+      // Set depth for new neighbors
+      const newDepths = new Map([[startingNodeId, 0]]);
+      newNodes.forEach((n: GraphNode) => newDepths.set(n.id, 1));
+      setNodeDepths(newDepths);
+
+      // Track children for collapse logic
+      setNodeChildren(prev => {
+        const updated = new Map(prev);
+        updated.set(startingNodeId, new Set(newNodes.map((n: GraphNode) => n.id)));
+        return updated;
+      });
+
+      devLog(`✅ View reset complete - showing ${newNodes.length} initial neighbors`);
+    } catch (err) {
+      devError('Error resetting view:', err);
+    } finally {
+      setLoadingNodes((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(startingNodeId);
+        return newSet;
+      });
+    }
 
     // Center camera on starting node
     setCenterNodeId(startingNodeId);
-    const startingNode = (initialNodes || []).find(n => n.id === startingNodeId);
     if (startingNode) {
       centerCameraOnNode(startingNode);
     }
-
-    devLog('✅ View reset complete');
   };
 
   // Initialize depth tracking and expansion state for starting node (Task 1.6)
