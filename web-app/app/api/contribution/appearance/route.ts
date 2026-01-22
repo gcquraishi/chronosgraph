@@ -51,7 +51,8 @@ export async function POST(request: NextRequest) {
     const dbSession = await getSession();
     const query = `
       MATCH (f:HistoricalFigure {canonical_id: $figureId})
-      MATCH (m:MediaWork {media_id: $mediaId})
+      MATCH (m:MediaWork)
+      WHERE m.media_id = $mediaId OR m.wikidata_id = $mediaId
       MATCH (u:User {email: $userEmail})
       MERGE (f)-[r:APPEARS_IN]->(m)
       ON CREATE SET
@@ -82,7 +83,7 @@ export async function POST(request: NextRequest) {
       mediaId,
       userEmail,
       sentimentTags: normalizedTags,
-      tagMetadata: tagMetadata,
+      tagMetadata: JSON.stringify(tagMetadata), // Convert to JSON string for Neo4j
       legacySentiment: normalizedTags[0] || 'complex', // Dual-write: first tag as legacy sentiment
       roleDescription,
       isProtagonist,

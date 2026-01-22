@@ -38,13 +38,17 @@ export async function GET(request: NextRequest) {
     const result = await session.run(
       `MATCH (m:MediaWork)
        ${whereClause}
-       RETURN m.media_id AS media_id, m.title AS title, m.release_year AS year, m.media_type AS media_type, m.wikidata_id AS wikidata_id
+       RETURN m.media_id AS media_id,
+              m.title AS title,
+              coalesce(m.release_year, m.year) AS year,
+              coalesce(m.media_type, m.type) AS media_type,
+              m.wikidata_id AS wikidata_id
        LIMIT 10`,
       { query, typeFilter }
     );
 
     const works = result.records.map((record) => ({
-      media_id: record.get('media_id'),
+      media_id: record.get('media_id') || record.get('wikidata_id'), // Fallback to wikidata_id if media_id is missing
       wikidata_id: record.get('wikidata_id'),
       title: record.get('title'),
       year: toNumber(record.get('year')),

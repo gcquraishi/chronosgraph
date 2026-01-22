@@ -146,7 +146,9 @@ export default function AddAppearanceForm({ figureId }: { figureId: string }) {
         return;
     }
 
-    if (!selectedMedia.media_id) {
+    // Accept either media_id or wikidata_id
+    const mediaIdentifier = selectedMedia.media_id || selectedMedia.wikidata_id;
+    if (!mediaIdentifier) {
         setError("Selected media is missing ID. Please try selecting again.");
         console.error("Selected media object:", selectedMedia);
         return;
@@ -172,7 +174,7 @@ export default function AddAppearanceForm({ figureId }: { figureId: string }) {
     startTransition(async () => {
         const payload = {
             figureId,
-            mediaId: selectedMedia.media_id,
+            mediaId: mediaIdentifier, // Use either media_id or wikidata_id
             sentimentTags, // New: array of tags
             roleDescription,
             isProtagonist,
