@@ -8,7 +8,8 @@ import { devLog, devWarn, devError } from '@/utils/devLog';
 
 const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
   ssr: false,
-});
+  // CHR-22: Enable ref forwarding so forceGraphRef.current works for zoomToFit()
+}) as any;
 
 interface GraphExplorerProps {
   canonicalId?: string;
@@ -1248,18 +1249,22 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
           onEngineStop={() => {
             // CHR-22: Auto-zoom to fit graph in frame after simulation settles
             // Adaptive zoom based on graph size - fills more of the available space
-            if (forceGraphRef.current) {
-              // Add padding so nodes aren't at the edge (100px padding)
-              const padding = 100;
-              try {
-                forceGraphRef.current.zoomToFit?.(400, padding);
-              } catch (e) {
-                // Silently fail if zoomToFit is not available
-                if (process.env.NODE_ENV === 'development') {
-                  console.warn('zoomToFit failed:', e);
+            // Small delay ensures graph is fully rendered before zooming
+            setTimeout(() => {
+              if (forceGraphRef.current) {
+                // Add padding so nodes aren't at the edge (100px padding)
+                const padding = 100;
+                try {
+                  console.log('🔍 Attempting zoomToFit, ref:', forceGraphRef.current);
+                  forceGraphRef.current.zoomToFit?.(400, padding);
+                  console.log('✅ zoomToFit called successfully');
+                } catch (e) {
+                  console.error('❌ zoomToFit failed:', e);
                 }
+              } else {
+                console.warn('⚠️ forceGraphRef.current is null, cannot zoom');
               }
-            }
+            }, 100);
           }}
           nodeCanvasObject={(node: any, ctx: any, globalScale: number) => {
             try {
