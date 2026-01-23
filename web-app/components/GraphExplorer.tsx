@@ -1223,7 +1223,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
             if (node.type === 'figure') return '#3b82f6'; // Blue for figures
             return '#f97316'; // Orange for media works
           }}
-          nodeRelSize={10}  // CHR-22: Increased from 7 for better visibility
+          nodeRelSize={12}  // CHR-22: Increased from 7 for better visibility and legibility
           linkColor={(link: any) => link.featured ? '#3b82f6' : '#d1d5db'}
           linkWidth={(link: any) => link.featured ? 3 : 1.5}
           linkLabel={(link: any) => {
@@ -1245,6 +1245,22 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
           enableNodeDrag={true}
           enableZoomInteraction={true}
           enablePanInteraction={true}
+          onEngineStop={() => {
+            // CHR-22: Auto-zoom to fit graph in frame after simulation settles
+            // Adaptive zoom based on graph size - fills more of the available space
+            if (forceGraphRef.current) {
+              // Add padding so nodes aren't at the edge (100px padding)
+              const padding = 100;
+              try {
+                forceGraphRef.current.zoomToFit?.(400, padding);
+              } catch (e) {
+                // Silently fail if zoomToFit is not available
+                if (process.env.NODE_ENV === 'development') {
+                  console.warn('zoomToFit failed:', e);
+                }
+              }
+            }
+          }}
           nodeCanvasObject={(node: any, ctx: any, globalScale: number) => {
             try {
               const label = node?.name || '';
