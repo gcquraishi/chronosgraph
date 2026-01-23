@@ -1,8 +1,24 @@
 # CHR-22 Implementation Summary: Graph Sizing Optimization
 
 **Date**: January 23, 2026
-**Status**: ✅ COMPLETE
-**Commit**: `8ae09a4`
+**Status**: ✅ COMPLETE (Updated)
+**Commits**: `8ae09a4`, `0a894e4`
+
+---
+
+## Latest Update (Commit `0a894e4`)
+
+**Problem**: After fixing frame size, graph content was too small/dense and unreadable.
+
+**Solution**: Added adaptive auto-zoom that fills the frame based on graph size.
+
+**Changes**:
+1. **Increased node size**: 10 → 12 (+71% from original 7)
+2. **Auto-zoom to fit**: Automatically zooms after simulation settles
+3. **Adaptive scaling**: Small graphs zoom in more, large graphs zoom in less
+4. **Smart padding**: 100px padding keeps nodes away from edges
+
+**Result**: Graph now fills ~80% of frame space, nodes are readable, automatic adaptation to any graph size.
 
 ---
 
@@ -21,7 +37,7 @@
 
 ### Issue #2: Graph Nodes Too Small
 **Before**: `nodeRelSize: 7` - nodes hard to see and click
-**After**: `nodeRelSize: 10` - **43% larger**, clearly visible
+**After**: `nodeRelSize: 12` - **71% larger**, clearly visible and readable
 
 ---
 
@@ -32,17 +48,25 @@
 - No need to scroll to see the full initial graph
 - Landing page hero + graph = ~690px total (fits in ~900px viewport)
 
-### 2. **Larger, More Visible Nodes**
-- Nodes are significantly bigger and easier to see
-- Easier to click on nodes (better touch targets)
-- Labels remain readable
+### 2. **Auto-Zoom to Fill Frame** ⭐ NEW
+- Graph automatically zooms to fill ~80% of available frame space
+- Small graphs (few nodes): Zoom in more to make nodes prominent
+- Large graphs (many nodes): Zoom in less but still fill frame nicely
+- Smooth 400ms transition after simulation settles
+- 100px padding keeps nodes away from edges
 
-### 3. **Tighter Node Clustering**
+### 3. **Larger, More Visible Nodes**
+- Nodes are 71% bigger than before (size 12 vs 7)
+- Much easier to see and click on nodes
+- Better touch targets for mobile
+- Labels remain readable at all zoom levels
+
+### 4. **Tighter Node Clustering**
 - Nodes start closer together (more compact layout)
 - User can still zoom out to explore if desired
 - Feels less "sparse" on initial load
 
-### 4. **Responsive on All Devices**
+### 5. **Responsive on All Devices**
 - Desktop: 60% of viewport height (max 600px)
 - Mobile: 50% of viewport height (max 450px)
 - Adapts to window resize
@@ -83,10 +107,21 @@ const height = isMobile
 nodeRelSize={7}
 
 // After
-nodeRelSize={10}  // +43% larger
+nodeRelSize={12}  // +71% larger
 ```
 
-#### 4. **Tighter Force Simulation** (Lines 1240-1243)
+#### 4. **Auto-Zoom to Fit** (Lines 1248-1263) ⭐ NEW
+```typescript
+onEngineStop={() => {
+  // Auto-zoom to fit graph in frame after simulation settles
+  if (forceGraphRef.current) {
+    const padding = 100; // Keep nodes 100px from edges
+    forceGraphRef.current.zoomToFit?.(400, padding); // 400ms smooth transition
+  }
+}}
+```
+
+#### 5. **Tighter Force Simulation** (Lines 1240-1243)
 ```typescript
 // Before
 d3Force={{
