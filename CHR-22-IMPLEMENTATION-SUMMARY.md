@@ -2,7 +2,41 @@
 
 **Date**: January 23, 2026
 **Status**: ✅ COMPLETE (Updated)
-**Commits**: `8ae09a4`, `0a894e4`
+**Commits**: `8ae09a4`, `0a894e4`, `8a5ddda`, `ca19b89`, `5e9b7ba`, `c7165f6`
+
+---
+
+## Final Fix (Commit `c7165f6`) - RESOLVED ✅
+
+**Problem**: Auto-zoom not working due to Next.js `dynamic()` import breaking React ref forwarding.
+
+**Root Cause**: The `dynamic()` import from Next.js prevents refs from being forwarded to the ForceGraph2D component, causing `forceGraphRef.current` to always be `null`.
+
+**Solution**:
+1. **Removed dynamic import**: Replaced with direct `require()` wrapped in `typeof window` check
+2. **Client-side mount check**: Added `mounted` state to only render ForceGraph2D after component mounts
+3. **Direct ref usage**: Changed from callback ref to direct `useRef` assignment
+4. **Updated auto-zoom**: useEffect now properly accesses `forceGraphRef.current`
+
+**Technical Changes**:
+```typescript
+// Before: Dynamic import (breaks refs)
+const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), { ssr: false });
+
+// After: Direct require with SSR guard
+let ForceGraph2D: any = null;
+if (typeof window !== 'undefined') {
+  ForceGraph2D = require('react-force-graph-2d').default;
+}
+
+// Before: Callback ref (didn't work with dynamic import)
+ref={(instance) => setForceGraphInstance(instance)}
+
+// After: Direct ref (works now)
+ref={forceGraphRef}
+```
+
+**Result**: Auto-zoom should now work correctly. Graph will automatically zoom to fill ~80% of frame after simulation settles.
 
 ---
 
