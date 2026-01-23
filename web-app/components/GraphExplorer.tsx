@@ -2,14 +2,15 @@
 
 import React, { useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
 import { GraphNode, GraphLink, PathVisualization } from '@/lib/types';
 import { devLog, devWarn, devError } from '@/utils/devLog';
 
-const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
-  ssr: false,
-  // CHR-22: Enable ref forwarding so forceGraphRef.current works for zoomToFit()
-}) as any;
+// CHR-22: Import directly instead of dynamic to enable ref forwarding
+// We'll handle SSR with a client-side mount check instead
+let ForceGraph2D: any = null;
+if (typeof window !== 'undefined') {
+  ForceGraph2D = require('react-force-graph-2d').default;
+}
 
 interface GraphExplorerProps {
   canonicalId?: string;
@@ -104,6 +105,8 @@ const isBaconNode = (nodeId: string): boolean => {
 
 export default function GraphExplorer({ canonicalId, nodes: initialNodes, links: initialLinks, highlightedPath }: GraphExplorerProps) {
   const router = useRouter();
+  // CHR-22: Track client-side mount to avoid SSR issues with ForceGraph2D
+  const [mounted, setMounted] = useState(false);
   // CHR-22: Responsive dimensions - fits above fold on 13" MacBook
   const [dimensions, setDimensions] = useState({ width: 1200, height: 600 });
   const [dimensionsReady, setDimensionsReady] = useState(false);
@@ -123,9 +126,8 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
   const isBloomMode = process.env.NEXT_PUBLIC_BLOOM_MODE === 'true';
 
   // Phase 1: Bloom Exploration - Camera control and center node tracking
-  // CHR-22: Using state instead of ref due to dynamic import breaking ref forwarding
-  const [forceGraphInstance, setForceGraphInstance] = useState<any>(null);
-  const forceGraphRef = { current: forceGraphInstance }; // Backwards compatibility
+  // CHR-22: Now using useRef since we removed dynamic import
+  const forceGraphRef = useRef<any>(null);
   const [centerNodeId, setCenterNodeId] = useState<string | null>(
     canonicalId ? `figure-${canonicalId}` : null
   );
@@ -606,16 +608,21 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
     }
   }, [centerNodeId, nodes.length, links.length, nodeChildren.size]);
 
+  // CHR-22: Set mounted flag on client-side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // CHR-22: Auto-zoom to fit after graph loads and instance is ready
   useEffect(() => {
-    if (forceGraphInstance && nodes.length > 0 && !isLoading) {
+    if (forceGraphRef.current && nodes.length > 0 && !isLoading && mounted) {
       console.log('🎯 Graph ready, attempting auto-zoom. Nodes:', nodes.length);
       // Delay to ensure layout has settled
       const zoomTimer = setTimeout(() => {
         try {
           const padding = 100;
           console.log('🔍 Calling zoomToFit with padding:', padding);
-          forceGraphInstance.zoomToFit?.(400, padding);
+          forceGraphRef.current.zoomToFit?.(400, padding);
           console.log('✅ zoomToFit completed successfully');
         } catch (e) {
           console.error('❌ zoomToFit failed:', e);
@@ -624,7 +631,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
 
       return () => clearTimeout(zoomTimer);
     }
-  }, [forceGraphInstance, nodes.length, isLoading]);
+  }, [nodes.length, isLoading, mounted]);
 
   // Fetch graph data on mount if not provided
   useEffect(() => {
@@ -1232,14 +1239,10 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
       {/* Full-Bleed Graph */}
       <ForceGraphErrorBoundary>
         <div ref={containerRef} className="bg-gray-50 rounded-lg border border-gray-200 w-full relative" style={{ height: `${dimensions.height}px`, overflow: 'hidden', cursor: 'grab' }}>
+          {mounted && ForceGraph2D && (
           <div style={{ width: '100%', height: '100%' }}>
           <ForceGraph2D
-          ref={(instance: any) => {
-            if (instance !== forceGraphInstance) {
-              console.log('🎨 ForceGraph2D ref callback, instance:', instance);
-              setForceGraphInstance(instance);
-            }
-          }}
+          ref={forceGraphRef}
           key={`${showAllEdges}-${showAcademicWorks}-${showReferenceWorks}-${visibleLinks.length}`}
           graphData={{ nodes: visibleNodes, links: graphLinks }}
           width={dimensions.width}
@@ -1362,6 +1365,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
           }}
         />
           </div>
+          )}
         </div>
       </ForceGraphErrorBoundary>
     </div>
