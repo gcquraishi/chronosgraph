@@ -103,7 +103,8 @@ const isBaconNode = (nodeId: string): boolean => {
 
 export default function GraphExplorer({ canonicalId, nodes: initialNodes, links: initialLinks, highlightedPath }: GraphExplorerProps) {
   const router = useRouter();
-  const [dimensions, setDimensions] = useState({ width: 1200, height: 1400 });
+  // CHR-22: Responsive dimensions - fits above fold on 13" MacBook
+  const [dimensions, setDimensions] = useState({ width: 1200, height: 600 });
   const [dimensionsReady, setDimensionsReady] = useState(false);
   const [nodes, setNodes] = useState<GraphNode[]>(initialNodes || []);
   const [links, setLinks] = useState<ForceGraphLink[]>(initialLinks || []);
@@ -658,7 +659,14 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
 
         // If container has width, use it; otherwise use a sensible default
         const width = containerWidth > 0 ? Math.max(containerWidth - 4, 800) : 1200;
-        const height = 1400; // Much taller canvas for better node distribution
+
+        // CHR-22: Responsive height - fits above fold on 13" MacBook
+        // Mobile: min(50vh, 450px) | Desktop: min(60vh, 600px)
+        const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+        const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 900;
+        const height = isMobile
+          ? Math.min(viewportHeight * 0.5, 450)  // Mobile: 50vh max 450px
+          : Math.min(viewportHeight * 0.6, 600); // Desktop: 60vh max 600px
 
         setDimensions({ width, height });
         setDimensionsReady(true);
@@ -685,7 +693,13 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
     const fallbackTimer = setTimeout(() => {
       if (!hasSetDimensions) {
         console.log('⚠️ Fallback: forcing dimensions ready with defaults');
-        setDimensions({ width: 1200, height: 1400 });
+        // CHR-22: Use responsive fallback height
+        const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+        const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 900;
+        const height = isMobile
+          ? Math.min(viewportHeight * 0.5, 450)
+          : Math.min(viewportHeight * 0.6, 600);
+        setDimensions({ width: 1200, height });
         setDimensionsReady(true);
         hasSetDimensions = true;
       }
@@ -1082,7 +1096,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
             </span>
           </div>
         </div>
-        <div className="bg-white rounded-lg overflow-hidden" style={{ height: 1400 }}>
+        <div className="bg-white rounded-lg overflow-hidden" style={{ height: 600 }}>
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
               <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
@@ -1209,7 +1223,7 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
             if (node.type === 'figure') return '#3b82f6'; // Blue for figures
             return '#f97316'; // Orange for media works
           }}
-          nodeRelSize={7}
+          nodeRelSize={10}  // CHR-22: Increased from 7 for better visibility
           linkColor={(link: any) => link.featured ? '#3b82f6' : '#d1d5db'}
           linkWidth={(link: any) => link.featured ? 3 : 1.5}
           linkLabel={(link: any) => {
@@ -1218,15 +1232,15 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
           }}
           backgroundColor="#f9fafb"
           onNodeClick={handleNodeClick as any}
-          // Force simulation parameters - balanced spacing with natural movement
+          // CHR-22: Tighter force simulation for compact initial view (user can zoom out to explore)
           d3AlphaDecay={0.01}
           d3VelocityDecay={0.3}
           cooldownTicks={200}
           d3Force={{
-            charge: { strength: -4000, distanceMax: 1000 },
-            link: { distance: 300, strength: 0.8 },
-            center: { strength: 0.1 },
-            collision: { radius: 80, strength: 0.4 }
+            charge: { strength: -3000, distanceMax: 800 },   // Reduced repulsion for tighter clustering
+            link: { distance: 200, strength: 0.9 },          // Shorter links, stronger pull
+            center: { strength: 0.15 },                      // Stronger centering
+            collision: { radius: 60, strength: 0.5 }         // Tighter packing allowed
           }}
           enableNodeDrag={true}
           enableZoomInteraction={true}
