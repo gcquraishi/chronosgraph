@@ -14,6 +14,29 @@ Redeploy
 Keep machine awake
     caffeinate -i
 
+Quick decision tree:
+                                                                                                                                                                                                                                                                                        
+  1. Got an idea mid-coding?                                                                                                                             
+  - /create-issue → Creates GitHub issue in 2 min → Keep coding                                                                                          
+                                                                                                                                                         
+  2. Starting a complex feature (unclear requirements)?                                                                                                  
+  - /explore → Surfaces all ambiguities → Answer questions                                                                                               
+  - /create-plan → Generates living plan doc                                                                                                             
+  - /execute → Implements with live % tracking                                                                                                           
+  - /review → Catches issues before merge                                                                                                                
+                                                                                                                                                         
+  3. Starting a well-understood feature?                                                                                                                 
+  - /create-plan → Skip exploration, go straight to plan                                                                                                 
+  - /execute → Implement                                                                                                                                 
+  - /review → Quality check                                                                                                                              
+                                                                                                                                                         
+  4. External reviewer gave feedback?                                                                                                                    
+  - /peer-review → Critically evaluates their findings                                                                                                   
+  - Fix only the valid ones with evidence                                                                                                                
+                                                                                                                                                         
+  5. Trivial change?                                                                                                                                     
+  - Just do it (no workflow needed)
+
 automate product development given the cast of       
   agents I have created. first, I want to know if      
   there are any other agents it would recommend at     

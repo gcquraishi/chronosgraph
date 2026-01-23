@@ -1,5 +1,22 @@
 export interface HistoricalFigure {
+  /**
+   * Canonical identifier for the historical figure
+   *
+   * Format options:
+   * - Wikidata Q-ID (preferred): "Q517" (Napoleon Bonaparte)
+   * - Provisional ID: "PROV:john-smith-1738462847293"
+   *
+   * Priority 1: Use Wikidata Q-ID when available for global uniqueness
+   * Priority 2: Generate timestamped provisional ID to prevent name collisions
+   */
   canonical_id: string;
+
+  /**
+   * Wikidata Q-ID if this figure has been linked to Wikidata
+   * When present, this should also be used as the canonical_id
+   */
+  wikidata_id?: string;
+
   name: string;
   is_fictional: boolean;
   historicity_status?: 'Historical' | 'Fictional' | 'Disputed';
@@ -8,7 +25,26 @@ export interface HistoricalFigure {
 
 export interface MediaWork {
   title: string;
+
+  /**
+   * Release/Publication Year: When the work was originally published or released
+   * Examples: 1949 (for "1984" by George Orwell), 1992 (for "A Place of Greater Safety")
+   */
   release_year: number;
+
+  /**
+   * Setting Year: When the story takes place (optional)
+   * Examples: 1984 (for "1984" novel set in dystopian future), 1789 (for "A Place of Greater Safety" set during French Revolution)
+   * May be null for contemporary works or those without a specific time setting
+   */
+  setting_year?: number;
+
+  /**
+   * Setting Year End: For works that span a time period (optional)
+   * Example: 1799 (for "A Place of Greater Safety" covering 1789-1799)
+   */
+  setting_year_end?: number;
+
   wikidata_id?: string;
   publisher?: string;
   translator?: string;

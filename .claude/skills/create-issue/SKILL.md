@@ -1,21 +1,25 @@
 ---
 name: create-issue
-description: "Quickly capture bugs, features, or improvements when you're mid-development. Creates a complete Linear issue with title, description, context, and labels in under 2 minutes."
+description: "Quickly capture bugs, features, or improvements when you're mid-development. Creates a Linear ticket (CHR-XX) via GraphQL API with title, description, context, and priority in under 2 minutes."
 ---
 
 # Create Issue
 
-User is mid-development and thought of a bug/feature/improvement. Capture it fast so they can keep working.
+User is mid-development and thought of a bug/feature/improvement. Capture it fast in Linear so they can keep working.
+
+---
+**⚠️ CRITICAL: ALWAYS CREATE LINEAR TICKETS (CHR-XX), NEVER GITHUB ISSUES**
+---
 
 ## Your Goal
 
-Create a complete Linear issue with:
+Create a complete Linear ticket (NOT GitHub issue) with:
 - Clear title
 - TL;DR of what this is about
 - Current state vs expected outcome
 - Relevant files that need touching
 - Risk/notes if applicable
-- Proper type/priority/effort labels
+- Priority level (1=critical, 2=high, 3=normal, 4=low)
 
 ## How to Get There
 
@@ -44,8 +48,9 @@ Keep questions brief. One message with 2-3 targeted questions beats multiple bac
 
 ## Issue Format Template
 
-When creating the issue, use `gh issue create` with this structure:
+**CRITICAL: ALL issues MUST be created in Linear using the GraphQL API. NEVER create GitHub issues.**
 
+Issue description structure:
 ```
 Title: [Clear, actionable title]
 
@@ -62,10 +67,11 @@ Title: [Clear, actionable title]
 - `path/to/file.ts` - [why it matters]
 - `path/to/another.py` - [why it matters]
 
-## Notes
-[Any risks, dependencies, or context that helps]
+## Implementation Approach
+[Implementation notes or suggestions]
 
-Labels: [type: bug/feature/improvement], [priority: low/normal/high/critical], [effort: small/medium/large]
+## Labels
+type:[bug/feature/improvement], priority:[low/normal/high/critical], effort:[small/medium/large]
 ```
 
 ## Workflow
@@ -75,14 +81,24 @@ Labels: [type: bug/feature/improvement], [priority: low/normal/high/critical], [
    - Use Grep to find relevant files (optional)
    - Web search for complex features (optional)
 
-2. **Create Issue** (15-30s)
-   - Use Linear GraphQL API to create issue
-   - Map issue details to Linear fields (title, description, priority, labels)
-   - Get Linear issue URL from response
+2. **Get Linear Team UUID** (5s)
+   - Read `.env` file to get LINEAR_API_KEY
+   - Query Linear GraphQL API to get team UUID:
+     ```bash
+     curl -X POST https://api.linear.app/graphql \
+       -H "Authorization: $LINEAR_API_KEY" \
+       -H "Content-Type: application/json" \
+       --data-binary '{"query": "{ teams { nodes { id name key } } }"}'
+     ```
+   - Team key "CHR" maps to UUID (e.g., "37ed983e-84aa-4245-9894-443835075e7e")
 
-3. **Done** (5s)
-   - Return Linear issue URL
-   - Keep it brief: "Created CHR-123 - [title]"
+3. **Create Linear Issue** (15-30s)
+   - Use Linear GraphQL API mutation with curl
+   - Use the team UUID (NOT the team key "CHR")
+   - Parse JSON response to extract identifier and URL
+
+4. **Done** (5s)
+   - Return Linear issue URL with format: "Created CHR-17 - [title]"
 
 ## Examples
 
@@ -117,58 +133,87 @@ Response:
 
 ## Linear API Integration
 
-**Credentials:**
-- API Key: `${LINEAR_API_KEY}` (store in `.env`, never commit)
-- Team ID: `${LINEAR_TEAM_ID}` (store in `.env`, never commit)
+**IMPORTANT: Read credentials from `.env` file at project root.**
 
-**Priority Mapping (Linear → labels):**
+**Credentials:**
+- API Key: Read `LINEAR_API_KEY` from `.env` file
+- Team UUID: Fetch dynamically via GraphQL (team key "CHR" in `.env` is legacy)
+
+**Priority Mapping:**
 - `priority: low` → Priority 4
-- `priority: normal` → Priority 3
+- `priority: normal` → Priority 3 (default)
 - `priority: high` → Priority 2
 - `priority: critical` → Priority 1 (URGENT)
 
-**Type Mapping (Linear labels):**
-- Bug → use Linear issue type field if available, otherwise label
-- Feature → use Linear issue type field if available, otherwise label
-- Improvement → use Linear issue type field if available, otherwise label
-
-**GraphQL Mutation Template:**
-```graphql
-mutation CreateIssue($input: IssueCreateInput!) {
-  issueCreate(input: $input) {
-    issue {
-      id
-      identifier
-      title
-      url
+**Complete curl Command Template:**
+```bash
+curl -X POST https://api.linear.app/graphql \
+  -H "Authorization: lin_api_XXXXXX" \
+  -H "Content-Type: application/json" \
+  --data-binary @- << 'EOF'
+{
+  "query": "mutation CreateIssue($input: IssueCreateInput!) { issueCreate(input: $input) { issue { id identifier title url } } }",
+  "variables": {
+    "input": {
+      "teamId": "37ed983e-84aa-4245-9894-443835075e7e",
+      "title": "Issue title here",
+      "description": "## Summary\n...\n## Current Behavior\n...",
+      "priority": 3
     }
   }
 }
+EOF
 ```
 
-**Variables for mutation:**
-```json
+**Critical Notes:**
+- `teamId` MUST be the UUID (e.g., "37ed983e-84aa-4245-9894-443835075e7e"), NOT "CHR"
+- Fetch team UUID first with: `{ teams { nodes { id name key } } }`
+- Use `--data-binary @-` with heredoc for proper JSON escaping
+- Parse response JSON to extract `data.issueCreate.issue.identifier` and `url`
+
+**Complete Example Workflow:**
+```bash
+# Step 1: Read API key from .env
+LINEAR_API_KEY=$(grep LINEAR_API_KEY .env | cut -d= -f2)
+
+# Step 2: Get team UUID
+TEAM_UUID=$(curl -s -X POST https://api.linear.app/graphql \
+  -H "Authorization: $LINEAR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "{ teams { nodes { id key } } }"}' | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
+
+# Step 3: Create issue
+curl -X POST https://api.linear.app/graphql \
+  -H "Authorization: $LINEAR_API_KEY" \
+  -H "Content-Type: application/json" \
+  --data-binary @- << 'EOF'
 {
-  "input": {
-    "teamId": "CHR",
-    "title": "...",
-    "description": "...",
-    "priority": 3,
-    "labelIds": ["..."]
+  "query": "mutation CreateIssue($input: IssueCreateInput!) { issueCreate(input: $input) { issue { id identifier title url } } }",
+  "variables": {
+    "input": {
+      "teamId": "37ed983e-84aa-4245-9894-443835075e7e",
+      "title": "Fix search deduplication",
+      "description": "## Summary\nDuplicate results showing...",
+      "priority": 3
+    }
   }
 }
+EOF
 ```
 
 ## Key Principles
 
-1. **Respect Flow State**: User is coding. Don't derail them. 2min max.
-2. **Smart Defaults**: Assume normal priority, medium effort unless obvious.
-3. **Context Over Questions**: Search codebase first, ask second.
-4. **Actionable Over Perfect**: Issue doesn't need to be perfect, needs to be captured.
-5. **Use Linear API**: Always use Linear GraphQL API for creation - ensures Linear-first tracking.
+1. **Linear-Only**: ALWAYS create issues in Linear via GraphQL API. NEVER use GitHub issues.
+2. **Respect Flow State**: User is coding. Don't derail them. 2min max.
+3. **Smart Defaults**: Assume normal priority, medium effort unless obvious.
+4. **Context Over Questions**: Search codebase first, ask second.
+5. **Actionable Over Perfect**: Issue doesn't need to be perfect, needs to be captured.
+6. **Team UUID Required**: Always fetch team UUID from GraphQL, never use team key "CHR" directly.
 
 ## Anti-Patterns (Don't Do This)
 
+❌ **Creating GitHub issues instead of Linear tickets**
+❌ Using team key "CHR" as teamId (must use UUID)
 ❌ Asking for information already obvious from description
 ❌ Web searching trivial bugs
 ❌ Listing more than 3 files
@@ -178,8 +223,9 @@ mutation CreateIssue($input: IssueCreateInput!) {
 
 ## Success Criteria
 
-- Issue created in under 2 minutes
+- **Linear ticket created** (CHR-XX format) in under 2 minutes
 - User can immediately return to coding
 - Issue has enough context for future implementation
 - No redundant questions asked
-- Appropriate labels applied
+- Appropriate priority applied (1-4)
+- Valid Linear URL returned (linear.app/chronosgraph/issue/CHR-XX/...)

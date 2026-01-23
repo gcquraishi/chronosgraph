@@ -13,9 +13,6 @@ import {
   User,
   Settings,
   LogOut,
-  Film,
-  Users,
-  Eye,
   GitBranch,
   Network,
   BookMarked
@@ -24,20 +21,15 @@ import {
 export default function Navbar() {
   const { data: session } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [contributeOpen, setContributeOpen] = useState(false);
   const [analyzeOpen, setAnalyzeOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
 
-  const contributeRef = useRef<HTMLDivElement>(null);
   const analyzeRef = useRef<HTMLDivElement>(null);
   const accountRef = useRef<HTMLDivElement>(null);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (contributeRef.current && !contributeRef.current.contains(event.target as Node)) {
-        setContributeOpen(false);
-      }
       if (analyzeRef.current && !analyzeRef.current.contains(event.target as Node)) {
         setAnalyzeOpen(false);
       }
@@ -76,54 +68,14 @@ export default function Navbar() {
               <span>Search</span>
             </Link>
 
-            {/* Contribute Dropdown */}
-            <div className="relative" ref={contributeRef}>
-              <button
-                onClick={() => setContributeOpen(!contributeOpen)}
-                className="flex items-center gap-2 px-4 py-2 text-brand-text hover:text-brand-accent transition-colors"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Contribute</span>
-                <ChevronDown className={`w-4 h-4 transition-transform ${contributeOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              {contributeOpen && (
-                <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-brand-primary/20 rounded-lg shadow-xl py-2">
-                  <Link
-                    href="/contribute/media"
-                    className="flex items-center gap-3 px-4 py-2 text-brand-text hover:bg-brand-primary/5 transition-colors"
-                    onClick={() => setContributeOpen(false)}
-                  >
-                    <Film className="w-4 h-4" />
-                    <span>Add Media Work</span>
-                  </Link>
-                  <Link
-                    href="/contribute/figure"
-                    className="flex items-center gap-3 px-4 py-2 text-brand-text hover:bg-brand-primary/5 transition-colors"
-                    onClick={() => setContributeOpen(false)}
-                  >
-                    <Users className="w-4 h-4" />
-                    <span>Add Figure</span>
-                  </Link>
-                  <Link
-                    href="/contribute/appearance"
-                    className="flex items-center gap-3 px-4 py-2 text-brand-text hover:bg-brand-primary/5 transition-colors"
-                    onClick={() => setContributeOpen(false)}
-                  >
-                    <Eye className="w-4 h-4" />
-                    <span>Add Appearance</span>
-                  </Link>
-                  <Link
-                    href="/contribute/creator"
-                    className="flex items-center gap-3 px-4 py-2 text-brand-text hover:bg-brand-primary/5 transition-colors"
-                    onClick={() => setContributeOpen(false)}
-                  >
-                    <GitBranch className="w-4 h-4" />
-                    <span>Add by Creator</span>
-                  </Link>
-                </div>
-              )}
-            </div>
+            {/* Contribute */}
+            <Link
+              href="/contribute"
+              className="flex items-center gap-2 px-4 py-2 text-brand-text hover:text-brand-accent transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Contribute</span>
+            </Link>
 
             {/* Analyze Dropdown */}
             <div className="relative" ref={analyzeRef}>
@@ -248,44 +200,15 @@ export default function Navbar() {
               <span>Search</span>
             </Link>
 
-            {/* Contribute Section */}
-            <div className="px-4 py-2">
-              <p className="text-xs font-semibold text-brand-text/60 uppercase tracking-wider mb-2">Contribute</p>
-              <div className="space-y-1 pl-4">
-                <Link
-                  href="/contribute/media"
-                  className="flex items-center gap-3 py-2 text-brand-text hover:text-brand-accent transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <Film className="w-4 h-4" />
-                  <span>Add Media Work</span>
-                </Link>
-                <Link
-                  href="/contribute/figure"
-                  className="flex items-center gap-3 py-2 text-brand-text hover:text-brand-accent transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <Users className="w-4 h-4" />
-                  <span>Add Figure</span>
-                </Link>
-                <Link
-                  href="/contribute/appearance"
-                  className="flex items-center gap-3 py-2 text-brand-text hover:text-brand-accent transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <Eye className="w-4 h-4" />
-                  <span>Add Appearance</span>
-                </Link>
-                <Link
-                  href="/contribute/creator"
-                  className="flex items-center gap-3 py-2 text-brand-text hover:text-brand-accent transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <GitBranch className="w-4 h-4" />
-                  <span>Add by Creator</span>
-                </Link>
-              </div>
-            </div>
+            {/* Contribute */}
+            <Link
+              href="/contribute"
+              className="flex items-center gap-3 px-4 py-2 text-brand-text hover:bg-brand-primary/5 transition-colors rounded"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <Plus className="w-4 h-4" />
+              <span>Contribute</span>
+            </Link>
 
             {/* Analyze Section */}
             <div className="px-4 py-2">

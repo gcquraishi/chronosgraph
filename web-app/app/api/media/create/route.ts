@@ -51,8 +51,14 @@ export async function POST(request: NextRequest) {
       productionStudio,
       locationIds,
       eraIds,
+      eraTags,
       locationProminence,
-      eraSettingType
+      eraSettingType,
+      setting_year,
+      setting_year_end,
+      wikidata_verified,
+      data_source,
+      unmapped_location_actions
     } = body;
 
     if (!title || !mediaType) {
@@ -163,7 +169,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate that all provided location IDs exist
+    // Validate that all provided location IDs exist (excluding newly created ones)
     if (locationIds && locationIds.length > 0) {
       const locValidation = await dbSession.run(
         `MATCH (l:Location) WHERE l.location_id IN $locationIds RETURN count(l) as count`,
@@ -195,6 +201,81 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // ============================================================================
+    // PROCESS USER-SUGGESTED LOCATIONS (CHR-20)
+    // ============================================================================
+    // Handle suggested locations from unmapped_location_actions array.
+    // Create new Location nodes for validated suggestions and add their IDs
+    // to the locationIds array so they get linked via SET_IN relationships.
+    // ============================================================================
+    const createdLocationIds: string[] = [];
+    const suggestedActions = (unmapped_location_actions || []).filter(
+      (action: any) => action.action === 'suggest'
+    );
+
+    if (suggestedActions.length > 0) {
+      console.log(`[Media Create] Processing ${suggestedActions.length} user-suggested locations...`);
+
+      for (const suggestion of suggestedActions) {
+        const { name, wikidataId, notes, validationConfidence } = suggestion;
+
+        // Generate location_id as slug + timestamp
+        const slug = name
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-')
+          .trim();
+        const locationId = `${slug}-${Date.now()}`;
+
+        // Create Location node with user_suggested data source
+        const createLocationQuery = `
+          CREATE (l:Location {
+            location_id: $locationId,
+            name: $name,
+            wikidata_id: $wikidataId,
+            location_type: 'city',
+            data_source: 'user_suggested',
+            validation_confidence: $validationConfidence,
+            notes: $notes,
+            created_at: timestamp(),
+            created_by: $userEmail
+          })
+          RETURN l.location_id AS location_id
+        `;
+
+        try {
+          const result = await dbSession.run(createLocationQuery, {
+            locationId,
+            name,
+            wikidataId: wikidataId || null,
+            validationConfidence: validationConfidence || 0.5,
+            notes: notes || null,
+            userEmail
+          });
+
+          const createdId = result.records[0]?.get('location_id');
+          if (createdId) {
+            createdLocationIds.push(createdId);
+            console.log(`[Media Create] Created suggested location: ${name} (${createdId})`);
+          }
+        } catch (error) {
+          console.error(`[Media Create] Failed to create suggested location "${name}":`, error);
+          // Continue with other suggestions even if one fails
+        }
+      }
+    }
+
+    // Merge created location IDs with existing locationIds
+    const allLocationIds = [...(locationIds || []), ...createdLocationIds];
+
+    // Determine data quality flags based on wikidataId if not explicitly provided
+    const wikidataVerified = wikidata_verified !== undefined
+      ? wikidata_verified
+      : (finalWikidataId ? true : false);
+
+    const dataSource = data_source || (finalWikidataId ? 'wikidata' : 'user_generated');
+
     /**
      * MediaWork Ingestion Protocol - Step 4: If not exists, create with wikidata_id property
      * Create new MediaWork node with all provided properties, including the canonical wikidata_id
@@ -208,9 +289,13 @@ export async function POST(request: NextRequest) {
         title: $title,
         media_type: $mediaType,
         release_year: $releaseYear,
+        setting_year: $settingYear,
+        setting_year_end: $settingYearEnd,
         creator: $creator,
         wikidata_id: $wikidataId,
         wikidata_label: $wikidataLabel,
+        wikidata_verified: $wikidataVerified,
+        data_source: $dataSource,
         publisher: $publisher,
         translator: $translator,
         channel: $channel,
@@ -238,11 +323,11 @@ export async function POST(request: NextRequest) {
       `;
     }
 
-    // Add SET_IN relationships for locations
-    if (locationIds && locationIds.length > 0) {
+    // Add SET_IN relationships for locations (includes both existing and newly created)
+    if (allLocationIds && allLocationIds.length > 0) {
       query += `
       WITH m
-      UNWIND $locationIds AS locationId
+      UNWIND $allLocationIds AS locationId
       MATCH (loc:Location {location_id: locationId})
       CREATE (m)-[:SET_IN {prominence: $locationProminence}]->(loc)
       `;
@@ -258,6 +343,28 @@ export async function POST(request: NextRequest) {
       `;
     }
 
+    // Add TAGGED_WITH relationships for era tags (with confidence scores)
+    // CHR-20: Support optional era dates (start_year/end_year can be null for impressionistic eras)
+    if (eraTags && eraTags.length > 0) {
+      query += `
+      WITH m
+      UNWIND $eraTags AS eraTag
+      MERGE (era:Era {name: eraTag.name})
+      ON CREATE SET era.era_id = toLower(replace(eraTag.name, ' ', '_')),
+                    era.era_type = 'literary_period',
+                    era.start_year = eraTag.start_year,
+                    era.end_year = eraTag.end_year,
+                    era.is_approximate = eraTag.is_approximate,
+                    era.created_at = timestamp()
+      CREATE (m)-[:TAGGED_WITH {
+        confidence: eraTag.confidence,
+        source: eraTag.source,
+        added_by: $userEmail,
+        added_at: timestamp()
+      }]->(era)
+      `;
+    }
+
     query += `
       RETURN m.media_id AS media_id, m.title AS title, m.release_year AS year, m.media_type AS media_type
     `;
@@ -267,9 +374,13 @@ export async function POST(request: NextRequest) {
       title,
       mediaType,
       releaseYear: year,
+      settingYear: setting_year ? parseInt(setting_year) : null,
+      settingYearEnd: setting_year_end ? parseInt(setting_year_end) : null,
       creator: creator || null,
       wikidataId: finalWikidataId || null,
       wikidataLabel: wikidataLabel || null,
+      wikidataVerified,
+      dataSource,
       publisher: publisher || null,
       translator: translator || null,
       channel: channel || null,
@@ -282,8 +393,9 @@ export async function POST(request: NextRequest) {
       episodeNumber: episodeNumber ? parseInt(episodeNumber) : null,
       relationshipType: relationshipType || null,
       isMainSeries: isMainSeries !== undefined ? isMainSeries : true,
-      locationIds: locationIds || [],
+      allLocationIds: allLocationIds || [],
       eraIds: eraIds || [],
+      eraTags: eraTags || [],
       locationProminence: locationProminence || 'primary',
       eraSettingType: eraSettingType || 'contemporary',
     });

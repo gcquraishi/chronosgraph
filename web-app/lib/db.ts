@@ -1521,3 +1521,91 @@ export async function getMediaLocationsAndEras(wikidataId: string): Promise<{
     await session.close();
   }
 }
+
+/**
+ * CHR-17: Deduplication Helper - Check if MediaWork exists by Wikidata Q-ID
+ *
+ * @param qid - Wikidata Q-ID (e.g., "Q2003749")
+ * @returns Object with exists flag and optional matched record metadata
+ */
+export async function checkExistingMediaWorkByQid(qid: string): Promise<{
+  exists: boolean;
+  match?: {
+    media_id: string;
+    wikidata_id: string;
+    title: string;
+    release_year: number;
+  };
+}> {
+  const session = await getSession();
+  try {
+    const result = await session.run(
+      `MATCH (m:MediaWork {wikidata_id: $qid})
+       RETURN m
+       LIMIT 1`,
+      { qid }
+    );
+
+    if (result.records.length === 0) {
+      return { exists: false };
+    }
+
+    const mediaNode = result.records[0].get('m');
+    return {
+      exists: true,
+      match: {
+        media_id: mediaNode.properties.media_id,
+        wikidata_id: mediaNode.properties.wikidata_id,
+        title: mediaNode.properties.title,
+        release_year: mediaNode.properties.release_year?.toNumber?.() ?? Number(mediaNode.properties.release_year),
+      },
+    };
+  } finally {
+    await session.close();
+  }
+}
+
+/**
+ * CHR-17: Deduplication Helper - Check if HistoricalFigure exists by Wikidata Q-ID
+ *
+ * @param qid - Wikidata Q-ID (e.g., "Q517")
+ * @returns Object with exists flag and optional matched record metadata
+ */
+export async function checkExistingFigureByQid(qid: string): Promise<{
+  exists: boolean;
+  match?: {
+    canonical_id: string;
+    wikidata_id?: string;
+    name: string;
+    birth_year?: number;
+    death_year?: number;
+  };
+}> {
+  const session = await getSession();
+  try {
+    const result = await session.run(
+      `MATCH (f:HistoricalFigure {wikidata_id: $qid})
+       RETURN f
+       LIMIT 1`,
+      { qid }
+    );
+
+    if (result.records.length === 0) {
+      return { exists: false };
+    }
+
+    const figureNode = result.records[0].get('f');
+    return {
+      exists: true,
+      match: {
+        canonical_id: figureNode.properties.canonical_id,
+        wikidata_id: figureNode.properties.wikidata_id,
+        name: figureNode.properties.name,
+        birth_year: (figureNode.properties.birth_year?.toNumber?.() ?? Number(figureNode.properties.birth_year)) || undefined,
+        death_year: (figureNode.properties.death_year?.toNumber?.() ?? Number(figureNode.properties.death_year)) || undefined,
+      },
+    };
+  } finally {
+    await session.close();
+  }
+}

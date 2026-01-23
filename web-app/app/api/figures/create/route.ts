@@ -13,17 +13,34 @@ function toNumber(value: any): number {
 }
 
 /**
- * Generate canonical_id from figure name
- * Following same pattern as media_id: lowercase, hyphens, no special chars
+ * Generate canonical_id for HistoricalFigure using Wikidata-first approach
+ *
+ * Priority 1: Use Wikidata Q-ID if available (e.g., "Q517" for Napoleon)
+ * Priority 2: Generate provisional ID with timestamp to prevent collisions
+ *
+ * Provisional format: PROV:{slug}-{timestamp}
+ * Example: "PROV:john-smith-1738462847293"
+ *
+ * This prevents collisions between figures with identical names (e.g., multiple "John Smith" entries)
+ * while maintaining alignment with the MediaWork Wikidata-first strategy.
  */
-function generateCanonicalId(name: string): string {
+function generateCanonicalId(name: string, wikidataId?: string, birthYear?: number): string {
+  // Priority 1: Use Wikidata Q-ID as canonical_id if available
+  if (wikidataId && wikidataId.startsWith('Q') && !wikidataId.startsWith('PROV:')) {
+    return wikidataId;
+  }
+
+  // Priority 2: Generate provisional ID with timestamp to ensure uniqueness
   const slug = name
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
     .trim();
-  return slug;
+
+  // Use timestamp to prevent collisions for figures with identical names
+  const timestamp = Date.now();
+  return `PROV:${slug}-${timestamp}`;
 }
 
 export async function POST(request: NextRequest) {
@@ -43,6 +60,8 @@ export async function POST(request: NextRequest) {
       era,
       wikidataId,
       historicity,
+      wikidata_verified,
+      data_source,
     } = body;
 
     // Validate required fields
@@ -60,14 +79,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const canonical_id = generateCanonicalId(name);
+    // Generate canonical_id using Wikidata-first approach
+    const canonical_id = generateCanonicalId(name, wikidataId, birthYear ? parseInt(birthYear) : undefined);
     const dbSession = await getSession();
 
-    // Check if figure already exists by canonical_id
-    const checkResult = await dbSession.run(
-      'MATCH (f:HistoricalFigure {canonical_id: $canonical_id}) RETURN f.canonical_id AS canonical_id, f.name AS name',
-      { canonical_id }
-    );
+    // Dual-key duplicate check: prioritize wikidata_id, fall back to canonical_id
+    // This prevents duplicates via either Q-ID match or provisional ID match
+    let checkQuery = 'MATCH (f:HistoricalFigure) WHERE ';
+    const queryParams: any = { canonical_id };
+
+    if (wikidataId && wikidataId.startsWith('Q')) {
+      // If Q-ID provided, check for Q-ID match first
+      checkQuery += 'f.wikidata_id = $wikidataId OR f.canonical_id = $canonical_id';
+      queryParams.wikidataId = wikidataId;
+    } else {
+      // No Q-ID, just check canonical_id
+      checkQuery += 'f.canonical_id = $canonical_id';
+    }
+
+    checkQuery += ' RETURN f.canonical_id AS canonical_id, f.name AS name, f.wikidata_id AS wikidata_id';
+
+    const checkResult = await dbSession.run(checkQuery, queryParams);
 
     if (checkResult.records.length > 0) {
       await dbSession.close();
@@ -78,11 +110,19 @@ export async function POST(request: NextRequest) {
           existingFigure: {
             canonical_id: existing.get('canonical_id'),
             name: existing.get('name'),
+            wikidata_id: existing.get('wikidata_id'),
           }
         },
         { status: 409 }
       );
     }
+
+    // Determine data quality flags based on wikidataId if not explicitly provided
+    const wikidataVerified = wikidata_verified !== undefined
+      ? wikidata_verified
+      : (wikidataId ? true : false);
+
+    const dataSource = data_source || (wikidataId ? 'wikidata' : 'user_generated');
 
     // Create new HistoricalFigure node
     const batch_id = `web_ui_${Date.now()}`;
@@ -96,6 +136,8 @@ export async function POST(request: NextRequest) {
         description: $description,
         era: $era,
         wikidata_id: $wikidataId,
+        wikidata_verified: $wikidataVerified,
+        data_source: $dataSource,
         historicity: $historicity,
         created_at: timestamp(),
         created_by: u.email,
@@ -114,6 +156,8 @@ export async function POST(request: NextRequest) {
       description: description || null,
       era: era || null,
       wikidataId: wikidataId || null,
+      wikidataVerified,
+      dataSource,
       historicity,
       userEmail,
       batchId: batch_id,

@@ -8,13 +8,13 @@ export async function GET(request: NextRequest) {
   const query = searchParams.get('q');
 
   if (!query || query.length < 2) {
-    return NextResponse.json({ results: [] });
+    return NextResponse.json({ results: [], total: 0, categories: {} });
   }
 
   try {
     const session = await getSession();
 
-    // Universal search across 5 categories
+    // Universal search across 7 categories (added Location and Era)
     const cypher = `
       // 1. Historical Figures
       MATCH (f:HistoricalFigure)
@@ -89,6 +89,34 @@ export async function GET(request: NextRequest) {
         url: '/media/' + exampleMediaId
       } as result
       LIMIT 3
+
+      UNION
+
+      // 6. Locations
+      MATCH (l:Location)
+      WHERE toLower(l.name) CONTAINS toLower($q)
+      RETURN {
+        type: 'location',
+        id: l.location_id,
+        label: l.name,
+        meta: l.location_type,
+        url: '/discovery/location/' + l.location_id
+      } as result
+      LIMIT 3
+
+      UNION
+
+      // 7. Eras
+      MATCH (e:Era)
+      WHERE toLower(e.name) CONTAINS toLower($q)
+      RETURN {
+        type: 'era',
+        id: e.era_id,
+        label: e.name,
+        meta: toString(e.start_year) + ' - ' + toString(e.end_year),
+        url: '/discovery/era/' + e.era_id
+      } as result
+      LIMIT 3
     `;
 
     const result = await session.run(cypher, { q: query });
@@ -96,7 +124,17 @@ export async function GET(request: NextRequest) {
 
     const results = result.records.map(record => record.get('result'));
 
-    return NextResponse.json({ results });
+    // Count results by category
+    const categories = results.reduce((acc: Record<string, number>, r: any) => {
+      acc[r.type] = (acc[r.type] || 0) + 1;
+      return acc;
+    }, {});
+
+    return NextResponse.json({
+      results,
+      total: results.length,
+      categories,
+    });
   } catch (error) {
     console.error('Universal search error:', error);
     return NextResponse.json({ error: 'Search failed' }, { status: 500 });

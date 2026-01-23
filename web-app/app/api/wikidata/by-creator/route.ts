@@ -12,17 +12,29 @@ interface WikidataWork {
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const creatorName = searchParams.get('name');
+  const creatorQid = searchParams.get('qid');
 
-  if (!creatorName || creatorName.length < 2) {
-    return NextResponse.json({ error: 'Creator name is required' }, { status: 400 });
+  if (!creatorName && !creatorQid) {
+    return NextResponse.json({ error: 'Creator name or Q-ID is required' }, { status: 400 });
+  }
+
+  if (creatorName && creatorName.length < 2) {
+    return NextResponse.json({ error: 'Creator name must be at least 2 characters' }, { status: 400 });
   }
 
   try {
-    // SPARQL query to find works by creator
+    // Build SPARQL query to find works by creator
+    let creatorPattern = '';
+    if (creatorQid) {
+      creatorPattern = `BIND(wd:${creatorQid} AS ?creator)`;
+    } else {
+      creatorPattern = `?creator rdfs:label "${creatorName}"@en .`;
+    }
+
     const sparqlQuery = `
       SELECT DISTINCT ?work ?workLabel ?date ?typeLabel WHERE {
-        # Find the creator by name
-        ?creator rdfs:label "${creatorName}"@en .
+        # Find the creator
+        ${creatorPattern}
 
         # Find works created by this person
         # P170 = creator, P50 = author, P57 = director, P178 = developer
@@ -95,7 +107,7 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json({
-      creator: creatorName,
+      creator: creatorName || creatorQid,
       works,
       count: works.length,
     });

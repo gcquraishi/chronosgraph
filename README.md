@@ -172,13 +172,33 @@ Expansion JSON files should follow this format:
 
 ## Contributing
 
-See `CLAUDE.md` for development guidelines and AI assistant instructions.
+ChronosGraph welcomes contributions! We've unified the contribution experience into a single hub at `/contribute`.
+
+**For Contributors:**
+- See `UNIFIED_CONTRIBUTE_GUIDE.md` for step-by-step instructions on adding historical figures and media works
+- Visit `/contribute` to start contributing immediately
+
+**For Developers:**
+- See `CLAUDE.md` for development guidelines and AI assistant instructions
+- See `CODE_REVIEW_CHECKLIST_CHR-16.md` for code review standards
+- See `TESTING_GUIDE_CHR-16.md` for comprehensive testing procedures
 
 ## Documentation
 
+### User Documentation
+- `UNIFIED_CONTRIBUTE_GUIDE.md` - Complete guide to using the `/contribute` page (CHR-16)
+
+### Developer Documentation
 - `scripts/README.md` - Script documentation
 - `web-app/README.md` - Web application documentation
+- `scripts/migration/CHR-16_MIGRATION_SUMMARY.md` - Database schema migrations for unified ingestion hub
+- `CODE_REVIEW_CHECKLIST_CHR-16.md` - Code quality, security, accessibility, and performance standards
+- `TESTING_GUIDE_CHR-16.md` - Manual and automated testing procedures
+
+### Project Documentation
 - `docs/` - Project reports and decisions
+- `CHRONOS_LOG.md` - Recent development session logs
+- `CHRONOS_LOG.archive.md` - Historical session archive
 
 ## License
 
