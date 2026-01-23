@@ -123,8 +123,9 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
   const isBloomMode = process.env.NEXT_PUBLIC_BLOOM_MODE === 'true';
 
   // Phase 1: Bloom Exploration - Camera control and center node tracking
-  // Using any for ForceGraph ref due to complex library types
-  const forceGraphRef = useRef<any>(null);
+  // CHR-22: Using state instead of ref due to dynamic import breaking ref forwarding
+  const [forceGraphInstance, setForceGraphInstance] = useState<any>(null);
+  const forceGraphRef = { current: forceGraphInstance }; // Backwards compatibility
   const [centerNodeId, setCenterNodeId] = useState<string | null>(
     canonicalId ? `figure-${canonicalId}` : null
   );
@@ -1213,7 +1214,12 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
         <div ref={containerRef} className="bg-gray-50 rounded-lg border border-gray-200 w-full relative" style={{ height: `${dimensions.height}px`, overflow: 'hidden', cursor: 'grab' }}>
           <div style={{ width: '100%', height: '100%' }}>
           <ForceGraph2D
-          ref={forceGraphRef}
+          ref={(instance: any) => {
+            if (instance !== forceGraphInstance) {
+              console.log('🎨 ForceGraph2D ref callback, instance:', instance);
+              setForceGraphInstance(instance);
+            }
+          }}
           key={`${showAllEdges}-${showAcademicWorks}-${showReferenceWorks}-${visibleLinks.length}`}
           graphData={{ nodes: visibleNodes, links: graphLinks }}
           width={dimensions.width}
