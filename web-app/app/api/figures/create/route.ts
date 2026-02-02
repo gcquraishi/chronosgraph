@@ -124,10 +124,20 @@ export async function POST(request: NextRequest) {
 
     const dataSource = data_source || (wikidataId ? 'wikidata' : 'user_generated');
 
-    // Create new HistoricalFigure node
+    // Create new HistoricalFigure node with CREATED_BY provenance
     const batch_id = `web_ui_${Date.now()}`;
     const query = `
       MATCH (u:User {email: $userEmail})
+
+      // Ensure Web UI Agent exists
+      MERGE (agent:Agent {agent_id: "web-ui-generic"})
+      ON CREATE SET
+        agent.name = "ChronosGraph Web UI",
+        agent.type = "human_user",
+        agent.created_at = datetime(),
+        agent.metadata = '{"interface":"web_ui","description":"Generic agent for web UI contributions"}'
+
+      // Create HistoricalFigure node
       CREATE (f:HistoricalFigure {
         canonical_id: $canonical_id,
         name: $name,
@@ -145,6 +155,15 @@ export async function POST(request: NextRequest) {
         ingestion_batch: $batchId,
         ingestion_source: "web_ui"
       })
+
+      // Create CREATED_BY relationship for provenance tracking
+      CREATE (f)-[:CREATED_BY {
+        timestamp: datetime(),
+        context: "web_ui",
+        batch_id: $batchId,
+        method: $dataSource
+      }]->(agent)
+
       RETURN f.canonical_id AS canonical_id, f.name AS name
     `;
 

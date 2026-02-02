@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **CHR-26/27/28/29: Phase 2.1 - CREATED_BY Provenance Tracking** - Comprehensive data provenance system
+  - Enhanced Agent node schema with full metadata (agent_id, type, version, created_at, metadata)
+  - CREATED_BY relationships for all entity nodes (timestamp, context, batch_id, method)
+  - Migration script to backfill 907 existing nodes (`scripts/migration/backfill_created_by_provenance.py`)
+  - Dry-run mode for safe migration preview
+  - Updated contribution APIs to set CREATED_BY on new nodes
+  - Audit query endpoint (`/api/audit/node-provenance`) for provenance tracking
+  - Statistics endpoint for aggregated provenance metrics
+  - Full documentation in `/docs/AGENT_SCHEMA_DESIGN.md`
+  - CLAUDE.md updated with mandatory CREATED_BY protocols
 - **CHR-16: Unified Data Ingestion Hub** - Single `/contribute` entry point replacing 4 fragmented pages
   - Two-tier search (ChronosGraph DB + Wikidata) prevents duplicate creation
   - Silent auto-enrichment populates 70%+ metadata fields from Wikidata

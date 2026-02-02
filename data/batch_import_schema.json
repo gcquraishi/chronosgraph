@@ -1,0 +1,252 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://chronosgraph.com/schemas/batch-import-v1.json",
+  "title": "ChronosGraph Batch Import Schema",
+  "description": "JSON schema for ChronosGraph batch import files",
+  "type": "object",
+  "required": ["metadata"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["source", "curator", "date"],
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "Source of the data (e.g., 'Wikipedia', 'IMDb Export')",
+          "minLength": 1
+        },
+        "curator": {
+          "type": "string",
+          "description": "Name of person or organization curating this data",
+          "minLength": 1
+        },
+        "date": {
+          "type": "string",
+          "format": "date",
+          "description": "Date of data curation (YYYY-MM-DD)",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional description of this batch"
+        }
+      }
+    },
+    "figures": {
+      "type": "array",
+      "description": "Array of historical figures to import",
+      "items": {
+        "$ref": "#/definitions/HistoricalFigure"
+      }
+    },
+    "works": {
+      "type": "array",
+      "description": "Array of media works to import",
+      "items": {
+        "$ref": "#/definitions/MediaWork"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "description": "Array of relationships between entities",
+      "items": {
+        "$ref": "#/definitions/Relationship"
+      }
+    }
+  },
+  "anyOf": [
+    { "required": ["figures"] },
+    { "required": ["works"] },
+    { "required": ["relationships"] }
+  ],
+  "definitions": {
+    "HistoricalFigure": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Display name of the historical figure",
+          "minLength": 1
+        },
+        "canonical_id": {
+          "type": "string",
+          "description": "Unique identifier (auto-generated if not provided)",
+          "pattern": "^(Q\\d+|PROV:[a-z0-9-]+|[a-z_][a-z0-9_-]*)$"
+        },
+        "wikidata_id": {
+          "type": "string",
+          "description": "Wikidata Q-ID (e.g., 'Q517' for Napoleon)",
+          "pattern": "^Q\\d+$"
+        },
+        "birth_year": {
+          "type": "integer",
+          "description": "Birth year (negative for BCE)",
+          "minimum": -10000,
+          "maximum": 2100
+        },
+        "death_year": {
+          "type": "integer",
+          "description": "Death year (negative for BCE)",
+          "minimum": -10000,
+          "maximum": 2100
+        },
+        "title": {
+          "type": "string",
+          "description": "Primary title or role (e.g., 'Roman Emperor')"
+        },
+        "era": {
+          "type": "string",
+          "description": "Historical era (e.g., 'Roman Republic', 'Victorian Era')"
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief description of the figure"
+        },
+        "historicity_status": {
+          "type": "string",
+          "enum": ["historical", "legendary", "mythological", "fictional"],
+          "description": "Level of historical authenticity"
+        }
+      },
+      "anyOf": [
+        { "required": ["canonical_id"] },
+        { "required": ["wikidata_id"] }
+      ]
+    },
+    "MediaWork": {
+      "type": "object",
+      "required": ["title"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title of the media work",
+          "minLength": 1
+        },
+        "wikidata_id": {
+          "type": "string",
+          "description": "Wikidata Q-ID (REQUIRED per entity resolution protocol)",
+          "pattern": "^Q\\d+$"
+        },
+        "media_id": {
+          "type": "string",
+          "description": "Internal identifier (auto-generated if not provided)"
+        },
+        "media_type": {
+          "type": "string",
+          "enum": [
+            "BOOK",
+            "FILM",
+            "TV_SERIES",
+            "GAME",
+            "PLAY",
+            "COMIC",
+            "BOOK_SERIES",
+            "FILM_SERIES",
+            "TV_SERIES_COLLECTION",
+            "GAME_SERIES"
+          ],
+          "description": "Type of media"
+        },
+        "release_year": {
+          "type": "integer",
+          "description": "Year of release or publication",
+          "minimum": -3000,
+          "maximum": 2100
+        },
+        "creator": {
+          "type": "string",
+          "description": "Name of creator/director/author"
+        },
+        "creator_wikidata_id": {
+          "type": "string",
+          "description": "Wikidata Q-ID of the creator",
+          "pattern": "^Q\\d+$"
+        },
+        "publisher": {
+          "type": "string",
+          "description": "Publisher name (for books)"
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief description of the work"
+        },
+        "setting": {
+          "type": "string",
+          "description": "Historical setting or time period"
+        }
+      }
+    },
+    "Relationship": {
+      "type": "object",
+      "required": ["from_id", "from_type", "to_id", "to_type", "rel_type"],
+      "properties": {
+        "from_id": {
+          "type": "string",
+          "description": "Source node identifier (canonical_id for figures, wikidata_id for works)",
+          "minLength": 1
+        },
+        "from_type": {
+          "type": "string",
+          "enum": ["HistoricalFigure", "MediaWork", "FictionalCharacter"],
+          "description": "Source node type"
+        },
+        "to_id": {
+          "type": "string",
+          "description": "Target node identifier",
+          "minLength": 1
+        },
+        "to_type": {
+          "type": "string",
+          "enum": ["HistoricalFigure", "MediaWork", "FictionalCharacter"],
+          "description": "Target node type"
+        },
+        "rel_type": {
+          "type": "string",
+          "enum": [
+            "APPEARS_IN",
+            "PORTRAYED_IN",
+            "INTERACTED_WITH",
+            "BASED_ON",
+            "FICTIONAL_PROXY",
+            "CONTEMPORARY",
+            "NEMESIS_OF",
+            "SUBJECT_OF"
+          ],
+          "description": "Relationship type"
+        },
+        "properties": {
+          "type": "object",
+          "description": "Optional relationship properties",
+          "properties": {
+            "role": {
+              "type": "string",
+              "description": "Role in the work (e.g., 'protagonist', 'antagonist')"
+            },
+            "is_protagonist": {
+              "type": "boolean",
+              "description": "Whether this is a main character"
+            },
+            "sentiment": {
+              "type": "string",
+              "enum": ["heroic", "villainous", "neutral", "complex"],
+              "description": "How the figure is portrayed"
+            },
+            "notes": {
+              "type": "string",
+              "description": "Additional notes about the relationship"
+            },
+            "context": {
+              "type": "string",
+              "description": "Context of the relationship"
+            },
+            "relationship_type": {
+              "type": "string",
+              "description": "Specific type of interaction"
+            }
+          }
+        }
+      }
+    }
+  }
+}

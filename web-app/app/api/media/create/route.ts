@@ -284,6 +284,16 @@ export async function POST(request: NextRequest) {
     const batch_id = `web_ui_${Date.now()}`;
     let query = `
       MATCH (u:User {email: $userEmail})
+
+      // Ensure Web UI Agent exists for provenance tracking
+      MERGE (agent:Agent {agent_id: "web-ui-generic"})
+      ON CREATE SET
+        agent.name = "ChronosGraph Web UI",
+        agent.type = "human_user",
+        agent.created_at = datetime(),
+        agent.metadata = '{"interface":"web_ui","description":"Generic agent for web UI contributions"}'
+
+      // Create MediaWork node
       CREATE (m:MediaWork {
         media_id: $mediaId,
         title: $title,
@@ -306,6 +316,14 @@ export async function POST(request: NextRequest) {
         ingestion_batch: $batchId,
         ingestion_source: "web_ui"
       })
+
+      // Create CREATED_BY relationship for provenance tracking
+      CREATE (m)-[:CREATED_BY {
+        timestamp: datetime(),
+        context: "web_ui",
+        batch_id: $batchId,
+        method: $dataSource
+      }]->(agent)
     `;
 
     // Add PART_OF relationship if parent series is specified

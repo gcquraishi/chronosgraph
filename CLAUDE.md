@@ -56,6 +56,67 @@
 - **Idempotency**: Safe to run multiple times (skips already-prefixed IDs)
 - **Backward Compatibility**: All existing `canonical_id` values remain valid (as substrings)
 
+## Provenance Tracking Protocol (CREATED_BY)
+**Mandatory for all node creation** (Phase 2.1 Enhancement - February 2026)
+
+### Agent Schema
+All contributions are attributed to an `:Agent` node:
+```cypher
+(:Agent {
+  agent_id: STRING,        // "claude-sonnet-4.5" or "web-ui-generic"
+  name: STRING,            // Display name
+  type: STRING,            // "ai_agent" | "human_user"
+  version: STRING,         // Model version (for AI agents)
+  created_at: DATETIME,    // When agent was registered
+  metadata: STRING         // JSON with additional info
+})
+```
+
+### CREATED_BY Relationship
+**REQUIRED**: Every new `HistoricalFigure`, `MediaWork`, or `FictionalCharacter` node MUST have a `CREATED_BY` relationship:
+
+```cypher
+(entity)-[:CREATED_BY {
+  timestamp: DATETIME,     // When entity was created (REQUIRED)
+  context: STRING,         // "bulk_ingestion" | "web_ui" | "api" | "migration" (REQUIRED)
+  batch_id: STRING,        // Ingestion batch identifier
+  method: STRING           // "wikidata_enriched" | "user_generated" | "manual"
+}]->(agent:Agent)
+```
+
+### Implementation Pattern
+When creating nodes in bulk ingestion scripts:
+```cypher
+// 1. Match or create Agent
+MERGE (agent:Agent {agent_id: "claude-sonnet-4.5"})
+ON CREATE SET
+  agent.name = "Claude Code (Sonnet 4.5)",
+  agent.type = "ai_agent",
+  agent.version = "claude-sonnet-4-5-20250929",
+  agent.created_at = datetime()
+
+// 2. Create entity node
+CREATE (f:HistoricalFigure { ... })
+
+// 3. Create CREATED_BY relationship
+CREATE (f)-[:CREATED_BY {
+  timestamp: datetime(),
+  context: "bulk_ingestion",
+  batch_id: $batchId,
+  method: "wikidata_enriched"
+}]->(agent)
+```
+
+### Audit & Verification
+- **Query provenance**: `GET /api/audit/node-provenance?entity_id={id}`
+- **Statistics**: `POST /api/audit/node-provenance` (returns counts by agent, context, method)
+- **Missing provenance**: `MATCH (n) WHERE NOT EXISTS((n)-[:CREATED_BY]->()) RETURN n`
+
+### Migration
+- **Backfill script**: `scripts/migration/backfill_created_by_provenance.py`
+- **Dry-run mode**: `python3 scripts/migration/backfill_created_by_provenance.py --dry-run`
+- **Production**: Remove `--dry-run` flag after CEO approval
+
 ## Safety & Path Integrity
 - **Permanent Storage Only:** Before creating or moving any files, verify the destination is a permanent project directory (Root, `/src`, etc.).
 - **Cache Restriction:** NEVER write to or assume context from temporary or cache folders like `__pycache__`, `.venv`, or `dist`.
