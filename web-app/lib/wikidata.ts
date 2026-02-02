@@ -7,6 +7,11 @@
 
 import { doubleMetaphone } from 'double-metaphone';
 import type { SearchResult, WikidataMatch } from '@/types/contribute';
+import {
+  calculateSimilarity,
+  calculatePhoneticSimilarity,
+  enhancedNameSimilarity,
+} from '@/lib/name-matching';
 
 interface WikidataSearchResult {
   qid: string;
@@ -26,111 +31,8 @@ interface WikidataValidation {
   error?: string;
 }
 
-/**
- * Calculate similarity ratio between two strings (0-1)
- */
-function calculateSimilarity(str1: string, str2: string): number {
-  const s1 = str1.toLowerCase();
-  const s2 = str2.toLowerCase();
-
-  // Simple Levenshtein-based similarity
-  const longer = s1.length > s2.length ? s1 : s2;
-  const shorter = s1.length > s2.length ? s2 : s1;
-
-  if (longer.length === 0) return 1.0;
-
-  const editDistance = levenshteinDistance(longer, shorter);
-  return (longer.length - editDistance) / longer.length;
-}
-
-/**
- * Levenshtein distance algorithm
- */
-function levenshteinDistance(str1: string, str2: string): number {
-  const matrix: number[][] = [];
-
-  for (let i = 0; i <= str2.length; i++) {
-    matrix[i] = [i];
-  }
-
-  for (let j = 0; j <= str1.length; j++) {
-    matrix[0][j] = j;
-  }
-
-  for (let i = 1; i <= str2.length; i++) {
-    for (let j = 1; j <= str1.length; j++) {
-      if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
-        matrix[i][j] = matrix[i - 1][j - 1];
-      } else {
-        matrix[i][j] = Math.min(
-          matrix[i - 1][j - 1] + 1,
-          matrix[i][j - 1] + 1,
-          matrix[i - 1][j] + 1
-        );
-      }
-    }
-  }
-
-  return matrix[str2.length][str1.length];
-}
-
-/**
- * Calculate phonetic similarity between two strings using Double Metaphone
- * Returns 1.0 for primary phonetic match, 0.5 for secondary match, 0.0 for no match
- *
- * Double Metaphone handles non-English names better than Soundex and generates
- * primary and secondary phonetic encodings for each name token.
- */
-function calculatePhoneticSimilarity(str1: string, str2: string): number {
-  if (!str1 || !str2) return 0.0;
-
-  // Extract name tokens (first/last names) for better phonetic matching
-  const tokens1 = str1.toLowerCase().trim().split(/\s+/).filter(t => t.length > 0);
-  const tokens2 = str2.toLowerCase().trim().split(/\s+/).filter(t => t.length > 0);
-
-  if (tokens1.length === 0 || tokens2.length === 0) return 0.0;
-
-  // Calculate phonetic encoding for each token
-  const phonetics1 = tokens1.map(token => doubleMetaphone(token));
-  const phonetics2 = tokens2.map(token => doubleMetaphone(token));
-
-  // Check for phonetic matches across all tokens
-  let bestMatch = 0.0;
-
-  for (const [primary1, secondary1] of phonetics1) {
-    for (const [primary2, secondary2] of phonetics2) {
-      // Primary phonetic key match (highest confidence)
-      if (primary1 && primary2 && primary1 === primary2) {
-        bestMatch = Math.max(bestMatch, 1.0);
-      }
-      // Secondary phonetic key match (medium confidence)
-      else if (
-        (primary1 && secondary2 && primary1 === secondary2) ||
-        (secondary1 && primary2 && secondary1 === primary2) ||
-        (secondary1 && secondary2 && secondary1 === secondary2)
-      ) {
-        bestMatch = Math.max(bestMatch, 0.5);
-      }
-    }
-  }
-
-  return bestMatch;
-}
-
-/**
- * Enhanced name similarity combining lexical (Levenshtein) and phonetic (Double Metaphone) matching
- * Weight distribution: 70% lexical, 30% phonetic
- *
- * This catches name variations like "Steven/Stephen" or "Smyth/Smith" that have similar
- * pronunciation but different spellings, while still prioritizing exact/close lexical matches.
- */
-function enhancedNameSimilarity(name1: string, name2: string): number {
-  const lexicalScore = calculateSimilarity(name1, name2);
-  const phoneticScore = calculatePhoneticSimilarity(name1, name2);
-
-  // Weighted average: 70% lexical (exact spelling), 30% phonetic (pronunciation)
-  return (lexicalScore * 0.7) + (phoneticScore * 0.3);
-}
+// Name similarity functions (calculateSimilarity, calculatePhoneticSimilarity, enhancedNameSimilarity)
+// have been moved to @/lib/name-matching.ts for reuse across the codebase.
 
 /**
  * Check if Wikidata description matches our media type

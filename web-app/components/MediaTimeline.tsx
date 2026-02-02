@@ -7,9 +7,9 @@ interface MediaTimelineProps {
 }
 
 const SENTIMENT_COLORS = {
-  Heroic: 'bg-green-500/20 text-green-300 border-green-500/30',
-  Villainous: 'bg-red-500/20 text-red-300 border-red-500/30',
-  Complex: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
+  Heroic: 'bg-green-50 text-green-700 border-green-500',
+  Villainous: 'bg-red-50 text-red-700 border-red-500',
+  Complex: 'bg-stone-50 text-stone-700 border-stone-500',
 };
 
 export default function MediaTimeline({ portrayals, groupBySeries = false }: MediaTimelineProps) {
@@ -19,9 +19,18 @@ export default function MediaTimeline({ portrayals, groupBySeries = false }: Med
 
   if (portrayals.length === 0) {
     return (
-      <div className="bg-stone-100 border border-stone-200 rounded-lg p-6">
-        <h2 className="text-xl font-semibold mb-4">Media Appearances</h2>
-        <p className="text-stone-600 text-center py-8">No media appearances recorded</p>
+      <div className="bg-stone-100 border-2 border-stone-200 p-6">
+        <h2 className="text-sm font-black text-stone-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+          <span className="text-amber-600">■</span> Media Appearances
+        </h2>
+        <div className="text-center py-12">
+          <p className="text-[10px] font-black text-stone-400 uppercase tracking-[0.2em] mb-2">
+            No Media Appearances Recorded
+          </p>
+          <p className="text-sm text-stone-500">
+            Contribute the first portrayal of this historical figure
+          </p>
+        </div>
       </div>
     );
   }
@@ -48,7 +57,7 @@ export default function MediaTimeline({ portrayals, groupBySeries = false }: Med
     return (
       <div
         key={index}
-        className="flex items-start gap-4 p-4 bg-white rounded-lg border border-stone-200"
+        className="flex items-start gap-4 p-4 bg-white border-2 border-stone-300 hover:border-amber-600 transition-colors"
       >
         <div className="flex-shrink-0 mt-1">
           <Film className="w-5 h-5 text-amber-600" />
@@ -56,17 +65,17 @@ export default function MediaTimeline({ portrayals, groupBySeries = false }: Med
         <div className="flex-grow">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-grow">
-              <h3 className="font-semibold text-white">{portrayal.media.title}</h3>
-              <div className="flex items-center gap-2 text-sm text-stone-600">
-                <span>{portrayal.media.release_year}</span>
+              <h3 className="font-bold text-stone-900 uppercase tracking-tight text-sm mb-1">{portrayal.media.title}</h3>
+              <div className="flex items-center gap-2 text-xs text-stone-600 font-mono">
+                <span className="font-bold">{portrayal.media.release_year}</span>
                 {hasSequenceInfo && (
                   <>
                     <span>•</span>
                     {media.series_position?.sequence_number && (
-                      <span className="text-amber-600">#{media.series_position.sequence_number}</span>
+                      <span className="text-amber-600 font-bold">#{media.series_position.sequence_number}</span>
                     )}
                     {media.series_position?.season_number && media.series_position?.episode_number && (
-                      <span className="text-amber-600">
+                      <span className="text-amber-600 font-bold">
                         S{media.series_position.season_number}E{media.series_position.episode_number}
                       </span>
                     )}
@@ -75,7 +84,7 @@ export default function MediaTimeline({ portrayals, groupBySeries = false }: Med
               </div>
             </div>
             <span
-              className={`px-3 py-1 text-xs rounded-full border flex-shrink-0 ${
+              className={`px-2 py-1 text-[9px] font-black uppercase tracking-[0.1em] border-2 flex-shrink-0 ${
                 SENTIMENT_COLORS[portrayal.sentiment]
               }`}
             >
@@ -88,9 +97,10 @@ export default function MediaTimeline({ portrayals, groupBySeries = false }: Med
   };
 
   return (
-    <div className="bg-stone-100 border border-stone-200 rounded-lg p-6">
-      <h2 className="text-xl font-semibold mb-4">
-        Media Appearances ({portrayals.length})
+    <div className="bg-stone-100 border-2 border-stone-200 p-6">
+      <h2 className="text-sm font-black text-stone-900 uppercase tracking-widest mb-6 flex items-center gap-2">
+        <span className="text-amber-600">■</span> Media Appearances
+        <span className="text-[10px] font-black text-stone-400 ml-auto">({portrayals.length} TOTAL)</span>
       </h2>
 
       {groupBySeries && Object.keys(groupedPortrayals).length > 1 ? (

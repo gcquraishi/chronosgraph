@@ -6,6 +6,8 @@ import MediaTimeline from '@/components/MediaTimeline';
 import GraphExplorer from '@/components/GraphExplorer';
 import HistoricityBadge from '@/components/HistoricityBadge';
 import AddAppearanceForm from '@/components/AddAppearanceForm';
+import ExploreGraphButton from '@/components/ExploreGraphButton';
+import SentimentTrendChart from '@/components/SentimentTrendChart';
 import { User } from 'lucide-react';
 
 export default async function FigurePage({
@@ -50,17 +52,20 @@ export default async function FigurePage({
                 {figure.era && (
                   <p className="text-lg text-stone-600 mb-4">{figure.era}</p>
                 )}
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3">
                   <span className="inline-flex items-center px-3 py-1 text-[10px] font-black uppercase tracking-[0.15em] border-2 bg-amber-50 border-amber-600 text-amber-900">
                     Portrayals: {figure.portrayals.length}
                   </span>
+
+                  {/* Explore in Graph Button - Client Component for interactivity */}
+                  <ExploreGraphButton />
                 </div>
               </div>
             </div>
           </div>
 
           {/* Graph Explorer - Priority visualization */}
-          <div className="mb-8">
+          <div id="graph-explorer-section" className="mb-8 scroll-mt-8">
             <GraphExplorer canonicalId={id} />
           </div>
 
@@ -97,6 +102,11 @@ export default async function FigurePage({
 
             {/* Conflict Radar */}
             <ConflictRadar distribution={sentimentDistribution} />
+          </div>
+
+          {/* Sentiment Timeline - Full Width */}
+          <div className="mb-8">
+            <SentimentTrendChart portrayals={figure.portrayals} />
           </div>
 
           {/* Contribution Form */}

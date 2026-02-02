@@ -124,15 +124,26 @@ export async function GET(request: NextRequest) {
 
     const results = result.records.map(record => record.get('result'));
 
+    // Deduplicate results by label + type (e.g., same figure appearing twice)
+    const seenKeys = new Set<string>();
+    const deduplicatedResults = results.filter((r: any) => {
+      const key = `${r.type}:${r.label.toLowerCase()}`;
+      if (seenKeys.has(key)) {
+        return false; // Skip duplicate
+      }
+      seenKeys.add(key);
+      return true;
+    });
+
     // Count results by category
-    const categories = results.reduce((acc: Record<string, number>, r: any) => {
+    const categories = deduplicatedResults.reduce((acc: Record<string, number>, r: any) => {
       acc[r.type] = (acc[r.type] || 0) + 1;
       return acc;
     }, {});
 
     return NextResponse.json({
-      results,
-      total: results.length,
+      results: deduplicatedResults,
+      total: deduplicatedResults.length,
       categories,
     });
   } catch (error) {

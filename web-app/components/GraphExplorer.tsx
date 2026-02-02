@@ -151,6 +151,12 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
   );
   const [historyIndex, setHistoryIndex] = useState<number>(0);
 
+  // Phase 3.1.3: Keyboard shortcuts help panel
+  const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
+
+  // Visual feedback for keyboard shortcuts
+  const [activeShortcut, setActiveShortcut] = useState<string | null>(null);
+
   // Camera control helper - smoothly centers camera on a node
   const centerCameraOnNode = (node: GraphNode & { x?: number; y?: number }) => {
     if (!forceGraphRef.current || typeof node.x !== 'number' || typeof node.y !== 'number') {
@@ -469,6 +475,169 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
     }
   };
 
+  // Task 3.1.2: Forward navigation
+  const navigateForward = async () => {
+    if (historyIndex >= navigationHistory.length - 1) {
+      devWarn('⚠️ Already at the most recent position');
+      return;
+    }
+
+    const newIndex = historyIndex + 1;
+    const nextNodeId = navigationHistory[newIndex];
+
+    if (!nextNodeId) {
+      devError('❌ Invalid history state: no node at index', newIndex);
+      return;
+    }
+
+    devLog(`➡️ Navigating forward to: ${nextNodeId} (${newIndex + 1}/${navigationHistory.length})`);
+
+    // Update history index
+    setHistoryIndex(newIndex);
+
+    // Find the node in current graph state
+    const nextNode = nodes.find(n => n.id === nextNodeId);
+
+    if (!nextNode) {
+      devWarn(`⚠️ Node ${nextNodeId} not in current graph, will need to re-expand`);
+      return;
+    }
+
+    // Center camera on next node
+    setCenterNodeId(nextNodeId);
+    centerCameraOnNode(nextNode);
+
+    // Re-expand the next node ONLY if its children are actually missing from graph
+    const hasChildrenOnGraph = nodeChildren.has(nextNodeId) &&
+      Array.from(nodeChildren.get(nextNodeId) || []).some(childId =>
+        nodes.some(n => n.id === childId)
+      );
+
+    if (!hasChildrenOnGraph) {
+      devLog(`Re-expanding forward node (children missing): ${nextNodeId}`);
+
+      // Determine node type and call appropriate expansion API
+      if (nextNodeId.startsWith('figure-')) {
+        const canonicalIdToExpand = nextNodeId.replace('figure-', '');
+        try {
+          setLoadingNodes((prev) => new Set(prev).add(nextNodeId));
+
+          const response = await fetch(`/api/graph/expand/${canonicalIdToExpand}?type=figure`);
+          if (!response.ok) throw new Error('Failed to re-expand figure node');
+
+          const data = await response.json();
+          setExpandedNodes((prev) => new Set(prev).add(nextNodeId));
+          setCurrentlyExpandedNode(nextNodeId);
+
+          // Add neighbors back to graph
+          const parentDepth = nodeDepths.get(nextNodeId) ?? 0;
+          const newDepth = parentDepth + 1;
+
+          setNodes(prev => {
+            const existingIds = new Set(prev.map(n => n.id));
+            const newNodes = data.nodes.filter((n: GraphNode) => !existingIds.has(n.id));
+            const limitedNodes = newNodes.slice(0, MAX_NEIGHBORS);
+
+            if (newNodes.length > MAX_NEIGHBORS) {
+              devWarn(`⚠️ High-degree node: showing ${MAX_NEIGHBORS} of ${newNodes.length} neighbors`);
+            }
+
+            return [...prev, ...limitedNodes];
+          });
+
+          setLinks((prevLinks) => {
+            const existingLinks = new Set(
+              prevLinks.flatMap(l => {
+                const source = typeof l.source === 'object' ? l.source.id : l.source;
+                const target = typeof l.target === 'object' ? l.target.id : l.target;
+                return [`${source}-${target}`, `${target}-${source}`];
+              })
+            );
+            const newLinks = data.links.filter((l: GraphLink) =>
+              !existingLinks.has(`${l.source}-${l.target}`) && !existingLinks.has(`${l.target}-${l.source}`)
+            );
+            return [...prevLinks, ...newLinks];
+          });
+
+          setLoadingNodes((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(nextNodeId);
+            return newSet;
+          });
+        } catch (err: any) {
+          devError('Error re-expanding figure node:', err);
+          setError(`Failed to navigate forward: ${err.message}`);
+          setLoadingNodes((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(nextNodeId);
+            return newSet;
+          });
+        }
+      } else if (nextNodeId.startsWith('media-')) {
+        const wikidataId = nextNodeId.replace('media-', '');
+        try {
+          setLoadingNodes((prev) => new Set(prev).add(nextNodeId));
+
+          const response = await fetch(`/api/graph/expand/${wikidataId}?type=media`);
+          if (!response.ok) throw new Error('Failed to re-expand media node');
+
+          const data = await response.json();
+          setExpandedNodes((prev) => new Set(prev).add(nextNodeId));
+          setCurrentlyExpandedNode(nextNodeId);
+
+          // Add neighbors back to graph
+          const parentDepth = nodeDepths.get(nextNodeId) ?? 0;
+          const newDepth = parentDepth + 1;
+
+          setNodes(prev => {
+            const existingIds = new Set(prev.map(n => n.id));
+            const newNodes = data.nodes.filter((n: GraphNode) => !existingIds.has(n.id));
+            const limitedNodes = newNodes.slice(0, MAX_NEIGHBORS);
+
+            if (newNodes.length > MAX_NEIGHBORS) {
+              devWarn(`⚠️ High-degree node: showing ${MAX_NEIGHBORS} of ${newNodes.length} neighbors`);
+            }
+
+            return [...prev, ...limitedNodes];
+          });
+
+          setLinks((prevLinks) => {
+            const existingLinks = new Set(
+              prevLinks.flatMap(l => {
+                const source = typeof l.source === 'object' ? l.source.id : l.source;
+                const target = typeof l.target === 'object' ? l.target.id : l.target;
+                return [`${source}-${target}`, `${target}-${source}`];
+              })
+            );
+            const newLinks = data.links.filter((l: GraphLink) =>
+              !existingLinks.has(`${l.source}-${l.target}`) && !existingLinks.has(`${l.target}-${l.source}`)
+            );
+            return [...prevLinks, ...newLinks];
+          });
+
+          setLoadingNodes((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(nextNodeId);
+            return newSet;
+          });
+        } catch (err: any) {
+          devError('Error re-expanding media node:', err);
+          setError(`Failed to navigate forward: ${err.message}`);
+          setLoadingNodes((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(nextNodeId);
+            return newSet;
+          });
+        }
+      }
+    } else {
+      // Node's children are already on graph, just mark as expanded and update current
+      devLog(`Forward node already has children on graph, skipping re-expand`);
+      setExpandedNodes((prev) => new Set(prev).add(nextNodeId));
+      setCurrentlyExpandedNode(nextNodeId);
+    }
+  };
+
   // Task 2.4: Reset view to starting state
   const resetView = async () => {
     const startingNodeId = canonicalId ? `figure-${canonicalId}` : null;
@@ -607,6 +776,85 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
       }
     }
   }, [centerNodeId, nodes.length, links.length, nodeChildren.size]);
+
+  // Phase 3.1.3: Keyboard shortcuts
+  useEffect(() => {
+    if (!isBloomMode) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore shortcuts when user is typing in an input field
+      const target = e.target as HTMLElement;
+      if (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.isContentEditable
+      ) {
+        return;
+      }
+
+      // Close help panel with Escape
+      if (e.key === 'Escape' && showKeyboardHelp) {
+        setShowKeyboardHelp(false);
+        return;
+      }
+
+      // Toggle help panel with ? or H
+      if ((e.key === '?' || e.key.toLowerCase() === 'h') && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        setShowKeyboardHelp(prev => !prev);
+        return;
+      }
+
+      // Back navigation: B or Left Arrow
+      if ((e.key === 'b' || e.key === 'B' || e.key === 'ArrowLeft') && historyIndex > 0) {
+        e.preventDefault();
+        setActiveShortcut('back');
+        setTimeout(() => setActiveShortcut(null), 300);
+        navigateBack();
+        return;
+      }
+
+      // Forward navigation: F or Right Arrow
+      if ((e.key === 'f' || e.key === 'F' || e.key === 'ArrowRight') && historyIndex < navigationHistory.length - 1) {
+        e.preventDefault();
+        setActiveShortcut('forward');
+        setTimeout(() => setActiveShortcut(null), 300);
+        navigateForward();
+        return;
+      }
+
+      // Reset view: R
+      if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        setActiveShortcut('reset');
+        setTimeout(() => setActiveShortcut(null), 300);
+        resetView();
+        return;
+      }
+
+      // Collapse currently expanded node: Escape
+      if (e.key === 'Escape' && currentlyExpandedNode && !showKeyboardHelp) {
+        e.preventDefault();
+        setActiveShortcut('collapse');
+        setTimeout(() => setActiveShortcut(null), 300);
+        collapseNode(currentlyExpandedNode);
+        setCurrentlyExpandedNode(null);
+        return;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [
+    isBloomMode,
+    historyIndex,
+    navigationHistory.length,
+    currentlyExpandedNode,
+    showKeyboardHelp,
+    navigateBack,
+    navigateForward,
+    resetView
+  ]);
 
   // CHR-22: Set mounted flag on client-side
   useEffect(() => {
@@ -1161,6 +1409,101 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
     );
   }
 
+  // Helper: Truncate node names for breadcrumbs
+  const truncateNodeName = (nodeId: string, maxLength: number = 20): string => {
+    const node = nodes.find(n => n.id === nodeId);
+    if (!node) return 'Unknown';
+
+    const name = node.name;
+    if (name.length <= maxLength) return name;
+    return name.substring(0, maxLength) + '...';
+  };
+
+  // Helper: Navigate to a specific point in history via breadcrumb click
+  // Task 3.1.2: Truncate forward history when jumping to middle position
+  const navigateToHistoryIndex = async (targetIndex: number) => {
+    if (targetIndex < 0 || targetIndex >= navigationHistory.length) {
+      devWarn('⚠️ Invalid breadcrumb index:', targetIndex);
+      return;
+    }
+
+    if (targetIndex === historyIndex) {
+      devLog('Already at this point in history');
+      return;
+    }
+
+    const targetNodeId = navigationHistory[targetIndex];
+    devLog(`🔗 Breadcrumb navigation: jumping to index ${targetIndex} (${targetNodeId})`);
+
+    // Truncate navigation history to remove forward entries (standard browser behavior)
+    // This prevents forward button from working after breadcrumb jump
+    const truncatedHistory = navigationHistory.slice(0, targetIndex + 1);
+    setNavigationHistory(truncatedHistory);
+
+    // Update history index
+    setHistoryIndex(targetIndex);
+
+    // Find the target node
+    const targetNode = nodes.find(n => n.id === targetNodeId);
+    if (!targetNode) {
+      devWarn(`⚠️ Node ${targetNodeId} not in current graph`);
+      return;
+    }
+
+    // Center camera on target node
+    setCenterNodeId(targetNodeId);
+    centerCameraOnNode(targetNode);
+
+    // Collapse all nodes AFTER the target index (now using truncated history)
+    const nodesToCollapse = navigationHistory.slice(targetIndex + 1);
+    if (nodesToCollapse.length > 0) {
+      devLog(`🧹 Collapsing ${nodesToCollapse.length} forward nodes:`, nodesToCollapse);
+
+      nodesToCollapse.forEach(nodeId => {
+        const connectedNodeIds = new Set<string>();
+        links.forEach(link => {
+          const source = typeof link.source === 'object' ? link.source.id : link.source;
+          const target = typeof link.target === 'object' ? link.target.id : link.target;
+
+          if (source === nodeId && target !== nodeId) {
+            connectedNodeIds.add(target);
+          } else if (target === nodeId && source !== nodeId) {
+            connectedNodeIds.add(source);
+          }
+        });
+
+        const historyPathIds = new Set(truncatedHistory);
+        const childrenToRemove = Array.from(connectedNodeIds).filter(id => !historyPathIds.has(id));
+
+        if (childrenToRemove.length > 0) {
+          setNodes(prev => prev.filter(n => !childrenToRemove.includes(n.id)));
+          setLinks(prev => prev.filter(l => {
+            const source = typeof l.source === 'object' ? l.source.id : l.source;
+            const target = typeof l.target === 'object' ? l.target.id : l.target;
+            return !childrenToRemove.includes(source) && !childrenToRemove.includes(target);
+          }));
+          setExpandedNodes(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(nodeId);
+            childrenToRemove.forEach(id => newSet.delete(id));
+            return newSet;
+          });
+        }
+      });
+    }
+
+    // Mark target node as expanded if it has children
+    const hasChildrenOnGraph = nodeChildren.has(targetNodeId) &&
+      Array.from(nodeChildren.get(targetNodeId) || []).some(childId =>
+        nodes.some(n => n.id === childId)
+      );
+
+    if (hasChildrenOnGraph) {
+      setExpandedNodes((prev) => new Set(prev).add(targetNodeId));
+      setCurrentlyExpandedNode(targetNodeId);
+    }
+  };
+
   return (
     <div className="relative">
       {/* Error Banner */}
@@ -1186,35 +1529,132 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
         </div>
       )}
 
-      {/* Task 2.3 & 2.4: Navigation Controls - Top Left */}
+      {/* Phase 3.1.1: Breadcrumb Trail */}
+      {isBloomMode && navigationHistory.length > 0 && (
+        <div className="absolute top-4 left-4 right-4 z-10 flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-lg border border-stone-300 shadow-lg p-3 overflow-x-auto">
+          <nav aria-label="Exploration breadcrumb" className="flex items-center gap-2 flex-nowrap min-w-0">
+            {navigationHistory.slice(0, historyIndex + 1).map((nodeId, index) => {
+              const isLast = index === historyIndex;
+              const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+              // On mobile, show only last 3 breadcrumbs with ellipsis
+              if (isMobile && navigationHistory.length > 3 && index < historyIndex - 2) {
+                if (index === 0) {
+                  return (
+                    <React.Fragment key={nodeId}>
+                      <button
+                        onClick={() => navigateToHistoryIndex(index)}
+                        className="text-sm font-mono text-stone-600 hover:text-amber-600 hover:underline transition-colors whitespace-nowrap flex-shrink-0"
+                        title={truncateNodeName(nodeId, 100)}
+                      >
+                        {truncateNodeName(nodeId, 15)}
+                      </button>
+                      <span className="text-stone-400 flex-shrink-0" aria-hidden="true">›</span>
+                      <span className="text-stone-400 text-sm flex-shrink-0">...</span>
+                      <span className="text-stone-400 flex-shrink-0" aria-hidden="true">›</span>
+                    </React.Fragment>
+                  );
+                }
+                return null;
+              }
+
+              return (
+                <React.Fragment key={nodeId}>
+                  {isLast ? (
+                    <span
+                      className="text-sm font-mono font-semibold text-amber-600 whitespace-nowrap flex-shrink-0"
+                      aria-current="location"
+                      title={truncateNodeName(nodeId, 100)}
+                    >
+                      {truncateNodeName(nodeId, 20)}
+                    </span>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => navigateToHistoryIndex(index)}
+                        className="text-sm font-mono text-stone-600 hover:text-amber-600 hover:underline transition-colors whitespace-nowrap flex-shrink-0"
+                        title={truncateNodeName(nodeId, 100)}
+                      >
+                        {truncateNodeName(nodeId, 20)}
+                      </button>
+                      <span className="text-stone-400 flex-shrink-0" aria-hidden="true">›</span>
+                    </>
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </nav>
+        </div>
+      )}
+
+      {/* Task 2.3 & 2.4 & 3.1.2 & 3.1.3: Navigation Controls - Top Left (moved down to avoid overlap with breadcrumbs) */}
       {isBloomMode && (
         <div className="absolute top-20 left-4 z-10 flex gap-2">
           <button
             onClick={navigateBack}
             disabled={historyIndex === 0}
-            className={`px-3 py-2 rounded-lg text-sm font-medium shadow-lg transition-all flex items-center gap-2 ${
+            className={`px-3 py-2 rounded-lg text-sm font-medium font-mono shadow-lg transition-all flex items-center gap-2 ${
+              activeShortcut === 'back' ? 'ring-2 ring-amber-400 ring-offset-1' : ''
+            } ${
               historyIndex === 0
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-300 hover:border-gray-300'
+                : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-300 hover:border-amber-400'
             }`}
-            title={historyIndex === 0 ? 'At beginning of exploration' : 'Go back to previous node'}
+            title={historyIndex === 0 ? 'At beginning of exploration' : 'Go back in exploration history (B or ←)'}
             aria-label="Navigate back"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            Back
+            <span className="hidden sm:inline">Back</span>
+          </button>
+          <button
+            onClick={navigateForward}
+            disabled={historyIndex >= navigationHistory.length - 1}
+            className={`px-3 py-2 rounded-lg text-sm font-medium font-mono shadow-lg transition-all flex items-center gap-2 ${
+              activeShortcut === 'forward' ? 'ring-2 ring-amber-400 ring-offset-1' : ''
+            } ${
+              historyIndex >= navigationHistory.length - 1
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-300 hover:border-amber-400'
+            }`}
+            title={historyIndex >= navigationHistory.length - 1 ? 'At most recent position' : 'Go forward in exploration history (F or →)'}
+            aria-label="Navigate forward"
+          >
+            <span className="hidden sm:inline">Forward</span>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
           </button>
           <button
             onClick={resetView}
-            className="px-3 py-2 rounded-lg text-sm font-medium shadow-lg transition-all flex items-center gap-2 bg-white text-stone-700 hover:bg-stone-100 border border-stone-300 hover:border-gray-300"
-            title="Reset to starting view"
+            className={`px-3 py-2 rounded-lg text-sm font-medium font-mono shadow-lg transition-all flex items-center gap-2 ${
+              activeShortcut === 'reset' ? 'ring-2 ring-amber-400 ring-offset-1' : ''
+            } bg-white text-stone-700 hover:bg-stone-100 border border-stone-300 hover:border-amber-400`}
+            title="Reset to starting view (R)"
             aria-label="Reset view"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
-            Reset
+            <span className="hidden sm:inline">Reset</span>
+          </button>
+          {/* Phase 3.1.3: Keyboard shortcuts help button */}
+          <button
+            onClick={() => setShowKeyboardHelp(prev => !prev)}
+            className={`px-3 py-2 rounded-lg text-sm font-medium font-mono shadow-lg transition-all flex items-center gap-2 ${
+              showKeyboardHelp
+                ? 'bg-amber-100 text-amber-800 border border-amber-400'
+                : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-300 hover:border-amber-400'
+            }`}
+            title="Show keyboard shortcuts (? or H)"
+            aria-label="Toggle keyboard shortcuts help"
+            aria-expanded={showKeyboardHelp}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="hidden sm:inline">Help</span>
           </button>
         </div>
       )}
@@ -1235,6 +1675,101 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
           Drag to pan • Scroll to zoom • Click nodes
         </div>
       </div>
+
+      {/* Phase 3.1.3: Keyboard Shortcuts Help Panel */}
+      {showKeyboardHelp && (
+        <>
+          {/* Overlay backdrop */}
+          <div
+            className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 transition-opacity"
+            onClick={() => setShowKeyboardHelp(false)}
+            aria-hidden="true"
+          />
+
+          {/* Help panel modal */}
+          <div
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-white rounded-lg shadow-2xl border-2 border-stone-300 max-w-md w-full mx-4"
+            role="dialog"
+            aria-labelledby="keyboard-shortcuts-title"
+            aria-modal="true"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-stone-300">
+              <h3
+                id="keyboard-shortcuts-title"
+                className="text-lg font-bold font-mono text-stone-800"
+              >
+                Keyboard Shortcuts
+              </h3>
+              <button
+                onClick={() => setShowKeyboardHelp(false)}
+                className="text-stone-400 hover:text-stone-600 transition-colors p-1"
+                aria-label="Close keyboard shortcuts help"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 space-y-6">
+              {/* Navigation section */}
+              <div>
+                <h4 className="text-sm font-bold font-mono text-stone-700 mb-3">Navigation</h4>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-2">
+                      <kbd className="px-2 py-1 bg-stone-100 border border-stone-300 rounded text-xs font-mono text-stone-700">←</kbd>
+                      <span className="text-sm text-stone-500">or</span>
+                      <kbd className="px-2 py-1 bg-stone-100 border border-stone-300 rounded text-xs font-mono text-stone-700">B</kbd>
+                    </div>
+                    <span className="text-sm text-stone-700">Go back in history</span>
+                  </div>
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-2">
+                      <kbd className="px-2 py-1 bg-stone-100 border border-stone-300 rounded text-xs font-mono text-stone-700">→</kbd>
+                      <span className="text-sm text-stone-500">or</span>
+                      <kbd className="px-2 py-1 bg-stone-100 border border-stone-300 rounded text-xs font-mono text-stone-700">F</kbd>
+                    </div>
+                    <span className="text-sm text-stone-700">Go forward in history</span>
+                  </div>
+                  <div className="flex items-center justify-between gap-4">
+                    <kbd className="px-2 py-1 bg-stone-100 border border-stone-300 rounded text-xs font-mono text-stone-700">R</kbd>
+                    <span className="text-sm text-stone-700">Reset to starting node</span>
+                  </div>
+                  <div className="flex items-center justify-between gap-4">
+                    <kbd className="px-2 py-1 bg-stone-100 border border-stone-300 rounded text-xs font-mono text-stone-700">Esc</kbd>
+                    <span className="text-sm text-stone-700">Collapse selected node</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Help section */}
+              <div>
+                <h4 className="text-sm font-bold font-mono text-stone-700 mb-3">Help</h4>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-2">
+                      <kbd className="px-2 py-1 bg-stone-100 border border-stone-300 rounded text-xs font-mono text-stone-700">?</kbd>
+                      <span className="text-sm text-stone-500">or</span>
+                      <kbd className="px-2 py-1 bg-stone-100 border border-stone-300 rounded text-xs font-mono text-stone-700">H</kbd>
+                    </div>
+                    <span className="text-sm text-stone-700">Toggle this help panel</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer note */}
+              <div className="pt-4 border-t border-stone-200">
+                <p className="text-xs text-stone-500 italic">
+                  Shortcuts are disabled when typing in input fields
+                </p>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Full-Bleed Graph */}
       <ForceGraphErrorBoundary>

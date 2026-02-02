@@ -85,4 +85,20 @@
   .bg-manila {
     background-color: var(--folder-manila);
   }
+
+  /* Sentiment chart animations */
+  .recharts-bar-rectangle {
+    transition: opacity 0.2s ease;
+  }
+
+  .recharts-bar-rectangle:hover {
+    opacity: 0.8;
+  }
+
+  /* Smooth transitions for interactive elements */
+  .transition-colors {
+    transition-property: color, background-color, border-color;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+  }
 }

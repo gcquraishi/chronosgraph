@@ -1,5 +1,5 @@
 # ChronosGraph Product Roadmap
-*Last updated: 2026-01-29*
+*Last updated: 2026-02-02*
 
 ---
 
@@ -15,17 +15,19 @@
 
 ChronosGraph is a knowledge graph exploring how historical figures have been portrayed across media (film, TV, books, games). Users discover connections between figures, analyze portrayal sentiment, and contribute new data.
 
-## Current State (January 2026)
+## Current State (February 2026)
 
 **Core Features Complete:**
 - Graph visualization with bloom exploration (expand/collapse nodes)
-- Figure detail pages with sentiment analysis
+- Advanced navigation (breadcrumbs, forward/back, keyboard shortcuts)
+- Figure detail pages with enhanced sentiment timeline
 - MediaWork catalog with Wikidata integration
 - Unified contribution hub (`/contribute`)
-- Entity resolution with Wikidata Q-IDs
-- Navigation controls (back, reset, collapse)
+- Entity resolution with Wikidata Q-IDs and duplicate detection
+- Provenance tracking with CREATED_BY relationships (100% coverage)
+- Automated weekly health monitoring via GitHub Actions
 
-**Database:** ~231 HistoricalFigures, associated MediaWorks and portrayals
+**Database:** ~795 HistoricalFigures, ~708 MediaWorks, ~680 APPEARS_IN relationships
 
 ---
 
@@ -76,16 +78,17 @@ The landing page now features path query with graph highlighting and autocomplet
 ## Phase 2: Data Quality & Provenance
 *Goal: Track who created what and maintain data integrity*
 
-### 2.1 CREATED_BY Relationship
-**Priority:** MEDIUM | **Status:** Planned | **Flight Plan:** `docs/planning/FLIGHT_PLAN_CREATED_BY.md`
+### 2.1 CREATED_BY Relationship ✅
+**Priority:** MEDIUM | **Status:** Complete (2026-02-02) | **Flight Plan:** `docs/planning/FLIGHT_PLAN_CREATED_BY.md`
 
 Track which agent/user created each node for audit trail.
 
-| Session | Scope | Deliverable |
-|---------|-------|-------------|
-| 2.1.1 | Add Agent node type and CREATED_BY relationship to schema | Schema updated |
-| 2.1.2 | Run migration to tag existing nodes from CHRONOS_LOG | Historical data tagged |
-| 2.1.3 | Update contribution APIs to set CREATED_BY on new nodes | New data tracked |
+| Session | Status | Scope | Deliverable |
+|---------|--------|-------|-------------|
+| 2.1.1 | ✅ | Add Agent node type and CREATED_BY relationship to schema | Schema updated |
+| 2.1.2 | ✅ | Run migration to tag existing nodes (backfilled 299 relationships) | 100% provenance coverage |
+| 2.1.3 | ✅ | Update contribution APIs to set CREATED_BY on new nodes | New data tracked |
+| 2.1.4 | ✅ | Weekly health check automation via GitHub Actions | Automated monitoring |
 
 ### 2.2 Duplicate Detection Dashboard
 **Priority:** LOW | **Status:** Not started
@@ -100,29 +103,29 @@ Surface potential duplicate figures for manual review.
 
 ---
 
-## Phase 3: Graph Exploration Enhancements
+## Phase 3: Graph Exploration Enhancements ✅
 *Goal: Make deep graph exploration more intuitive*
 
-### 3.1 Bloom Phase 3 (Polish)
-**Priority:** LOW | **Status:** Not started
+### 3.1 Bloom Phase 3 (Polish) ✅
+**Priority:** LOW | **Status:** Complete (2026-02-02)
 
 Additional navigation conveniences.
 
-| Session | Scope | Deliverable |
-|---------|-------|-------------|
-| 3.1.1 | Add breadcrumb trail showing exploration path | Visual path history |
-| 3.1.2 | Add forward navigation (if back was used) | Can go forward again |
-| 3.1.3 | Keyboard shortcuts (B=back, R=reset, Escape=collapse) | Power user controls |
+| Session | Status | Scope | Deliverable |
+|---------|--------|-------|-------------|
+| 3.1.1 | ✅ | Add breadcrumb trail showing exploration path | Visual path history with truncation |
+| 3.1.2 | ✅ | Add forward navigation (if back was used) | Can navigate forward through history |
+| 3.1.3 | ✅ | Keyboard shortcuts (←/B, →/F, R, Esc, ?/H) | Power user controls with help modal |
 
-### 3.2 Figure Detail Page Polish
-**Priority:** LOW | **Status:** Not started
+### 3.2 Figure Detail Page Polish ✅
+**Priority:** LOW | **Status:** Complete (2026-02-02)
 
 Enhance individual figure pages.
 
-| Session | Scope | Deliverable |
-|---------|-------|-------------|
-| 3.2.1 | Add "Explore in Graph" button linking to graph explorer | Entry point from figure |
-| 3.2.2 | Improve sentiment visualization (timeline view) | Sentiment over time |
+| Session | Status | Scope | Deliverable |
+|---------|--------|-------|-------------|
+| 3.2.1 | ✅ | Add "Explore in Graph" button with smooth scroll | Entry point from figure with visual feedback |
+| 3.2.2 | ✅ | Enhanced sentiment timeline with decade grouping | Temporal visualization + trend detection |
 
 ---
 

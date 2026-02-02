@@ -57,7 +57,8 @@
 - **Backward Compatibility**: All existing `canonical_id` values remain valid (as substrings)
 
 ## Provenance Tracking Protocol (CREATED_BY)
-**Mandatory for all node creation** (Phase 2.1 Enhancement - February 2026)
+**Mandatory for all node creation** (Phase 2.1 - COMPLETE as of February 2, 2026)
+**Status**: ✅ 100% provenance coverage (1,594 entity nodes tracked)
 
 ### Agent Schema
 All contributions are attributed to an `:Agent` node:
@@ -116,6 +117,75 @@ CREATE (f)-[:CREATED_BY {
 - **Backfill script**: `scripts/migration/backfill_created_by_provenance.py`
 - **Dry-run mode**: `python3 scripts/migration/backfill_created_by_provenance.py --dry-run`
 - **Production**: Remove `--dry-run` flag after CEO approval
+- **Status**: ✅ Executed successfully (Feb 2, 2026) - 1,594 CREATED_BY relationships established
+
+## Database Health Monitoring
+**Infrastructure** (Sprint 3 - February 2026)
+
+### Health Check Script
+- **Tool**: `scripts/qa/neo4j_health_check.py`
+- **Purpose**: Comprehensive database health monitoring and reporting
+- **Usage**: `python3 scripts/qa/neo4j_health_check.py --report health_report.md`
+- **Schedule**: Run weekly to monitor database growth and integrity
+
+### Health Metrics Tracked
+- Connection status verification
+- Node and relationship counts by type
+- Orphaned node detection (nodes with no relationships)
+- CREATED_BY provenance coverage (should be 100%)
+- Index health status (all should be ONLINE)
+- Performance metrics and warnings
+
+### Health Report Output
+- Markdown format report with tables and metrics
+- Warning detection for missing provenance, orphaned nodes
+- Success criteria: 100% provenance coverage, no critical errors
+- Saved to timestamped files for historical tracking
+
+### Automation
+- **Recommended**: Schedule weekly runs via cron or GitHub Actions
+- **Alert thresholds**: Warn if provenance coverage < 100%, orphaned nodes > 5
+- **Report archive**: Store in `docs/reports/health-checks/`
+
+## Batch Import Infrastructure
+**Data Ingestion at Scale** (CHR-40 - February 2026)
+
+### Batch Import Tool
+- **Primary tool**: `scripts/import/batch_import.py`
+- **Purpose**: Bulk ingestion of historical figures and media works from JSON files
+- **Features**:
+  - JSON schema validation with detailed error messages
+  - Duplicate detection using enhanced name similarity
+  - Wikidata Q-ID validation via API
+  - Automatic CREATED_BY agent attribution
+  - Dry-run mode for safe preview
+  - Batch transaction management (configurable batch size)
+  - Progress reporting and detailed logging
+
+### Usage Pattern
+```bash
+# 1. Validate JSON against schema
+python3 scripts/import/validate_batch_json.py data/batch.json
+
+# 2. Dry run to preview changes
+python3 scripts/import/batch_import.py data/batch.json --dry-run
+
+# 3. Execute import after review
+python3 scripts/import/batch_import.py data/batch.json --execute
+```
+
+### JSON Schema
+- **Location**: `data/batch_import_schema.json`
+- **Examples**: `data/examples/batch_figures_only.json`, `batch_works_only.json`
+- **Templates**: CSV templates available in `data/examples/`
+- **Converter**: `scripts/import/csv_to_batch_json.py` for CSV → JSON conversion
+
+### Safety Features
+- Dry-run mode enabled by default (prevents accidents)
+- Confirmation prompt for live execution
+- Duplicate detection before insertion
+- Transaction rollback on error
+- Detailed import reports generated automatically
 
 ## Safety & Path Integrity
 - **Permanent Storage Only:** Before creating or moving any files, verify the destination is a permanent project directory (Root, `/src`, etc.).
