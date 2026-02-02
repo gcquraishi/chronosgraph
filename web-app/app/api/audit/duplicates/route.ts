@@ -144,17 +144,33 @@ export async function GET(request: NextRequest) {
       portrayals_count: toNumber(record.get('portrayals_count')),
     }));
 
+    // OPTIMIZATION: Group figures by first letter for faster comparison
+    // This reduces comparisons from O(n²) to O(k×m²) where k=buckets, m=avg bucket size
+    const figuresByLetter = new Map<string, typeof figures>();
+    for (const figure of figures) {
+      const firstLetter = figure.name.charAt(0).toUpperCase();
+      if (!figuresByLetter.has(firstLetter)) {
+        figuresByLetter.set(firstLetter, []);
+      }
+      figuresByLetter.get(firstLetter)!.push(figure);
+    }
+
+    console.log(`[Duplicate Detection] Grouped ${figures.length} figures into ${figuresByLetter.size} letter buckets`);
+    const startCompareTime = Date.now();
+
     // Compare all pairs to find duplicates
     const duplicatePairs: DuplicatePair[] = [];
     const processedPairs = new Set<string>();
 
-    for (let i = 0; i < figures.length; i++) {
-      for (let j = i + 1; j < figures.length; j++) {
-        const fig1 = figures[i];
-        const fig2 = figures[j];
+    // Process each letter group independently (much faster than full cartesian product)
+    for (const [letter, group] of figuresByLetter.entries()) {
+      for (let i = 0; i < group.length; i++) {
+        for (let j = i + 1; j < group.length; j++) {
+          const fig1 = group[i];
+          const fig2 = group[j];
 
-        // Skip if same canonical_id (shouldn't happen but defensive)
-        if (fig1.canonical_id === fig2.canonical_id) continue;
+          // Skip if same canonical_id (shouldn't happen but defensive)
+          if (fig1.canonical_id === fig2.canonical_id) continue;
 
         // Skip if both have Wikidata IDs and they're different (not duplicates)
         if (
@@ -210,7 +226,11 @@ export async function GET(request: NextRequest) {
           year_match: yearMatch,
         });
       }
+      }
     }
+
+    const compareTime = Date.now() - startCompareTime;
+    console.log(`[Duplicate Detection] Comparison phase: ${compareTime}ms, found ${duplicatePairs.length} duplicates`);
 
     // Sort by similarity score (highest first)
     duplicatePairs.sort((a, b) => b.similarity.combined - a.similarity.combined);
