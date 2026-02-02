@@ -26,8 +26,16 @@ ChronosGraph is a knowledge graph exploring how historical figures have been por
 - Entity resolution with Wikidata Q-IDs and duplicate detection
 - Provenance tracking with CREATED_BY relationships (100% coverage)
 - Automated weekly health monitoring via GitHub Actions
+- **Performance optimization with LRU caching (66.8x average speedup)**
+- **Database index monitoring (34 indexes, all ONLINE)**
 
-**Database:** ~795 HistoricalFigures, ~708 MediaWorks, ~680 APPEARS_IN relationships
+**Database:** 772 HistoricalFigures, ~708 MediaWorks, ~680 APPEARS_IN relationships
+
+**Recent Work (Feb 2, 2026):**
+- Cleaned up 12 duplicate figures (26 relationships consolidated)
+- Implemented first-letter grouping (26x faster duplicate detection)
+- Deployed LRU cache infrastructure (3,487x speedup on warm cache)
+- Created QA automation scripts (index audit, API profiler)
 
 ---
 
@@ -131,22 +139,36 @@ Enhance individual figure pages.
 
 ---
 
-## Phase 4: Scale & Community (Future)
+## Phase 4: Scale & Community
 *Goal: Support growth beyond single-user contribution*
 
-### 4.1 Bulk Data Ingestion
+### 4.1 Bulk Data Ingestion (Future)
 - Batch import from curated JSON files
 - Scheduled Wikidata sync for canonical records
 
-### 4.2 Multi-User Contributions
+### 4.2 Multi-User Contributions (Future)
 - Edit history tracking
 - Attribution on contributions
 - Review queue for community edits
 
-### 4.3 Performance at Scale (10k+ entities)
-- Vector semantic search
-- Query caching
-- Database indexing audit
+### 4.3 Performance at Scale ✅
+**Priority:** HIGH | **Status:** Complete (2026-02-02) | **Plan:** `PERFORMANCE_OPTIMIZATION_PLAN.md`
+
+Optimize database queries and caching for 10k+ entities.
+
+| Session | Status | Scope | Deliverable |
+|---------|--------|-------|-------------|
+| 4.3.1 | ✅ | First-letter grouping for duplicate detection | 26x speedup (44s → 1.7s) |
+| 4.3.2 | ✅ | LRU caching with configurable TTLs | 66.8x average cache speedup |
+| 4.3.3 | ✅ | Database index health audit | All 34 indexes ONLINE, audit script created |
+| 4.3.4 | ✅ | API response time profiling | Validated optimizations, profiler script created |
+
+**Impact:** 3,487x speedup on duplicate detection (warm cache), all critical APIs under 500ms
+
+**Future Work:**
+- Vector semantic search for fuzzy name matching
+- Cache warmup on deployment
+- Incremental duplicate detection
 
 ---
 
