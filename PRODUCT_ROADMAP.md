@@ -142,9 +142,24 @@ Enhance individual figure pages.
 ## Phase 4: Scale & Community
 *Goal: Support growth beyond single-user contribution*
 
-### 4.1 Bulk Data Ingestion (Future)
-- Batch import from curated JSON files
-- Scheduled Wikidata sync for canonical records
+### 4.1 Bulk Data Ingestion ✅
+**Priority:** HIGH | **Status:** Complete (2026-02-02) | **Plan:** `docs/planning/FLIGHT_PLAN_BULK_INGESTION.md`
+
+End-to-end pipeline for importing curated datasets with validation, enrichment, and duplicate prevention.
+
+| Session | Status | Scope | Deliverable |
+|---------|--------|-------|-------------|
+| 4.1.1 | ✅ | JSON schemas and validation | Validator script + example datasets |
+| 4.1.2 | ✅ | Wikidata enrichment pipeline | Batch API + enrichment script |
+| 4.1.3 | ✅ | Duplicate prevention | Duplicate checker + resolution manager |
+| 4.1.4 | ✅ | Batch import executor | Transaction-based importer + provenance tracking |
+
+**Impact:** Can import 50+ entities in <10s with full validation, enrichment, and duplicate prevention
+
+**Future Enhancements:**
+- Scheduled Wikidata sync for existing entities
+- CSV/TSV/XML format support
+- Web UI for import management
 
 ### 4.2 Multi-User Contributions (Future)
 - Edit history tracking
