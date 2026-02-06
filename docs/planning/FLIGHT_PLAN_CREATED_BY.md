@@ -1,6 +1,6 @@
-# ChronosGraph Gemini Flight Plan: `CREATED_BY` Relationship Integration
+# Fictotum Gemini Flight Plan: `CREATED_BY` Relationship Integration
 
-**OBJECTIVE:** Implement a new `CREATED_BY` relationship to track the origin agent of each node in the ChronosGraph database, and retroactively assign this relationship to existing nodes based on the `CHRONOS_LOG.md` history.
+**OBJECTIVE:** Implement a new `CREATED_BY` relationship to track the origin agent of each node in the Fictotum database, and retroactively assign this relationship to existing nodes based on the `FICTOTUM_LOG.md` history.
 
 ## 1. ARCHITECTURE & SCHEMA MODIFICATION
 
@@ -11,7 +11,7 @@ The database schema (`scripts/schema.py`) has been updated to include:e
 ## 2. RETROACTIVE DATA MIGRATION
 
 A Python migration script (`scripts/migration/migrate_add_created_by.py`) has been generated to:
-- Parse historical ingestion data based on `CHRONOS_LOG.md`.
+- Parse historical ingestion data based on `FICTOTUM_LOG.md`.
 - Identify entities created by specific "Claude Code" agents.
 - Create `:Agent` nodes for each identified agent.
 - Establish `(Node)-[:CREATED_BY]->(Agent)` relationships for all historically ingested nodes.
@@ -39,11 +39,11 @@ A Python migration script (`scripts/migration/migrate_add_created_by.py`) has be
     ```bash
     python scripts/migration/migrate_add_created_by.py
     ```
-    *   **Explanation:** This script will connect to the Neo4j database, identify all entities ingested by "Claude Code" (based on the `CHRONOS_LOG.md` analysis), create the corresponding `:Agent` nodes, and establish the `CREATED_BY` relationships.
+    *   **Explanation:** This script will connect to the Neo4j database, identify all entities ingested by "Claude Code" (based on the `FICTOTUM_LOG.md` analysis), create the corresponding `:Agent` nodes, and establish the `CREATED_BY` relationships.
 
 **MODIFICATIONS**:
 
--   **Update `CHRONOS_LOG.md`:** After successful execution of the above commands, please append the following entry to `CHRONOS_LOG.md`.
+-   **Update `FICTOTUM_LOG.md`:** After successful execution of the above commands, please append the following entry to `FICTOTUM_LOG.md`.
 
     ```markdown
     ---
@@ -64,7 +64,7 @@ A Python migration script (`scripts/migration/migrate_add_created_by.py`) has be
       - New `CREATED_BY` relationship type.
 
     **NOTES:**
-    This migration establishes critical data provenance, linking all ingested nodes to the AI agent responsible for their creation based on `CHRONOS_LOG.md`.
+    This migration establishes critical data provenance, linking all ingested nodes to the AI agent responsible for their creation based on `FICTOTUM_LOG.md`.
     ---
     ```
 

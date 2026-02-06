@@ -62,7 +62,7 @@ Key architectural/implementation choices:
   - [x] 🟩 Ensure expanded form maintains current styling
   - **Files**: `web-app/components/AddAppearanceForm.tsx`
   - **Dependencies**: Task 2.1 must complete first
-  - **Notes**: Match existing ChronosGraph card styling (gray-800 background, gray-700 border)
+  - **Notes**: Match existing Fictotum card styling (gray-800 background, gray-700 border)
   - **Completed**: 2026-01-22
   - **Implementation Notes**: Header button has hover:bg-gray-700/50 for visual feedback. Expanded form has border-t separator. Maintains existing gray-800/gray-700 styling.
 

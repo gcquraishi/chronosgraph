@@ -1,6 +1,6 @@
-# ChronosGraph Documentation
+# Fictotum Documentation
 
-Welcome to the ChronosGraph documentation hub. This guide will help you navigate the available resources for contributing, developing, and understanding the platform.
+Welcome to the Fictotum documentation hub. This guide will help you navigate the available resources for contributing, developing, and understanding the platform.
 
 ## Documentation Structure
 
@@ -21,7 +21,7 @@ docs/
 
 ### For Contributors
 
-**New to ChronosGraph?** Start here:
+**New to Fictotum?** Start here:
 
 1. **[Contributing Guidelines](/docs/contributing/CONTRIBUTING.md)** - Read this first
    - Data quality standards
@@ -75,7 +75,7 @@ docs/
 ### Historical Research Resources
 
 **Session Logs**:
-- **[CHRONOS_LOG.md](/CHRONOS_LOG.md)** - Master research log with all ingestion sessions
+- **[FICTOTUM_LOG.md](/FICTOTUM_LOG.md)** - Master research log with all ingestion sessions
   - WWII Historical Cluster (CHR-34) - 38 figures, 18 media works
   - Medieval Europe Cluster (CHR-35) - 50 figures, 25 media works
   - Roman Empire Cluster - 100+ figures, 20+ media works
@@ -211,7 +211,7 @@ docs/
 
 **For research agents ingesting 20+ entities**:
 
-1. Create session note header in CHRONOS_LOG.md
+1. Create session note header in FICTOTUM_LOG.md
 2. Research phase: Compile entity list with Wikidata Q-IDs
 3. Duplicate check: Query database for existing entities
 4. Write Cypher bulk insert script with provenance
@@ -256,7 +256,7 @@ Sentiment tags describe **how the media portrays a figure**, not historical trut
 
 ## Code of Conduct
 
-ChronosGraph is a scholarly platform built on rigorous data quality and respectful collaboration.
+Fictotum is a scholarly platform built on rigorous data quality and respectful collaboration.
 
 ### Core Principles
 
@@ -295,7 +295,7 @@ When sources disagree:
 - **[Britannica](https://www.britannica.com)** - Scholarly verification
 - **[IMDb](https://www.imdb.com)** - Film and TV verification
 
-### ChronosGraph Tools
+### Fictotum Tools
 
 - **Contribution Hub**: `/contribute` - Web UI for adding entities
 - **Duplicate Detection Dashboard**: `/admin/duplicates` - Review and merge duplicates
@@ -362,11 +362,11 @@ A: Yes, but document your changes in session notes and ensure you have sources t
 
 **For General Questions**:
 - Check existing documentation first
-- Consult CHRONOS_LOG.md for research examples
+- Consult FICTOTUM_LOG.md for research examples
 - Ask in the team channel (if applicable)
 
 ---
 
 **Last Updated**: 2026-02-01
 **Documentation Version**: 1.0.0
-**Contributors**: Claude Sonnet 4.5 (ChronosGraph Co-CEO)
+**Contributors**: Claude Sonnet 4.5 (Fictotum Co-CEO)

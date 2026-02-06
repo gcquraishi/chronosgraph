@@ -8,7 +8,7 @@
 
 ## TL;DR
 Replace 4 fragmented data entry routes with a **single unified hub** at `/contribute` featuring:
-- Two-tier search (ChronosGraph DB + Wikidata)
+- Two-tier search (Fictotum DB + Wikidata)
 - Silent auto-enrichment with location/era tags
 - Creator bulk-import workflow
 - User-generated entity fallback with data quality flags
@@ -163,7 +163,7 @@ Replace 4 fragmented data entry routes with a **single unified hub** at `/contri
   - **Notes**: Custom wizard (no library), settings step is NEW for location/era confirmation
 
 - [ ] 🟥 **Task 2.2: Build Two-Tier Search Results Component**
-  - [ ] 🟥 Section 1: "Already in ChronosGraph" (dbResults with [View Page] buttons)
+  - [ ] 🟥 Section 1: "Already in Fictotum" (dbResults with [View Page] buttons)
   - [ ] 🟥 Section 2: "Add from Wikidata" (wikidataResults with [Add] buttons)
   - [ ] 🟥 Section 3: "Not found anywhere?" (user-generated fallback)
   - [ ] 🟥 Special handling: If Wikidata result is Person with works → dual buttons

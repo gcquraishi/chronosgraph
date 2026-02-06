@@ -27,7 +27,7 @@ export default function PathfinderMockup() {
       <div className="absolute top-0 left-0 w-full p-6 flex justify-between items-center z-10">
         <div className="flex items-center gap-2 font-bold text-xl text-gray-900">
           <Network className="w-8 h-8 text-blue-600" />
-          <span>ChronosGraph</span>
+          <span>Fictotum</span>
         </div>
         <Link href="/mockups" className="text-gray-500 hover:text-gray-900 flex items-center gap-2">
           <ArrowLeft className="w-4 h-4" /> Back to Mockups

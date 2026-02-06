@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-Successfully reduced the orphan figure rate from **47.5% to 38.3%** by creating **247 new APPEARS_IN relationships** between existing HistoricalFigure nodes and MediaWork nodes in the ChronosGraph database. This exceeded the target of reducing the orphan rate to below 60%.
+Successfully reduced the orphan figure rate from **47.5% to 38.3%** by creating **247 new APPEARS_IN relationships** between existing HistoricalFigure nodes and MediaWork nodes in the Fictotum database. This exceeded the target of reducing the orphan rate to below 60%.
 
 ### Key Metrics
 
@@ -298,15 +298,15 @@ RETURN f.name, m.title
 
 ## Conclusion
 
-This session successfully exceeded the goal of reducing orphan figure rate to below 60%, achieving a final rate of **38.3%**. By creating **247 new APPEARS_IN relationships**, we've improved the connectivity and research value of the ChronosGraph database.
+This session successfully exceeded the goal of reducing orphan figure rate to below 60%, achieving a final rate of **38.3%**. By creating **247 new APPEARS_IN relationships**, we've improved the connectivity and research value of the Fictotum database.
 
 The systematic approach of focusing on high-priority eras (WWII, Renaissance, Cold War) and leveraging existing MediaWork nodes proved highly effective. The remaining orphans are concentrated in the Ancient era (62.7%) and 18th Century (45.2%), providing clear targets for future work.
 
 **Files Created**:
-- `/Users/gcquraishi/Documents/big-heavy/chronosgraph/ORPHAN_REDUCTION_REPORT_CHR-80.md`
+- `/Users/gcquraishi/Documents/big-heavy/fictotum/ORPHAN_REDUCTION_REPORT_CHR-80.md`
 
 **Files Updated**:
-- `/Users/gcquraishi/Documents/big-heavy/chronosgraph/CHRONOS_LOG.md`
+- `/Users/gcquraishi/Documents/big-heavy/fictotum/FICTOTUM_LOG.md`
 
 **Database Changes**:
 - 247 new APPEARS_IN relationships created

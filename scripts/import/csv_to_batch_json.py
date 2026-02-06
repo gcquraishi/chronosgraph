@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-ChronosGraph CSV to Batch JSON Converter
+Fictotum CSV to Batch JSON Converter
 
-Converts CSV files to ChronosGraph batch import JSON format.
+Converts CSV files to Fictotum batch import JSON format.
 Supports both historical figures and media works.
 
 Usage:
@@ -181,7 +181,7 @@ def create_batch_json(
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description="Convert CSV to ChronosGraph batch import JSON",
+        description="Convert CSV to Fictotum batch import JSON",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 CSV Format Requirements:
@@ -235,7 +235,7 @@ Example:
         sys.exit(1)
 
     print("=" * 80)
-    print("ChronosGraph CSV to JSON Converter")
+    print("Fictotum CSV to JSON Converter")
     print("=" * 80)
     print(f"Input CSV: {input_path}")
     print(f"Output JSON: {args.output_json}")

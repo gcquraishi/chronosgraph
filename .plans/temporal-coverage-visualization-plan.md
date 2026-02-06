@@ -5,7 +5,7 @@
 ---
 
 ## TL;DR
-Create a consumer-facing "Historical Coverage Explorer" view that visualizes ChronosGraph's temporal distribution of media works and historical figures across all time periods, showing coverage density, geographic spread, and content gaps. Think of it as a "heat map through time" showing where our database has rich content vs. sparse coverage.
+Create a consumer-facing "Historical Coverage Explorer" view that visualizes Fictotum's temporal distribution of media works and historical figures across all time periods, showing coverage density, geographic spread, and content gaps. Think of it as a "heat map through time" showing where our database has rich content vs. sparse coverage.
 
 ---
 

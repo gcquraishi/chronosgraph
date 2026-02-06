@@ -29,7 +29,7 @@ npm start
 ## Current Functionality
 
 ### Step 1: Search
-- Universal search across ChronosGraph database and Wikidata
+- Universal search across Fictotum database and Wikidata
 - Three-tier results:
   1. Existing entities (navigate directly)
   2. Wikidata entities (add with enrichment)

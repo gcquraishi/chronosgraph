@@ -1,5 +1,5 @@
 """
-ChronosGraph: Marcus Didius Falco Series - The Iron Hand of Mars (Book 4)
+Fictotum: Marcus Didius Falco Series - The Iron Hand of Mars (Book 4)
 
 Comprehensive ingestion of character relationships from Lindsey Davis's
 "The Iron Hand of Mars" (Book 4 of Marcus Didius Falco series).
@@ -437,7 +437,7 @@ def main():
 
     try:
         print("="*80)
-        print("ChronosGraph: The Iron Hand of Mars (Book 4) Character Ingestion")
+        print("Fictotum: The Iron Hand of Mars (Book 4) Character Ingestion")
         print("="*80)
 
         print("\n[1/6] Setting up schema constraints...")

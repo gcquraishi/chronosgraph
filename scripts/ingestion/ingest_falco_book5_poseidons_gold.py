@@ -1,5 +1,5 @@
 """
-ChronosGraph: Marcus Didius Falco Series - Poseidon's Gold (Book 5)
+Fictotum: Marcus Didius Falco Series - Poseidon's Gold (Book 5)
 
 Comprehensive ingestion of character relationships from Lindsey Davis's
 "Poseidon's Gold" (Book 5 of Marcus Didius Falco series).
@@ -430,7 +430,7 @@ def main():
 
     try:
         print("="*80)
-        print("ChronosGraph: Poseidon's Gold (Book 5) Character Ingestion")
+        print("Fictotum: Poseidon's Gold (Book 5) Character Ingestion")
         print("="*80)
 
         print("\n[1/6] Setting up schema constraints...")

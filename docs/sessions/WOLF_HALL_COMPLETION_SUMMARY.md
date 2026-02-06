@@ -8,9 +8,9 @@
 
 ## Executive Summary
 
-Successfully completed the Wolf Hall trilogy in the ChronosGraph database by adding 2 missing MediaWork nodes, creating/updating 8 HistoricalFigure nodes with Wikidata canonical IDs, and establishing 18 PORTRAYED_IN relationships. All character connections are now complete and historically accurate.
+Successfully completed the Wolf Hall trilogy in the Fictotum database by adding 2 missing MediaWork nodes, creating/updating 8 HistoricalFigure nodes with Wikidata canonical IDs, and establishing 18 PORTRAYED_IN relationships. All character connections are now complete and historically accurate.
 
-**Key Achievement:** Wolf Hall trilogy is now the first and only complete book series in ChronosGraph with full character coverage.
+**Key Achievement:** Wolf Hall trilogy is now the first and only complete book series in Fictotum with full character coverage.
 
 ---
 
@@ -93,7 +93,7 @@ Successfully completed the Wolf Hall trilogy in the ChronosGraph database by add
 
 ## Scripts Created for Future Use
 
-All scripts located in `/Users/gcquraishi/Documents/chronosgraph/scripts/`:
+All scripts located in `/Users/gcquraishi/Documents/big-heavy/fictotum/scripts/`:
 
 ### Quality Assurance Scripts
 - `qa/analyze_wolf_hall_gaps.py` - Identifies character coverage gaps in series
@@ -233,19 +233,19 @@ Expected Results:
 ## Session Artifacts
 
 **Files Created:** 7 Python scripts (842 lines total)
-**Files Modified:** 1 (CHRONOS_LOG.md)
+**Files Modified:** 1 (FICTOTUM_LOG.md)
 **Database Changes:** +2 MediaWorks, +5 HistoricalFigures, +18 relationships
 **Canonical ID Migrations:** 3 legacy IDs updated to Wikidata Q-IDs
 
 **All artifacts permanently stored in:**
-- `/Users/gcquraishi/Documents/chronosgraph/scripts/qa/`
-- `/Users/gcquraishi/Documents/chronosgraph/scripts/ingestion/`
+- `/Users/gcquraishi/Documents/big-heavy/fictotum/scripts/qa/`
+- `/Users/gcquraishi/Documents/big-heavy/fictotum/scripts/ingestion/`
 
 ---
 
 ## Conclusion
 
-The Wolf Hall trilogy is now complete in ChronosGraph with all major historical figures properly connected across the three books. Character appearances are historically accurate, validated against birth/death dates and the timeline of each novel. All entities use canonical Wikidata Q-IDs for proper entity resolution.
+The Wolf Hall trilogy is now complete in Fictotum with all major historical figures properly connected across the three books. Character appearances are historically accurate, validated against birth/death dates and the timeline of each novel. All entities use canonical Wikidata Q-IDs for proper entity resolution.
 
 This completion establishes a proof-of-concept for complete series coverage and demonstrates the proper methodology for future large-scale ingestion efforts.
 

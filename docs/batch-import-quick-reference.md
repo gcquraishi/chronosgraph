@@ -1,4 +1,4 @@
-# ChronosGraph Batch Import - Quick Reference
+# Fictotum Batch Import - Quick Reference
 
 ## Installation
 

@@ -1,4 +1,4 @@
-# ChronosGraph Scalability: Quick Fix Guide
+# Fictotum Scalability: Quick Fix Guide
 
 **Date:** 2026-01-18
 **Total Time Required:** ~5 hours
@@ -8,7 +8,7 @@
 
 ## TL;DR
 
-ChronosGraph will hit performance walls at 10k+ nodes due to:
+Fictotum will hit performance walls at 10k+ nodes due to:
 1. Missing indexes on frequently-queried properties
 2. Dual ID strategy causing query inefficiency
 3. No timestamp auditing for data lineage
@@ -33,7 +33,7 @@ python3 scripts/apply_scale_indexes.py
 ### Execute Now
 
 ```bash
-cd /Users/gcquraishi/Documents/chronosgraph
+cd /Users/gcquraishi/Documents/fictotum
 python3 scripts/apply_scale_indexes.py
 ```
 
@@ -442,8 +442,8 @@ DROP INDEX media_fulltext IF EXISTS;
 3. ✅ Add timestamps → Update ingestion scripts (1 hour)
 4. ✅ Bound collections → Add `[0..N]` slicing (1 hour)
 
-**Result:** ChronosGraph ready to scale to 100k+ nodes without performance degradation.
+**Result:** Fictotum ready to scale to 100k+ nodes without performance degradation.
 
 ---
 
-**For detailed analysis, see:** `/Users/gcquraishi/Documents/chronosgraph/SCALABILITY_AUDIT.md`
+**For detailed analysis, see:** `/Users/gcquraishi/Documents/big-heavy/fictotum/SCALABILITY_AUDIT.md`

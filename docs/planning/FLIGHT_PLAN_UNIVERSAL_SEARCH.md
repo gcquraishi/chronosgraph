@@ -1,4 +1,4 @@
-# ChronosGraph Gemini Flight Plan: Universal Search & Creator Ingestion
+# Fictotum Gemini Flight Plan: Universal Search & Creator Ingestion
 
 **OBJECTIVE:** Expand user interactions by implementing a "Universal Search" (Figures, Media, Series, Creators, Actors) and a "Creator-Based Ingestion" workflow.
 
@@ -85,7 +85,7 @@
 
 **MODIFICATIONS**:
 
--   **Update `CHRONOS_LOG.md`:** Append entry confirming the Actor schema update and Universal Search implementation.
+-   **Update `FICTOTUM_LOG.md`:** Append entry confirming the Actor schema update and Universal Search implementation.
 
 **VERIFICATION**:
 

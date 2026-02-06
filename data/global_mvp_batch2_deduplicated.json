@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "project": "ChronosGraph Global MVP - Batch 2 (Deduplicated)",
+    "project": "Fictotum Global MVP - Batch 2 (Deduplicated)",
     "description": "Expansion dataset with NEW figures and characters only. Duplicates removed by Wikidata Q-ID matching.",
     "deduplication_summary": {
       "media_works": "10 duplicates removed, 2 new added (The Flashman Papers, The Three Musketeers)",

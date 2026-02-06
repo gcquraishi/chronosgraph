@@ -1,4 +1,4 @@
-# ChronosGraph Q-ID Auto-Resolution Report
+# Fictotum Q-ID Auto-Resolution Report
 
 **Generated:** 2026-01-18 21:18:32
 

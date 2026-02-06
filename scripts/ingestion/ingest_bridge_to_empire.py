@@ -1,5 +1,5 @@
 """
-ChronosGraph: Bridge to Empire - Age of Augustus Expansion
+Fictotum: Bridge to Empire - Age of Augustus Expansion
 
 Expands the graph to include Early Empire era works:
 - I, Claudius (Robert Graves novel, 1934)
@@ -947,7 +947,7 @@ class BridgeToEmpireIngestor:
 def generate_empire_report(stats: dict, cross_era: list, conflicts: list) -> str:
     """Generate the Bridge to Empire report."""
     report = []
-    report.append("# ChronosGraph: Bridge to Empire Report")
+    report.append("# Fictotum: Bridge to Empire Report")
     report.append(f"\n**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
     report.append("\n## Database Statistics")
@@ -1007,7 +1007,7 @@ def main():
         raise ValueError("NEO4J_PASSWORD not found")
 
     print("=" * 70)
-    print("ChronosGraph: Bridge to Empire")
+    print("Fictotum: Bridge to Empire")
     print("=" * 70)
     print(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 

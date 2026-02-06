@@ -24,7 +24,7 @@ def fetch_wikidata_label(qid):
             'languages': 'en',
             'format': 'json'
         }
-        headers = {'User-Agent': 'ChronosGraph/1.0'}
+        headers = {'User-Agent': 'Fictotum/1.0'}
 
         response = requests.get(url, params=params, headers=headers, timeout=10)
         data = response.json()

@@ -1,4 +1,4 @@
-# ChronosGraph Research Log
+# Fictotum Research Log
 
 ## Session: 2026-02-03 - Series Works Bulk Import (CHR-79)
 
@@ -50,7 +50,7 @@ Bulk import 150-200 individual MediaWork nodes from top 10 historical fiction bo
 ## Session: 2026-02-03 - Medieval Europe Expansion (CHR-35)
 
 ### Objective
-Add 50+ significant Medieval Europe historical figures (500-1500 CE) to ChronosGraph database with 100% Wikidata Q-ID coverage and create APPEARS_IN relationships to existing MediaWork nodes.
+Add 50+ significant Medieval Europe historical figures (500-1500 CE) to Fictotum database with 100% Wikidata Q-ID coverage and create APPEARS_IN relationships to existing MediaWork nodes.
 
 ### Results
 - **Total Medieval Figures Added: 14 new HistoricalFigure nodes**
@@ -85,7 +85,7 @@ Add 50+ significant Medieval Europe historical figures (500-1500 CE) to ChronosG
 ### Notes
 - 38 additional Medieval figures were detected as duplicates (already in database from previous imports)
 - Total Medieval figures in database now: 115+ with Q-IDs
-- ChronosGraph already had extensive Medieval coverage from earlier ingestion phases
+- Fictotum already had extensive Medieval coverage from earlier ingestion phases
 - Focus on adding notable gaps: Norman conquest, Investiture Controversy, Crusader states, Wars of the Roses figures
 
 ---
@@ -309,14 +309,14 @@ Created APPEARS_IN relationships:
 - Full compliance with Entity Resolution Protocol (Wikidata-first, CREATED_BY provenance)
 
 ### Comprehensive Report
-See `/Users/gcquraishi/Documents/big-heavy/chronosgraph/WWII_FIGURES_IMPORT_REPORT.md` for complete breakdown by category, statistics, and recommendations.
+See `/Users/gcquraishi/Documents/big-heavy/fictotum/WWII_FIGURES_IMPORT_REPORT.md` for complete breakdown by category, statistics, and recommendations.
 
 ---
 
 ## Session: 2026-02-03 - Series Expansion Mission (Phase 1: Capture Existing Series)
 
 ### Objective
-Transform ChronosGraph series coverage from minimal (1 series) to comprehensive (200+ series). Phase 1 priority: Capture works already in database that are part of series and link them properly.
+Transform Fictotum series coverage from minimal (1 series) to comprehensive (200+ series). Phase 1 priority: Capture works already in database that are part of series and link them properly.
 
 ### Series Created (Progress: 3 complete)
 
@@ -789,7 +789,7 @@ Successfully executed autonomous database expansion mission targeting top 30 cov
 ## Session: 2026-02-03 - Database Expansion: Underrepresented Periods & Regions (Phase 1)
 
 ### Objective
-Significantly expand ChronosGraph database by identifying and populating underrepresented historical periods and geographic regions. Target: Add 50-100 new HistoricalFigures and 30-50 MediaWorks across multiple time periods to address database gaps.
+Significantly expand Fictotum database by identifying and populating underrepresented historical periods and geographic regions. Target: Add 50-100 new HistoricalFigures and 30-50 MediaWorks across multiple time periods to address database gaps.
 
 ### Phase 1 Analysis: Gap Identification
 Initial database state: 785 figures, 712 media works.
@@ -1563,7 +1563,7 @@ Founding Fathers (Washington, Jefferson, Franklin, Hamilton, Madison, Adams), Mi
 
 ---
 
-# ChronosGraph Research Log
+# Fictotum Research Log
 
 ## Session: 2026-02-01 - American Revolution & Founding Fathers Cluster (CHR-37)
 
@@ -1768,7 +1768,7 @@ Quality: 100% Wikidata-First, 100% provenance coverage, zero duplicates created.
 ## Session: 2026-02-03 - WWII Content Cluster Expansion (CHR-34)
 
 ### Objective
-Execute comprehensive WWII content cluster expansion to establish ChronosGraph as the definitive resource for World War II historical networks. Add 60+ WWII figures and 30+ media works across all theaters, nationalities, and roles to transform existing foundation (40 APPEARS_IN relationships) into comprehensive coverage spanning military leaders, political figures, Holocaust survivors, resistance fighters, and scientists.
+Execute comprehensive WWII content cluster expansion to establish Fictotum as the definitive resource for World War II historical networks. Add 60+ WWII figures and 30+ media works across all theaters, nationalities, and roles to transform existing foundation (40 APPEARS_IN relationships) into comprehensive coverage spanning military leaders, political figures, Holocaust survivors, resistance fighters, and scientists.
 
 ### Cluster Statistics (Final)
 - **Historical Figures Added**: 40 new WWII figures with Wikidata Q-IDs
@@ -1953,7 +1953,7 @@ Applied systematic sentiment classification:
 ### Expected User Impact
 
 **Network Density Achievement**:
-- WWII becomes most explored period on ChronosGraph (120+ total relationships)
+- WWII becomes most explored period on Fictotum (120+ total relationships)
 - Multiple entry points: Churchill → Band of Brothers → Eisenhower → D-Day films
 - Rich context for understanding WWII through media lens across all nationalities
 
@@ -1967,7 +1967,7 @@ Applied systematic sentiment classification:
 
 Successfully executed CHR-34 WWII content cluster expansion mission adding 40 high-quality historical figures and 28 verified media works. Achieved comprehensive coverage spanning Allied/Axis military leaders, political figures, Holocaust survivors, resistance fighters, and scientists. Created 80+ APPEARS_IN relationships with accurate sentiment tags based on individual research of each portrayal. Maintained 100% compliance with Wikidata-First entity resolution protocol and provenance tracking requirements.
 
-**Key Achievement**: Transformed ChronosGraph WWII coverage from foundational (40 relationships) to comprehensive (120+ total relationships) spanning all theaters, nationalities, and perspectives. Database now serves as definitive WWII historical network resource.
+**Key Achievement**: Transformed Fictotum WWII coverage from foundational (40 relationships) to comprehensive (120+ total relationships) spanning all theaters, nationalities, and perspectives. Database now serves as definitive WWII historical network resource.
 
 ---
 

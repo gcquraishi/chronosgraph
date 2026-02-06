@@ -11,7 +11,7 @@
 ## Visual Design System
 
 ### Color Palette
-Following ChronosGraph's soft, inviting aesthetic:
+Following Fictotum's soft, inviting aesthetic:
 
 | Element | Color | Hex | Usage |
 |---------|-------|-----|-------|
@@ -85,7 +85,7 @@ Following ChronosGraph's soft, inviting aesthetic:
 
 ### 2. Search Results
 
-#### Section A: Already in ChronosGraph
+#### Section A: Already in Fictotum
 - **Icon**: Database (brand-primary)
 - **Card Hover**: Border changes to brand-accent
 - **Interaction**: Click navigates to entity page
@@ -335,7 +335,7 @@ Search → Settings → Confirm → Creating
 
 ### API Integration (Work Package 2D)
 **Placeholder Endpoints**:
-- `/api/search/unified` (ChronosGraph search)
+- `/api/search/unified` (Fictotum search)
 - `/api/wikidata/search` (Wikidata lookup)
 - `/api/enrichment/media` (AI suggestions)
 - `/api/figures/create` | `/api/media/create`

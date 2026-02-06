@@ -288,7 +288,7 @@ export async function POST(request: NextRequest) {
       // Ensure Web UI Agent exists for provenance tracking
       MERGE (agent:Agent {agent_id: "web-ui-generic"})
       ON CREATE SET
-        agent.name = "ChronosGraph Web UI",
+        agent.name = "Fictotum Web UI",
         agent.type = "human_user",
         agent.created_at = datetime(),
         agent.metadata = '{"interface":"web_ui","description":"Generic agent for web UI contributions"}'

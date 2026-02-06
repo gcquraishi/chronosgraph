@@ -2,7 +2,7 @@
 """
 Query Neo4j to find Henry VIII node for CHR-6 landing page implementation.
 
-This script searches for Henry VIII in the ChronosGraph database and retrieves:
+This script searches for Henry VIII in the Fictotum database and retrieves:
 - canonical_id for use in landing page
 - Node properties (name, historicity_status, era)
 - Number of media connections (APPEARS_IN relationships)

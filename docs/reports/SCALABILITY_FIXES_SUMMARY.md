@@ -1,4 +1,4 @@
-# ChronosGraph Scalability Fixes - Implementation Summary
+# Fictotum Scalability Fixes - Implementation Summary
 
 **Date:** 2026-01-18
 **Session:** Scale-proofing review and implementation
@@ -6,7 +6,7 @@
 
 ## Overview
 
-Implemented all critical scalability fixes identified in the database audit. These changes future-proof ChronosGraph for scaling from 270 → 10,000+ nodes without performance degradation.
+Implemented all critical scalability fixes identified in the database audit. These changes future-proof Fictotum for scaling from 270 → 10,000+ nodes without performance degradation.
 
 ---
 

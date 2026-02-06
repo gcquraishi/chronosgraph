@@ -1,4 +1,4 @@
-# ChronosGraph: Bridge to Empire Report
+# Fictotum: Bridge to Empire Report
 
 **Generated:** 2026-01-15 06:38:20
 

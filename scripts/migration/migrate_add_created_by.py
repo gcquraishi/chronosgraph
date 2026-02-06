@@ -1,5 +1,5 @@
 """
-ChronosGraph: Retroactive `CREATED_BY` Relationship Migration
+Fictotum: Retroactive `CREATED_BY` Relationship Migration
 """
 import os
 import json
@@ -9,7 +9,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from neo4j import GraphDatabase
 
-# A mapping of AGENT names to the data files they created, based on CHRONOS_LOG.md
+# A mapping of AGENT names to the data files they created, based on FICTOTUM_LOG.md
 # We are only concerned with ingestion actions that created new nodes.
 AGENT_TO_FILES_MAP = {
     "Claude Code (Sonnet 4.5)": [
@@ -173,7 +173,7 @@ def main():
 
     migrator = CreatedByMigration(uri, user, pwd)
     try:
-        print(f"--- ChronosGraph CREATED_BY Migration: {datetime.now()} ---")
+        print(f"--- Fictotum CREATED_BY Migration: {datetime.now()} ---")
         migrator.build_agent_entity_map()
         migrator.run_migration()
     finally:

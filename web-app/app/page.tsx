@@ -99,7 +99,7 @@ export default function LandingPage() {
             Historical Network Analysis // Archive_001
           </div>
           <h1 className="text-4xl md:text-6xl font-bold text-stone-900 tracking-tighter uppercase text-center">
-            ChronosGraph
+            Fictotum
           </h1>
           <p className="text-center text-stone-600 mt-2 text-sm">
             Explore how history judges its figures through media portrayals
@@ -253,7 +253,7 @@ export default function LandingPage() {
                     </h3>
                   </div>
                   <p className="text-sm text-stone-600 leading-relaxed">
-                    Visualize ChronosGraph's temporal distribution across all historical periods. Explore coverage density, identify gaps, and discover content-rich eras.
+                    Visualize Fictotum's temporal distribution across all historical periods. Explore coverage density, identify gaps, and discover content-rich eras.
                   </p>
                   <div className="mt-4 text-xs font-black text-amber-600 uppercase tracking-wider group-hover:text-amber-700">
                     Explore Timeline →

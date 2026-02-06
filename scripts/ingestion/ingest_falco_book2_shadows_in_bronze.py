@@ -1,5 +1,5 @@
 """
-ChronosGraph: Marcus Didius Falco Series - Shadows in Bronze (Book 2)
+Fictotum: Marcus Didius Falco Series - Shadows in Bronze (Book 2)
 
 Comprehensive ingestion of character relationships from Lindsey Davis's
 "Shadows in Bronze" (Book 2 of Marcus Didius Falco series).
@@ -423,7 +423,7 @@ def main():
 
     try:
         print("="*80)
-        print("ChronosGraph: Shadows in Bronze (Book 2) Character Ingestion")
+        print("Fictotum: Shadows in Bronze (Book 2) Character Ingestion")
         print("="*80)
 
         # Setup schema

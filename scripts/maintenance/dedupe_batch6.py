@@ -68,7 +68,7 @@ def main():
     driver = GraphDatabase.driver(uri, auth=(username, password))
 
     print("=" * 70)
-    print("ChronosGraph Batch 6 Deduplication")
+    print("Fictotum Batch 6 Deduplication")
     print("=" * 70)
 
     # Get existing Wikidata IDs
@@ -125,7 +125,7 @@ def main():
     # Create deduplicated dataset
     deduplicated = {
         "metadata": {
-            "project": "ChronosGraph Global MVP - Batch 6 (Deduplicated)",
+            "project": "Fictotum Global MVP - Batch 6 (Deduplicated)",
             "description": "Expansion dataset with NEW figures, media, and characters only. Duplicates removed by Wikidata Q-ID matching.",
             "deduplication_summary": {
                 "media_works": f"{len(dup_media)} duplicates removed, {len(new_media)} new added",

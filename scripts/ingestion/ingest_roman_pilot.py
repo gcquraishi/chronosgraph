@@ -1,5 +1,5 @@
 """
-ChronosGraph Roman Pilot Ingestor
+Fictotum Roman Pilot Ingestor
 
 Populates Neo4j with data from:
 - HBO Rome (TV Series)
@@ -340,7 +340,7 @@ PORTRAYALS = [
 ]
 
 
-class ChronosGraphIngestor:
+class FictotumIngestor:
     """Handles ingestion of historical fiction data into Neo4j."""
 
     def __init__(self, uri: str, username: str, password: str):
@@ -474,11 +474,11 @@ def main():
         raise ValueError("NEO4J_PASSWORD not found in environment variables")
 
     print("=" * 60)
-    print("ChronosGraph Roman Pilot Ingestor")
+    print("Fictotum Roman Pilot Ingestor")
     print("=" * 60)
     print(f"Connecting to: {uri}")
 
-    ingestor = ChronosGraphIngestor(uri, username, password)
+    ingestor = FictotumIngestor(uri, username, password)
 
     try:
         # Setup schema with constraints

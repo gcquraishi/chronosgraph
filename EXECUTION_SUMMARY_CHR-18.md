@@ -201,5 +201,5 @@ The Entity Resolution Enhancement (CHR-18) has been **successfully implemented, 
 
 ---
 
-**Signed**: Claude (ChronosGraph Co-CEO)
+**Signed**: Claude (Fictotum Co-CEO)
 **Date**: January 23, 2026

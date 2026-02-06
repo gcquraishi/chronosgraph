@@ -85,7 +85,7 @@ export default function IlluminatedManuscriptPage() {
         </article>
 
         <footer className="mt-32 pt-8 border-t border-[#D4AF37]/20 text-center text-[10px] uppercase tracking-[0.3em] font-bold opacity-40">
-          Manuscript Digitized via ChronosGraph // MCMXC - MMXXVI
+          Manuscript Digitized via Fictotum // MCMXC - MMXXVI
         </footer>
       </main>
     </div>

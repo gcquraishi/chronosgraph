@@ -1,6 +1,6 @@
-# ChronosGraph Scripts
+# Fictotum Scripts
 
-Python scripts for managing the ChronosGraph Neo4j database.
+Python scripts for managing the Fictotum Neo4j database.
 
 ## Directory Structure
 

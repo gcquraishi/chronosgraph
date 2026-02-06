@@ -1,5 +1,5 @@
 """
-ChronosGraph Pathfinder Module
+Fictotum Pathfinder Module
 
 Implements 'Six Degrees of Historiography' using Neo4j shortest path queries.
 Finds connections between historical figures through:
@@ -59,7 +59,7 @@ class HistoriographicPath:
     total_bridges: int
 
 
-class ChronosGraphPathfinder:
+class FictotumPathfinder:
     """Neo4j pathfinding for Six Degrees of Historiography."""
 
     def __init__(self, uri: str, username: str, password: str):
@@ -395,12 +395,12 @@ def main():
         raise ValueError("NEO4J_PASSWORD not found in environment variables")
 
     print("=" * 70)
-    print("ChronosGraph Pathfinder - Six Degrees of Historiography")
+    print("Fictotum Pathfinder - Six Degrees of Historiography")
     print("=" * 70)
     print(f"Connected to: Neo4j Aura (c78564a4)")
     print()
 
-    pathfinder = ChronosGraphPathfinder(uri, username, password)
+    pathfinder = FictotumPathfinder(uri, username, password)
 
     try:
         # Example: Find path between Julius Caesar and Cleopatra

@@ -7,7 +7,7 @@ Purpose:
   them as provisional identifiers that should be enriched with Wikidata Q-IDs.
 
 Background:
-  As part of Priority 1 (Entity Resolution Enhancement), ChronosGraph now uses
+  As part of Priority 1 (Entity Resolution Enhancement), Fictotum now uses
   Wikidata Q-IDs as canonical identifiers when available. Existing figures that
   were created before this change have slug-only canonical_ids (e.g., "napoleon-bonaparte").
 
@@ -23,7 +23,7 @@ Usage:
   python3 prefix_provisional_canonical_ids.py --dry-run  # Preview changes
   python3 prefix_provisional_canonical_ids.py            # Apply migration
 
-Author: Claude (ChronosGraph Co-CEO)
+Author: Claude (Fictotum Co-CEO)
 Date: 2026-01-22
 """
 
@@ -118,7 +118,7 @@ def main():
     args = parser.parse_args()
 
     print("=" * 80)
-    print("ChronosGraph Migration: Prefix Provisional Canonical IDs")
+    print("Fictotum Migration: Prefix Provisional Canonical IDs")
     print("=" * 80)
     print()
 

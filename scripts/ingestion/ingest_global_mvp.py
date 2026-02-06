@@ -1,5 +1,5 @@
 """
-ChronosGraph: Global MVP Seed Ingestion
+Fictotum: Global MVP Seed Ingestion
 
 Ingests the 10-era Global MVP dataset covering high-collision historical periods.
 - 10 Media Works (Wikidata-mapped)
@@ -283,7 +283,7 @@ def main():
         data = json.load(f)
 
     print("=" * 70)
-    print("ChronosGraph: Global MVP Seed Ingestion")
+    print("Fictotum: Global MVP Seed Ingestion")
     print("=" * 70)
     print(f"Dataset: {data['metadata']['project']} v{data['metadata']['version']}")
     print(f"Description: {data['metadata']['description']}")

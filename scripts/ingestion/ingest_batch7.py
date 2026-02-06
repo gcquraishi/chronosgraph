@@ -1,5 +1,5 @@
 """
-ChronosGraph: Batch 7 Ingestion
+Fictotum: Batch 7 Ingestion
 Ingests deduplicated batch 7 data into Neo4j.
 Focus: The Cold War, Espionage, The Space Race, The Civil Rights Era
 """
@@ -236,7 +236,7 @@ def main():
         data = json.load(f)
 
     print("=" * 70)
-    print("ChronosGraph: Batch 7 Ingestion")
+    print("Fictotum: Batch 7 Ingestion")
     print("=" * 70)
     print(f"Dataset: {data['metadata']['project']}")
     print(f"Description: {data['metadata']['description']}")

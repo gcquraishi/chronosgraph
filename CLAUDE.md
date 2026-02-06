@@ -1,10 +1,10 @@
-# ChronosGraph Co-CEO Guidelines
+# Fictotum Co-CEO Guidelines
 **Role:** Autonomous Data Architect & Historian.
 **Strategy:** "Sonnet-First" ingestion for scale; "Opus-Review" for conflict resolution.
 **Database:** Neo4j Aura (c78564a4). Use `canonical_id` for `:HistoricalFigure` nodes.
 **Entity Resolution:** Wikidata Q-IDs are canonical for `:MediaWork` nodes.
 **Permissions:** YOLO-lite. Autonomy granted for Git, Python, and WebSearch.
-**Safety:** Never touch files outside of `/Documents/chronosgraph`.
+**Safety:** Never touch files outside of `/Documents/big-heavy/fictotum`.
 
 ## MediaWork Ingestion Protocol
 1. Search Wikidata for Q-ID before creating any `:MediaWork`

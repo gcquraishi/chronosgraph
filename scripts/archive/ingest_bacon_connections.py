@@ -1,5 +1,5 @@
 """
-ChronosGraph: Ingestion Engine for Bacon Connections
+Fictotum: Ingestion Engine for Bacon Connections
 Connects Kevin Bacon (actor), Francis Bacon (painter), and Francis Bacon (philosopher)
 through multiple film and documentary pathways.
 """

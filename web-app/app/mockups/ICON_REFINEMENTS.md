@@ -1,5 +1,5 @@
 # Icon Refinement Documentation
-**ChronosGraph Wes Anderson Design System v2**
+**Fictotum Wes Anderson Design System v2**
 
 ## Executive Summary
 
@@ -171,7 +171,7 @@ While the original Wes Anderson v2 design was aesthetically strong, user feedbac
 **Color Palette**: Dark brown cabinet (#5C4A3C), blue screen (#5B9AA9), sage green glare (#A8C9A8), brown knobs (#8B6F61)
 **Stroke Weights**: 2.5px (frame), 2px (screen/antennas), 1.5px (details)
 
-**Design Rationale**: Rabbit ear antennas are the key signifier of "old TV" vs modern flatscreen. This fits ChronosGraph's historical focus perfectly.
+**Design Rationale**: Rabbit ear antennas are the key signifier of "old TV" vs modern flatscreen. This fits Fictotum's historical focus perfectly.
 
 ---
 
@@ -257,7 +257,7 @@ Despite making icons more literal, we preserved core Wes Anderson aesthetic prin
 ### 4. Vintage Feel
 - Icons reference 1960s-70s design aesthetics
 - Period-appropriate technology (vintage cameras, retro TVs, old film reels)
-- Aligns with ChronosGraph's historical focus
+- Aligns with Fictotum's historical focus
 
 ### 5. Scalability
 - All icons tested at 40px, 60px, 80px, and 100px
@@ -399,11 +399,11 @@ These refinements successfully balance **literal recognition** with **aesthetic 
 
 The key insight: **Iconic visual metaphors are more powerful than abstract representations**. By embracing universally recognized symbols (comedy/tragedy masks, rabbit ear antennas, film reels with spokes), we achieved both clarity and charm.
 
-The ChronosGraph icon system is now production-ready, accessible, and delightful.
+The Fictotum icon system is now production-ready, accessible, and delightful.
 
 ---
 
 **Document Version**: 1.0
 **Last Updated**: 2026-02-04
-**Author**: ChronosGraph Design Team
+**Author**: Fictotum Design Team
 **Status**: Final - Ready for Implementation

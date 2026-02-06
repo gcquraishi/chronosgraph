@@ -54,9 +54,9 @@ export default function Navbar() {
           {/* Logo/Brand */}
           <Link href="/" className="flex items-center gap-2 text-lg font-black text-stone-900 hover:text-amber-600 transition-colors uppercase tracking-tight">
             <Network className="w-5 h-5" />
-            <span>ChronosGraph</span>
+            <span>Fictotum</span>
             <span className="text-stone-400 font-bold">//</span>
-            <span className="text-xs text-amber-700 tracking-wider">Evidence Archive</span>
+            <span className="text-xs text-amber-700 tracking-wider">The Archive</span>
           </Link>
 
           {/* Desktop Navigation */}

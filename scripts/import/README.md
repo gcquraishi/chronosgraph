@@ -1,4 +1,4 @@
-# ChronosGraph Batch Import Tools
+# Fictotum Batch Import Tools
 
 This directory contains tools for importing large batches of historical figures and media works from structured data files.
 
@@ -34,7 +34,7 @@ python3 batch_import.py data/batch.json --execute --batch-size 100
 **Full Documentation**: See `/docs/batch-import-guide.md`
 
 ### 2. `validate_batch_json.py` - Schema Validator
-**Purpose**: Validate JSON files against ChronosGraph batch import schema before importing.
+**Purpose**: Validate JSON files against Fictotum batch import schema before importing.
 
 **Usage**:
 ```bash
@@ -54,7 +54,7 @@ python3 validate_batch_json.py data/my_batch.json
 - Logical consistency (e.g., death_year >= birth_year)
 
 ### 3. `csv_to_batch_json.py` - CSV Converter
-**Purpose**: Convert CSV files to ChronosGraph batch import JSON format.
+**Purpose**: Convert CSV files to Fictotum batch import JSON format.
 
 **Usage**:
 ```bash
@@ -434,5 +434,5 @@ For issues or questions:
 
 - **Full Guide**: `/docs/batch-import-guide.md` - Comprehensive documentation
 - **JSON Schema**: `/data/batch_import_schema.json` - Official schema definition
-- **Project Schema**: `/scripts/schema.py` - ChronosGraph data model
+- **Project Schema**: `/scripts/schema.py` - Fictotum data model
 - **Entity Resolution**: `/CLAUDE.md` - Entity resolution protocols

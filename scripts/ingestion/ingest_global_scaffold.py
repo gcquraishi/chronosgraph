@@ -1,5 +1,5 @@
 """
-ChronosGraph: Global Scaffold Ingestion
+Fictotum: Global Scaffold Ingestion
 
 Modular batch ingestion system for HistoricalFigures, MediaWorks, and FictionalCharacters.
 Implements:
@@ -366,7 +366,7 @@ class GlobalScaffoldIngestor:
 def generate_ingestion_report(stats: dict) -> str:
     """Generate a summary report of ingestion results."""
     report = []
-    report.append("# ChronosGraph Global Scaffold Ingestion Report")
+    report.append("# Fictotum Global Scaffold Ingestion Report")
     report.append(f"\n**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
     report.append("\n## Database Statistics After Ingestion")
@@ -416,7 +416,7 @@ def main():
         raise ValueError("NEO4J_PASSWORD not found in environment variables")
 
     print("=" * 70)
-    print("ChronosGraph: Global Scaffold Ingestion")
+    print("Fictotum: Global Scaffold Ingestion")
     print("=" * 70)
     print(f"Connecting to: {uri}")
     print(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")

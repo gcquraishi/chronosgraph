@@ -1,8 +1,8 @@
-# ChronosGraph Icon Design Brief for Gemini
+# Fictotum Icon Design Brief for Gemini
 
 ## Project Overview
 
-You are creating a custom icon library for **ChronosGraph**, a historical data visualization platform. The icons must embody a **Wes Anderson aesthetic**: geometric, symmetrical, vintage (1960s-70s), whimsical yet precise.
+You are creating a custom icon library for **Fictotum**, a historical data visualization platform. The icons must embody a **Wes Anderson aesthetic**: geometric, symmetrical, vintage (1960s-70s), whimsical yet precise.
 
 ---
 

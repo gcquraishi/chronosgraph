@@ -1,4 +1,4 @@
-# ChronosGraph Status Board
+# Fictotum Status Board
 *Last updated: 2026-02-02 17:45 UTC*
 
 ## Currently Active
@@ -31,7 +31,7 @@
 ## Recent Session Handoffs
 
 ### Phase 4.3 Performance Optimization COMPLETE: 2026-02-02 17:45 UTC
-**Did:** Completed comprehensive performance optimization of ChronosGraph backend (Phase A: Duplicate Cleanup + Phase B: Performance Optimization). Achieved 3,487x speedup on duplicate detection through first-letter grouping + LRU caching.
+**Did:** Completed comprehensive performance optimization of Fictotum backend (Phase A: Duplicate Cleanup + Phase B: Performance Optimization). Achieved 3,487x speedup on duplicate detection through first-letter grouping + LRU caching.
 
 **Phase A: Duplicate Cleanup (Session 4.2)**
 - Analyzed 50 detected duplicate pairs via tier-based strategy
@@ -281,7 +281,7 @@
   - Mobile responsive hamburger menu
   - Zero TypeScript errors in navbar code
 
-**Architecture Note:** Contribute is a single link (not dropdown) because ChronosGraph uses a unified contribution hub at `/contribute` (implemented 2026-01-22), replacing the fragmented routes originally planned in the flight plan.
+**Architecture Note:** Contribute is a single link (not dropdown) because Fictotum uses a unified contribution hub at `/contribute` (implemented 2026-01-22), replacing the fragmented routes originally planned in the flight plan.
 
 **Updated:**
 - `PRODUCT_ROADMAP.md` - Marked section 1.1 complete (100% of sessions)
@@ -425,4 +425,4 @@
 ### Coordination:
 - Claim resources in "Active Claims" to prevent conflicts
 - Check handoff notes to understand what just completed
-- Major milestones still go in CHRONOS_LOG.md
+- Major milestones still go in FICTOTUM_LOG.md

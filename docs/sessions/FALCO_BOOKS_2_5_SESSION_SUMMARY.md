@@ -145,13 +145,13 @@ The database is now optimally positioned for Books 6-20 ingestion:
 
 ## File Locations (Absolute Paths)
 
-- Research: `/Users/gcquraishi/Documents/chronosgraph/FALCO_BOOKS_2_5_CHARACTER_RESEARCH.md`
-- Book 2 Script: `/Users/gcquraishi/Documents/chronosgraph/scripts/ingestion/ingest_falco_book2_shadows_in_bronze.py`
-- Book 3 Script: `/Users/gcquraishi/Documents/chronosgraph/scripts/ingestion/ingest_falco_book3_venus_in_copper.py`
-- Book 4 Script: `/Users/gcquraishi/Documents/chronosgraph/scripts/ingestion/ingest_falco_book4_iron_hand_mars.py`
-- Book 5 Script: `/Users/gcquraishi/Documents/chronosgraph/scripts/ingestion/ingest_falco_book5_poseidons_gold.py`
-- Master Script: `/Users/gcquraishi/Documents/chronosgraph/scripts/ingestion/ingest_falco_series_books_2_5.py`
-- Verify Script: `/Users/gcquraishi/Documents/chronosgraph/scripts/verify_falco_books_2_5.py`
+- Research: `/Users/gcquraishi/Documents/big-heavy/fictotum/FALCO_BOOKS_2_5_CHARACTER_RESEARCH.md`
+- Book 2 Script: `/Users/gcquraishi/Documents/big-heavy/fictotum/scripts/ingestion/ingest_falco_book2_shadows_in_bronze.py`
+- Book 3 Script: `/Users/gcquraishi/Documents/big-heavy/fictotum/scripts/ingestion/ingest_falco_book3_venus_in_copper.py`
+- Book 4 Script: `/Users/gcquraishi/Documents/big-heavy/fictotum/scripts/ingestion/ingest_falco_book4_iron_hand_mars.py`
+- Book 5 Script: `/Users/gcquraishi/Documents/big-heavy/fictotum/scripts/ingestion/ingest_falco_book5_poseidons_gold.py`
+- Master Script: `/Users/gcquraishi/Documents/big-heavy/fictotum/scripts/ingestion/ingest_falco_series_books_2_5.py`
+- Verify Script: `/Users/gcquraishi/Documents/big-heavy/fictotum/scripts/verify_falco_books_2_5.py`
 
 ## Next Steps for Books 6-20
 
@@ -161,7 +161,7 @@ To continue the series ingestion:
 2. Identify 6-8 new characters per book
 3. Create targeted ingestion script following established pattern
 4. Execute ingestion script and verify results
-5. Update CHRONOS_LOG with progress
+5. Update FICTOTUM_LOG with progress
 
 Expected final state (all 20 books):
 - 50+ unique characters
@@ -187,7 +187,7 @@ Expected final state (all 20 books):
 
 ## Conclusion
 
-The Marcus Didius Falco series Books 2-5 are now fully integrated into the ChronosGraph database, establishing a robust foundation for the remaining 15 books. The ingestion methodology has proven scalable, reliable, and maintainable. All 36 characters are properly connected with meaningful relationships that reflect both the narrative of each book and the broader historical context of Roman Empire (AD 70-96).
+The Marcus Didius Falco series Books 2-5 are now fully integrated into the Fictotum database, establishing a robust foundation for the remaining 15 books. The ingestion methodology has proven scalable, reliable, and maintainable. All 36 characters are properly connected with meaningful relationships that reflect both the narrative of each book and the broader historical context of Roman Empire (AD 70-96).
 
 The database is production-ready for Books 6-20 expansion using the established patterns and scripts.
 

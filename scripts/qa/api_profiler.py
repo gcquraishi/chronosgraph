@@ -126,7 +126,7 @@ class APIProfiler:
     def run_suite(self):
         """Run the full profiling suite"""
         print("=" * 80)
-        print("ChronosGraph API Performance Profiler")
+        print("Fictotum API Performance Profiler")
         print("=" * 80)
         print(f"Base URL: {self.base_url}")
         print(f"Time: {time.strftime('%Y-%m-%d %H:%M:%S')}")

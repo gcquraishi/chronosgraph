@@ -5,7 +5,7 @@
 ---
 
 ## TL;DR
-Upgrade ChronosGraph's entity resolution system by adopting Wikidata-first canonical identifiers for HistoricalFigure nodes (Priority 1) and implementing phonetic name matching for better duplicate detection (Priority 2). This prevents ID collision risks and improves matching accuracy as the database scales.
+Upgrade Fictotum's entity resolution system by adopting Wikidata-first canonical identifiers for HistoricalFigure nodes (Priority 1) and implementing phonetic name matching for better duplicate detection (Priority 2). This prevents ID collision risks and improves matching accuracy as the database scales.
 
 ---
 

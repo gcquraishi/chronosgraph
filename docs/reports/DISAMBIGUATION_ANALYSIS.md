@@ -1,16 +1,16 @@
 ---
-title: ChronosGraph Disambiguation Analysis & Recommendations
+title: Fictotum Disambiguation Analysis & Recommendations
 author: Claude Code (Data Architect)
 date: 2026-01-18
 database: Neo4j Aura (instance c78564a4)
 status: COMPREHENSIVE AUDIT COMPLETE
 ---
 
-# ChronosGraph Disambiguation Analysis
+# Fictotum Disambiguation Analysis
 
 ## Executive Summary
 
-This document presents a comprehensive analysis of entity disambiguation within the ChronosGraph Neo4j database, identifying critical data integrity issues and providing actionable remediation strategies.
+This document presents a comprehensive analysis of entity disambiguation within the Fictotum Neo4j database, identifying critical data integrity issues and providing actionable remediation strategies.
 
 **Key Findings:**
 - ✅ **MediaWork Disambiguation:** EXCELLENT - 100% compliance with wikidata_id protocol
@@ -437,7 +437,7 @@ for figure in batch_data["historical_figures"]:
 ```bash
 # Add to CI/CD pipeline or cron job
 #!/bin/bash
-cd /path/to/chronosgraph
+cd /path/to/fictotum
 python3 scripts/qa/run_disambiguation_audit.py
 if grep -q "CRITICAL" disambiguation_audit_report.md; then
     echo "⚠️ Critical issues found! Manual intervention required."
@@ -632,7 +632,7 @@ fi
 
 ## 10. Conclusion
 
-The ChronosGraph database demonstrates **excellent MediaWork disambiguation** (100% Q-ID compliance) but requires attention to **HistoricalFigure entity resolution**. The identified issues are addressable through a combination of automated merges, manual review, and enhanced ingestion protocols.
+The Fictotum database demonstrates **excellent MediaWork disambiguation** (100% Q-ID compliance) but requires attention to **HistoricalFigure entity resolution**. The identified issues are addressable through a combination of automated merges, manual review, and enhanced ingestion protocols.
 
 **Immediate Next Steps:**
 1. Execute merge script to resolve 11 confirmed duplicates
@@ -645,7 +645,7 @@ The ChronosGraph database demonstrates **excellent MediaWork disambiguation** (1
 - Establish weekly disambiguation audits as part of data governance
 
 **Overall Assessment:**
-ChronosGraph's entity resolution foundation is **solid and repairable**. With the recommended improvements, the database can achieve >95% Q-ID coverage and maintain zero duplicates indefinitely.
+Fictotum's entity resolution foundation is **solid and repairable**. With the recommended improvements, the database can achieve >95% Q-ID coverage and maintain zero duplicates indefinitely.
 
 ---
 

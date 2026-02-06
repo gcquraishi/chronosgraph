@@ -17,7 +17,7 @@ def generate_html():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChronosGraph - Wes Anderson Icons</title>
+    <title>Fictotum - Wes Anderson Icons</title>
     <style>
         body {
             font-family: 'Courier New', Courier, monospace;
@@ -77,7 +77,7 @@ def generate_html():
     </style>
 </head>
 <body>
-    <h1>ChronosGraph Icon Library</h1>
+    <h1>Fictotum Icon Library</h1>
     <p>Wes Anderson Collection • February 2026</p>
     <div class="grid">
 """

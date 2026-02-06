@@ -1,15 +1,15 @@
 ---
-title: ChronosGraph Disambiguation Audit - Executive Summary
+title: Fictotum Disambiguation Audit - Executive Summary
 date: 2026-01-18
 author: Claude Code (Data Architect)
 database: Neo4j Aura (instance c78564a4)
 ---
 
-# ChronosGraph Disambiguation Audit - Executive Summary
+# Fictotum Disambiguation Audit - Executive Summary
 
 ## Overview
 
-A comprehensive disambiguation audit has been completed for the ChronosGraph Neo4j database. This document summarizes findings, provides actionable remediation steps, and introduces new tools to maintain data integrity.
+A comprehensive disambiguation audit has been completed for the Fictotum Neo4j database. This document summarizes findings, provides actionable remediation steps, and introduces new tools to maintain data integrity.
 
 ## Audit Results at a Glance
 
@@ -287,7 +287,7 @@ Process:
 
 3. **Documentation**
    - Archive audit reports in git
-   - Update CHRONOS_LOG.md with findings
+   - Update FICTOTUM_LOG.md with findings
 
 ### Strategic Improvements
 
@@ -327,13 +327,13 @@ Process:
 
 ## Conclusion
 
-The ChronosGraph database demonstrates **strong MediaWork disambiguation** but requires attention to **HistoricalFigure entity resolution**. All identified issues are addressable through:
+The Fictotum database demonstrates **strong MediaWork disambiguation** but requires attention to **HistoricalFigure entity resolution**. All identified issues are addressable through:
 
 1. **Immediate automated merges** (11 duplicates)
 2. **Short-term Q-ID resolution** (89 missing Q-IDs)
 3. **Long-term process improvements** (validation, protocols, audits)
 
-**Overall Assessment:** Database is **healthy and repairable**. With recommended improvements, ChronosGraph can achieve >95% Q-ID coverage and maintain zero duplicates indefinitely.
+**Overall Assessment:** Database is **healthy and repairable**. With recommended improvements, Fictotum can achieve >95% Q-ID coverage and maintain zero duplicates indefinitely.
 
 ---
 

@@ -197,7 +197,7 @@ export default function ContributePage() {
     setWizardState(prev => ({ ...prev, error: null }));
 
     try {
-      // Parallel search: ChronosGraph DB + Wikidata (both works and figures)
+      // Parallel search: Fictotum DB + Wikidata (both works and figures)
       const [dbResponse, wikidataWorkResponse, wikidataFigureResponse] = await Promise.all([
         fetch(`/api/search/universal?q=${encodeURIComponent(query)}`),
         fetch('/api/wikidata/enrich', {
@@ -419,7 +419,7 @@ export default function ContributePage() {
       // Example: "A Place of Greater Safety" was published in 1992 but set in 1789-1799
       const settingYear = wikidataData.enrichedData?.setting_year || null;
 
-      // Step 2: Map Wikidata locations to ChronosGraph locations
+      // Step 2: Map Wikidata locations to Fictotum locations
       let suggestedLocations: EnrichedEntity['suggestedLocations'] = [];
       let unmappedLocations: EnrichedEntity['unmappedLocations'] = [];
 
@@ -819,7 +819,7 @@ export default function ContributePage() {
           What would you like to add?
         </h2>
         <p className="text-brand-text/70">
-          Search for a historical figure or media work to add to ChronosGraph
+          Search for a historical figure or media work to add to Fictotum
         </p>
       </div>
 
@@ -1128,7 +1128,7 @@ export default function ContributePage() {
               Confirm & Create
             </h2>
             <p className="text-brand-text/70">
-              Review the details before adding to ChronosGraph
+              Review the details before adding to Fictotum
             </p>
           </div>
         </div>
@@ -1297,7 +1297,7 @@ export default function ContributePage() {
         Creating Entity...
       </h2>
       <p className="text-brand-text/70">
-        Please wait while we add this to ChronosGraph
+        Please wait while we add this to Fictotum
       </p>
     </div>
   );
@@ -1314,7 +1314,7 @@ export default function ContributePage() {
           <div className="flex items-center gap-2 md:gap-3 mb-2">
             <PlusCircle className="w-6 h-6 md:w-8 md:h-8 text-brand-accent flex-shrink-0" />
             <h1 className="text-2xl md:text-3xl font-bold text-brand-primary">
-              Add to ChronosGraph
+              Add to Fictotum
             </h1>
           </div>
           <p className="text-sm md:text-base text-brand-text/70">

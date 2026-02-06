@@ -1,5 +1,5 @@
 # Landing Page Design Directions
-*Five distinct concepts for the ChronosGraph entry point*
+*Five distinct concepts for the Fictotum entry point*
 
 ## Direction 1: The "Pathfinder" (Utility-First)
 **Core Concept:** Immediately solve the user's primary question: "How are X and Y connected?"
@@ -43,7 +43,7 @@
 *   **Primary Action:** "Jump to 1789" (French Revolution).
 *   **Secondary:** "Search Figure".
 *   **Pros:** Intuitive for history buffs, provides context (Era-based).
-*   **Cons:** Hard to show cross-era connections (which is ChronosGraph's superpower).
+*   **Cons:** Hard to show cross-era connections (which is Fictotum's superpower).
 
 ## Direction 5: The "Detective Board" (Investigative)
 **Core Concept:** You are the researcher. Here are your tools.
@@ -62,5 +62,5 @@
 ## Recommendation
 **Direction 1 (Pathfinder)** combined with **Direction 2 (Living Universe)**.
 
-*   **Why:** ChronosGraph's unique value is the *connection*. The A-to-B search is the strongest hook.
+*   **Why:** Fictotum's unique value is the *connection*. The A-to-B search is the strongest hook.
 *   **Execution:** Keep the "Pathfinder" input front and center (Direction 1), but instead of a white background, layer it over a muted, slow-moving "Living Universe" graph (Direction 2) that acts as a dynamic wallpaper until engaged.

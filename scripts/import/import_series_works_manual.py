@@ -127,7 +127,7 @@ class ManualSeriesImporter:
         """
 
         url = "https://query.wikidata.org/sparql"
-        headers = {"User-Agent": "ChronosGraph/1.0"}
+        headers = {"User-Agent": "Fictotum/1.0"}
 
         try:
             response = requests.get(
@@ -339,7 +339,7 @@ class ManualSeriesImporter:
     def run(self):
         """Run import for all series."""
         print("\n" + "="*80)
-        print("ChronosGraph Manual Series Works Import")
+        print("Fictotum Manual Series Works Import")
         print("Target: 150-200 MediaWork nodes from book series")
         print("="*80 + "\n")
 
@@ -377,7 +377,7 @@ class ManualSeriesImporter:
     def generate_report(self):
         """Generate markdown report."""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        report_path = f"/Users/gcquraishi/Documents/big-heavy/chronosgraph/series_works_import_report_{timestamp}.md"
+        report_path = f"/Users/gcquraishi/Documents/big-heavy/fictotum/series_works_import_report_{timestamp}.md"
 
         with open(report_path, "w") as f:
             f.write("# Series Works Import Report\n\n")

@@ -86,7 +86,7 @@ export default function TwoTierSearchResults({
         <div className="flex items-center gap-2">
           <Database className="w-5 h-5 text-brand-primary" />
           <h3 className="text-lg font-semibold text-brand-primary">
-            Already in ChronosGraph
+            Already in Fictotum
           </h3>
         </div>
         <div className="space-y-2">

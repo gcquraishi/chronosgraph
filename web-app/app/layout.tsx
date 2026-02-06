@@ -4,7 +4,7 @@ import AuthProvider from "@/components/AuthProvider";
 import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  title: "ChronosGraph - Historical Figures Across Media",
+  title: "Fictotum - Every portrayal. Every era. Every angle.",
   description: "Explore how historical figures are portrayed across fiction and history",
 };
 

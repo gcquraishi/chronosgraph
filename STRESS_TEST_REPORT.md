@@ -1,4 +1,4 @@
-# ChronosGraph Comprehensive Stress Test Report
+# Fictotum Comprehensive Stress Test Report
 **Test Date:** February 3, 2026
 **Tester:** Dr. Helena Thornwood (Oxford Historical Accuracy Division)
 **Test Environment:** Neo4j Aura (c78564a4) | Production Database
@@ -10,7 +10,7 @@
 
 **Overall App Health Score: B+ (85/100)**
 
-ChronosGraph demonstrates solid technical architecture with good data quality fundamentals. The application is functional and serves its core purpose well. However, there are **critical data quality issues**, **sentiment mapping inconsistencies**, and **UX gaps** that must be addressed before beta launch.
+Fictotum demonstrates solid technical architecture with good data quality fundamentals. The application is functional and serves its core purpose well. However, there are **critical data quality issues**, **sentiment mapping inconsistencies**, and **UX gaps** that must be addressed before beta launch.
 
 ### Key Strengths
 - Excellent provenance tracking (97% coverage)
@@ -849,7 +849,7 @@ RETURN total_figures, figures_with_sentiment,
 **Tests Skipped:** 15 (require UI/dev server access)
 
 **Overall Assessment:**
-ChronosGraph is **production-ready with caveats**. The application has solid bones but needs immediate attention to data quality issues (sentiment taxonomy, orphaned nodes, duplicates) before public beta. Performance is good, architecture is sound, but UX polish and accessibility improvements are needed for broader launch.
+Fictotum is **production-ready with caveats**. The application has solid bones but needs immediate attention to data quality issues (sentiment taxonomy, orphaned nodes, duplicates) before public beta. Performance is good, architecture is sound, but UX polish and accessibility improvements are needed for broader launch.
 
 **Recommended Next Steps:**
 1. Address all Priority 1 issues (1 week sprint)

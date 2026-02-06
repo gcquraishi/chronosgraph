@@ -1,6 +1,6 @@
-# ChronosGraph Codebase Audit Results
+# Fictotum Codebase Audit Results
 **Date:** 2026-01-21
-**Linear Issue:** [CHR-7](https://linear.app/chronosgraph/issue/CHR-7/audit-codebase-to-identify-well-built-vs-half-baked-features)
+**Linear Issue:** [CHR-7](https://linear.app/fictotum/issue/CHR-7/audit-codebase-to-identify-well-built-vs-half-baked-features)
 
 ## Summary
 

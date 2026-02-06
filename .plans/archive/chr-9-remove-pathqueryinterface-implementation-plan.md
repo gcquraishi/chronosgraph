@@ -2,7 +2,7 @@
 
 **Overall Progress:** `0%` (0/3 tasks complete)
 
-**Linear Issue:** [CHR-9](https://linear.app/chronosgraph/issue/CHR-9/remove-find-historical-paths-section-from-landing-page)
+**Linear Issue:** [CHR-9](https://linear.app/fictotum/issue/CHR-9/remove-find-historical-paths-section-from-landing-page)
 
 ---
 
@@ -189,7 +189,7 @@ web-app/
 
 - **Minimal scope**: Only removing from landing page; pathfinder functionality remains available at `/explore/pathfinder`
 - **API stays**: `/api/pathfinder` endpoint is shared by multiple features, so it stays
-- **Dashboard focus**: Landing page becomes graph-first, highlighting ChronosGraph's core strength
+- **Dashboard focus**: Landing page becomes graph-first, highlighting Fictotum's core strength
 - **Future work**: Pathfinder page marked REFACTOR in audit (improve UX later, don't remove)
 - **Audit context**: Part of CHR-7 cleanup roadmap to focus on well-built features
 - **Clean separation**: PathQueryInterface removal doesn't affect pathfinder page or ConflictFeed

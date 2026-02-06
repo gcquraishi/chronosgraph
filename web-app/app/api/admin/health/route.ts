@@ -219,7 +219,7 @@ export async function GET(request: Request) {
         return new NextResponse(csv, {
           headers: {
             'Content-Type': 'text/csv',
-            'Content-Disposition': `attachment; filename="chronosgraph-health-${Date.now()}.csv"`,
+            'Content-Disposition': `attachment; filename="fictotum-health-${Date.now()}.csv"`,
           },
         });
       }
@@ -248,7 +248,7 @@ function convertHealthMetricsToCSV(metrics: HealthMetrics): string {
   const lines: string[] = [];
 
   // Header
-  lines.push('ChronosGraph Database Health Report');
+  lines.push('Fictotum Database Health Report');
   lines.push(`Generated: ${metrics.timestamp}`);
   lines.push('');
 

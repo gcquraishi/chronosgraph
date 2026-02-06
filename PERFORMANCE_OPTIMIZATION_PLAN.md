@@ -1,6 +1,6 @@
 # Performance Optimization Plan (Phase 4.3)
 **Date:** February 2, 2026
-**Goal:** Optimize ChronosGraph for 1,000+ entity scale
+**Goal:** Optimize Fictotum for 1,000+ entity scale
 **Current State:** 772 figures, ~708 media works
 
 ---

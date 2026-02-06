@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to ChronosGraph will be documented in this file.
+All notable changes to Fictotum will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Full documentation in `/docs/AGENT_SCHEMA_DESIGN.md`
   - CLAUDE.md updated with mandatory CREATED_BY protocols
 - **CHR-16: Unified Data Ingestion Hub** - Single `/contribute` entry point replacing 4 fragmented pages
-  - Two-tier search (ChronosGraph DB + Wikidata) prevents duplicate creation
+  - Two-tier search (Fictotum DB + Wikidata) prevents duplicate creation
   - Silent auto-enrichment populates 70%+ metadata fields from Wikidata
   - AI-powered era tag suggestions (Gemini suggests 3-5 contextual tags)
   - Creator bulk import feature (add 10+ films with one click)

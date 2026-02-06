@@ -64,7 +64,7 @@ async function fetchWithTimeout(url: string, timeout = 5000): Promise<Response> 
     const response = await fetch(url, {
       signal: controller.signal,
       headers: {
-        'User-Agent': 'ChronosGraph/1.0 (https://chronosgraph.com; Data Enrichment)',
+        'User-Agent': 'Fictotum/1.0 (https://fictotum.com; Data Enrichment)',
       },
     });
     clearTimeout(timeoutId);
@@ -180,7 +180,7 @@ async function enrichMediaWork(wikidataId: string): Promise<EnrichedWorkData> {
   }
 
   // P31: Instance of (media type)
-  // Map Wikidata types to ChronosGraph media types
+  // Map Wikidata types to Fictotum media types
   if (entity.claims?.P31) {
     const instanceClaims = entity.claims.P31;
     const typeQid = instanceClaims[0]?.mainsnak?.datavalue?.value?.id;

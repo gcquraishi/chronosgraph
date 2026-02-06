@@ -107,8 +107,8 @@ Key architectural/implementation choices:
 - [x] 🟩 **Task 4.2: Update Documentation**
   - [x] 🟩 Add comment in page.tsx explaining why Henry VIII is chosen as starting node
   - [x] 🟩 Document new single-node API endpoint (if created)
-  - [x] 🟩 Update CHRONOS_LOG.md with CHR-6 implementation summary
-  - **Files**: `web-app/app/page.tsx` (lines 6-13 - comprehensive rationale comment), `CHRONOS_LOG.md` (pending)
+  - [x] 🟩 Update FICTOTUM_LOG.md with CHR-6 implementation summary
+  - **Files**: `web-app/app/page.tsx` (lines 6-13 - comprehensive rationale comment), `FICTOTUM_LOG.md` (pending)
   - **Completed**: 2026-01-21
   - **Notes**: No new API endpoint created - used simpler direct initialization approach
 
@@ -389,7 +389,7 @@ Before marking CHR-6 complete, verify:
 - [ ] Loading states display correctly during expansion
 - [ ] Error state exists if node not found
 - [ ] Hero copy reflects new single-node experience
-- [ ] CHRONOS_LOG.md updated with implementation summary
+- [ ] FICTOTUM_LOG.md updated with implementation summary
 - [ ] Code comments explain Henry VIII choice
 - [ ] No console errors on initial render or expansion
 

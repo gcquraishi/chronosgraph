@@ -54,7 +54,7 @@ curl -X POST http://localhost:3000/api/audit/node-provenance
       "count": 850
     },
     {
-      "agent_name": "ChronosGraph Web UI",
+      "agent_name": "Fictotum Web UI",
       "agent_id": "web-ui-generic",
       "agent_type": "human_user",
       "count": 355

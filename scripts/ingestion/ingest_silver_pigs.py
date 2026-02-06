@@ -1,5 +1,5 @@
 """
-ChronosGraph: Marcus Didius Falco Series - The Silver Pigs (Book 1)
+Fictotum: Marcus Didius Falco Series - The Silver Pigs (Book 1)
 
 Comprehensive ingestion of character relationships from Lindsey Davis's 20-book
 Marcus Didius Falco mystery series, starting with the anchor book "The Silver Pigs."
@@ -528,7 +528,7 @@ def main():
 
     try:
         print("="*80)
-        print("ChronosGraph: The Silver Pigs Character Ingestion")
+        print("Fictotum: The Silver Pigs Character Ingestion")
         print("="*80)
 
         # Setup schema

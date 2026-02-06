@@ -105,7 +105,7 @@ export default function CartographerPage() {
       </main>
 
       <footer className="mt-20 p-8 border-t border-[#4A3728]/10 flex justify-between items-center text-[10px] font-black uppercase tracking-[0.5em] opacity-40">
-        <div>ChronosGraph Cartography Dept.</div>
+        <div>Fictotum Cartography Dept.</div>
         <div>MMXXVI</div>
       </footer>
     </div>

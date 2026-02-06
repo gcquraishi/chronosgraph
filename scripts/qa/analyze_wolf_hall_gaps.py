@@ -163,7 +163,7 @@ with driver.session() as session:
         ]
     }
 
-    output_path = '/Users/gcquraishi/Documents/chronosgraph/data/wolf_hall_gaps.json'
+    output_path = '/Users/gcquraishi/Documents/big-heavy/fictotum/data/wolf_hall_gaps.json'
     with open(output_path, 'w') as f:
         json.dump(export_data, f, indent=2)
 

@@ -1,5 +1,5 @@
 # Kevin Bacon to Francis Bacon: Database Implementation Guide
-## ChronosGraph Neo4j Integration Plan
+## Fictotum Neo4j Integration Plan
 
 ---
 
@@ -867,5 +867,5 @@ This implementation provides:
 - **Query templates** for network analysis
 - **Index structure** for Neo4j Aura performance
 
-The network demonstrates how biographical cinema, period drama television, and documentary works create rich connection possibilities for historical figure databases in the ChronosGraph model.
+The network demonstrates how biographical cinema, period drama television, and documentary works create rich connection possibilities for historical figure databases in the Fictotum model.
 

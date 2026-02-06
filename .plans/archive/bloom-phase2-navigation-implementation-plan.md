@@ -260,7 +260,7 @@ Task 2.6 (Testing - Final, depends on all above)
 ## Related Documents
 
 - **Parent Plan**: [Bloom Phase 1 Implementation Plan](./bloom-exploration-implementation-plan.md)
-- **GitHub Issue**: [#1 - Interactive node-to-node graph exploration](https://github.com/gcquraishi/chronosgraph/issues/1)
+- **GitHub Issue**: [#1 - Interactive node-to-node graph exploration](https://github.com/gcquraishi/fictotum/issues/1)
 - **Code Files**:
   - `web-app/components/GraphExplorer.tsx` (primary modification target)
   - `web-app/app/figure/[id]/page.tsx` (entry point enhancement)

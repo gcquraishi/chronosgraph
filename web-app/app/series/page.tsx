@@ -73,7 +73,7 @@ export default function SeriesBrowsePage() {
               <h1 className="text-4xl md:text-6xl font-bold text-stone-900 tracking-tighter uppercase">Browse Series</h1>
             </div>
             <p className="text-stone-600">
-              Explore all book, TV, film, and game series in ChronosGraph
+              Explore all book, TV, film, and game series in Fictotum
             </p>
           </div>
 

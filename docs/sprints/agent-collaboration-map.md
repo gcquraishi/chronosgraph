@@ -1,4 +1,4 @@
-# ChronosGraph Agent Collaboration Map
+# Fictotum Agent Collaboration Map
 
 ## Agent Roster & Primary Responsibilities
 

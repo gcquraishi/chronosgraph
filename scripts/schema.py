@@ -1,5 +1,5 @@
 """
-ChronosGraph Schema Definition
+Fictotum Schema Definition
 
 Media-Centric hubs (Books, Games, Films) connected to Historical Figures
 using Master Entity Resolution for unique figure nodes.

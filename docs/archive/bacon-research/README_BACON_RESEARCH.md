@@ -3,7 +3,7 @@
 
 **Research Completion Date:** January 18, 2026
 **Total Documentation:** 74 KB across 4 files
-**Status:** Ready for ChronosGraph Implementation
+**Status:** Ready for Fictotum Implementation
 
 ---
 
@@ -28,7 +28,7 @@ This is the main comprehensive research document containing:
   - The Oliver Stone network (JFK 1991)
 - Part V: Shared networks and collaborative ecosystems
 - Part VI: The Francis Bacon caveat (painter vs. philosopher distinction)
-- Part VII: Data model for ChronosGraph with Cypher examples
+- Part VII: Data model for Fictotum with Cypher examples
 - Summary table of confirmed connections
 - Recommendations for database implementation
 - Full sources and references with URLs
@@ -153,7 +153,7 @@ High-level overview of entire research project:
 - Data modeling insights and best practices
 - Identifying next steps for implementation
 - Presenting findings to team
-- Understanding implications for ChronosGraph
+- Understanding implications for Fictotum
 
 **Format:** Executive summary suitable for stakeholder presentations
 
@@ -218,14 +218,14 @@ Francis Bacon (painter)
 ## File Locations (Absolute Paths)
 
 ```
-/Users/gcquraishi/Documents/chronosgraph/docs/KEVIN_BACON_FRANCIS_BACON_SIX_DEGREES.md
-/Users/gcquraishi/Documents/chronosgraph/docs/BACON_CONNECTION_PATHS_VISUAL.md
-/Users/gcquraishi/Documents/chronosgraph/docs/BACON_NETWORK_DATABASE_IMPLEMENTATION.md
-/Users/gcquraishi/Documents/chronosgraph/docs/BACON_RESEARCH_SUMMARY.md
-/Users/gcquraishi/Documents/chronosgraph/docs/README_BACON_RESEARCH.md (this file)
+/Users/gcquraishi/Documents/big-heavy/fictotum/docs/KEVIN_BACON_FRANCIS_BACON_SIX_DEGREES.md
+/Users/gcquraishi/Documents/big-heavy/fictotum/docs/BACON_CONNECTION_PATHS_VISUAL.md
+/Users/gcquraishi/Documents/big-heavy/fictotum/docs/BACON_NETWORK_DATABASE_IMPLEMENTATION.md
+/Users/gcquraishi/Documents/big-heavy/fictotum/docs/BACON_RESEARCH_SUMMARY.md
+/Users/gcquraishi/Documents/big-heavy/fictotum/docs/README_BACON_RESEARCH.md (this file)
 ```
 
-All files are in permanent project directory: `/Users/gcquraishi/Documents/chronosgraph/docs/`
+All files are in permanent project directory: `/Users/gcquraishi/Documents/big-heavy/fictotum/docs/`
 
 ---
 
@@ -315,17 +315,17 @@ All files are in permanent project directory: `/Users/gcquraishi/Documents/chron
 - BBC: https://www.bbc.com/
 - RTÉ: https://www.rte.ie/
 
-### ChronosGraph Context
-- Project: `/Users/gcquraishi/Documents/chronosgraph/`
+### Fictotum Context
+- Project: `/Users/gcquraishi/Documents/big-heavy/fictotum/`
 - Database: Neo4j Aura (c78564a4)
 - Configuration: `CLAUDE.md` guidelines followed
 - Entity Resolution: Wikidata Q-IDs for media works
 - Canonical IDs: Used for historical figure disambiguation
 
 ### Related Documentation
-- ChronosGraph README: `/Users/gcquraishi/Documents/chronosgraph/README.md`
-- Project Guidelines: `/Users/gcquraishi/Documents/chronosgraph/CLAUDE.md`
-- Other Research: `/Users/gcquraishi/Documents/chronosgraph/docs/`
+- Fictotum README: `/Users/gcquraishi/Documents/big-heavy/fictotum/README.md`
+- Project Guidelines: `/Users/gcquraishi/Documents/big-heavy/fictotum/CLAUDE.md`
+- Other Research: `/Users/gcquraishi/Documents/big-heavy/fictotum/docs/`
 
 ---
 
@@ -339,7 +339,7 @@ The 4-document package offers:
 - **Implementation code** ready for Neo4j execution
 - **Executive summary** for stakeholder communication
 
-All material is stored in the permanent ChronosGraph project directory and is ready for immediate database implementation.
+All material is stored in the permanent Fictotum project directory and is ready for immediate database implementation.
 
 ---
 

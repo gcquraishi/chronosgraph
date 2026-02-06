@@ -1,5 +1,5 @@
 """
-ChronosGraph: Comprehensive CREATED_BY Provenance Backfill (CHR-27)
+Fictotum: Comprehensive CREATED_BY Provenance Backfill (CHR-27)
 
 This script backfills CREATED_BY relationships for all existing nodes by:
 1. Enhancing existing Agent nodes with full metadata
@@ -107,7 +107,7 @@ class ProvenanceBackfillMigrator:
 
         agent_data = {
             "agent_id": "web-ui-generic",
-            "name": "ChronosGraph Web UI",
+            "name": "Fictotum Web UI",
             "type": "human_user",
             "version": None,
             "created_at": "2025-01-01T00:00:00Z",
@@ -376,7 +376,7 @@ class ProvenanceBackfillMigrator:
     def run(self):
         """Execute the complete migration"""
         self.log("=" * 70)
-        self.log(f"ChronosGraph CREATED_BY Provenance Backfill")
+        self.log(f"Fictotum CREATED_BY Provenance Backfill")
         self.log(f"Mode: {'DRY RUN (no changes will be made)' if self.dry_run else 'PRODUCTION (changes will be applied)'}")
         self.log("=" * 70)
 
@@ -425,7 +425,7 @@ class ProvenanceBackfillMigrator:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Backfill CREATED_BY provenance for all ChronosGraph nodes"
+        description="Backfill CREATED_BY provenance for all Fictotum nodes"
     )
     parser.add_argument(
         "--dry-run",

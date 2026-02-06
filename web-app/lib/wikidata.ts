@@ -87,7 +87,7 @@ export async function searchWikidataForWork(params: {
 
     const response = await fetch(url.toString(), {
       headers: {
-        'User-Agent': 'ChronosGraph/1.0 (https://chronosgraph.com; Q-ID Validation)',
+        'User-Agent': 'Fictotum/1.0 (https://fictotum.com; Q-ID Validation)',
       },
     });
 
@@ -215,7 +215,7 @@ export async function validateQid(
 
     const response = await fetch(url.toString(), {
       headers: {
-        'User-Agent': 'ChronosGraph/1.0 (https://chronosgraph.com; Q-ID Validation)',
+        'User-Agent': 'Fictotum/1.0 (https://fictotum.com; Q-ID Validation)',
       },
     });
 
@@ -369,7 +369,7 @@ export async function fetchCreatorWorks(
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json',
-        'User-Agent': 'ChronosGraph/1.0 (https://chronosgraph.com; Creator Works)',
+        'User-Agent': 'Fictotum/1.0 (https://fictotum.com; Creator Works)',
       },
       body: `query=${encodeURIComponent(sparqlQuery)}`,
     });

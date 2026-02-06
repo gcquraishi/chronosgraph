@@ -318,12 +318,12 @@ The backend correctly:
 
 ## Test Scripts Created
 
-1. `/Users/gcquraishi/Documents/chronosgraph/scripts/qa/test_node_neighbors.py`
+1. `/Users/gcquraishi/Documents/big-heavy/fictotum/scripts/qa/test_node_neighbors.py`
    - Comprehensive figure node expansion testing
    - High-connectivity verification
    - Edge case validation
 
-2. `/Users/gcquraishi/Documents/chronosgraph/scripts/qa/test_media_neighbors.py`
+2. `/Users/gcquraishi/Documents/big-heavy/fictotum/scripts/qa/test_media_neighbors.py`
    - Media node expansion testing
    - High-connectivity verification
    - Edge case validation
@@ -336,6 +336,6 @@ python3 scripts/qa/test_media_neighbors.py
 
 ---
 
-**Verified by:** Claude Sonnet 4.5 (ChronosGraph Data Architect)
+**Verified by:** Claude Sonnet 4.5 (Fictotum Data Architect)
 **Date:** 2026-01-20
 **Status:** ✅ APPROVED FOR PRODUCTION

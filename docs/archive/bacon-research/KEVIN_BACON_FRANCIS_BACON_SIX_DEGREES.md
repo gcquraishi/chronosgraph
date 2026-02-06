@@ -2,7 +2,7 @@
 ## Research Report on Historical Media Network Connections
 
 **Research Date:** January 18, 2026
-**Project Context:** ChronosGraph - Historical Media Database Knowledge Graph
+**Project Context:** Fictotum - Historical Media Database Knowledge Graph
 **Objective:** Document potential network paths connecting contemporary actor Kevin Bacon to Renaissance philosopher Francis Bacon (1561-1626) through historical media and biographical productions.
 
 ---
@@ -340,7 +340,7 @@ The biographical films found are about the 20th-century painter, NOT the Renaiss
    - Multiple documentaries (1985, 1988, 2017, 2022)
    - Extensive interview archives
 
-3. **Database Implication:** For ChronosGraph, to create meaningful connections to the Renaissance philosopher, new media would need to be researched:
+3. **Database Implication:** For Fictotum, to create meaningful connections to the Renaissance philosopher, new media would need to be researched:
    - Documentaries about Renaissance history
    - Biographical films about English philosophers
    - Period dramas set in Elizabethan/Jacobean England
@@ -370,7 +370,7 @@ Francis Bacon (Renaissance philosopher, 1561-1626)
 
 ---
 
-## Part VII: Data Model for ChronosGraph
+## Part VII: Data Model for Fictotum
 
 ### Proposed Node and Relationship Structure
 
@@ -507,7 +507,7 @@ CREATE (dj)-[:PORTRAYED {character: "Francis Bacon", year: 1998}]->(fb)
 
 ## Recommendations for Database Implementation
 
-### For ChronosGraph Knowledge Graph
+### For Fictotum Knowledge Graph
 
 1. **Create `:MediaWork` nodes for all identified films and documentaries**
    - Include `wikidata_id` where available
@@ -555,7 +555,7 @@ A **4-degree connection path** has been confirmed from Kevin Bacon to Francis Ba
 
 **Via Films:** JFK (1991) → Hamlet (1996) → Love Is the Devil (1998)
 
-While this path successfully demonstrates six-degrees-of-separation concept for the ChronosGraph database model, achieving a connection to **Francis Bacon the Renaissance philosopher (1561-1626)** would require discovering or creating media that directly portrays or discusses this historical figure.
+While this path successfully demonstrates six-degrees-of-separation concept for the Fictotum database model, achieving a connection to **Francis Bacon the Renaissance philosopher (1561-1626)** would require discovering or creating media that directly portrays or discusses this historical figure.
 
 The research reveals that biographical cinema and period drama documentaries create rich network opportunities for historical figure connections when sufficient media coverage exists. The absence of major films about the Renaissance philosopher represents a notable gap in historical media representation.
 

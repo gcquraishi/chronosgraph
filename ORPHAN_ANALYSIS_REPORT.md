@@ -1,4 +1,4 @@
-# ChronosGraph Orphan Analysis Report
+# Fictotum Orphan Analysis Report
 **Generated**: February 3, 2026
 **Database**: Neo4j Aura (instance c78564a4)
 **Analyst**: Claude Code (Sonnet 4.5)
@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-This report presents findings from a comprehensive data quality audit following the stress test of the ChronosGraph database. Key accomplishments:
+This report presents findings from a comprehensive data quality audit following the stress test of the Fictotum database. Key accomplishments:
 
 - **8 fictional characters** successfully reclassified from HistoricalFigure to FictionalCharacter
 - **281 orphaned historical figures** identified and categorized by era
@@ -69,7 +69,7 @@ Successfully reclassified **8 fictional characters** from the Lindsey Davis myst
 | High Medieval | 17 | **HIGH** | Popular in fiction/film |
 | World War II (1939-1945) | 16 | **HIGH** | Extensive media coverage |
 | Cold War | 15 | **MEDIUM** | Growing media interest |
-| Roman Empire | 14 | **HIGH** | Core ChronosGraph focus |
+| Roman Empire | 14 | **HIGH** | Core Fictotum focus |
 | World War II | 13 | **HIGH** | Duplicate era label (merge needed) |
 | Late Medieval | 13 | **MEDIUM** | Good coverage potential |
 | Roman Republic | 7 | **HIGH** | Core focus area |
@@ -405,7 +405,7 @@ ORDER BY f.birth_year
 
 ## Conclusion
 
-The ChronosGraph database is in **healthy** overall condition with 100% provenance coverage and no critical data corruption. The primary opportunities for improvement are:
+The Fictotum database is in **healthy** overall condition with 100% provenance coverage and no critical data corruption. The primary opportunities for improvement are:
 
 1. **Orphan reduction**: 281 historical figures and 948 media works need connections
 2. **Duplicate resolution**: 20 figure pairs require merging (impacts 40 nodes)

@@ -1,5 +1,5 @@
 """
-ChronosGraph: Marcus Didius Falco Series - Venus in Copper (Book 3)
+Fictotum: Marcus Didius Falco Series - Venus in Copper (Book 3)
 
 Comprehensive ingestion of character relationships from Lindsey Davis's
 "Venus in Copper" (Book 3 of Marcus Didius Falco series).
@@ -447,7 +447,7 @@ def main():
 
     try:
         print("="*80)
-        print("ChronosGraph: Venus in Copper (Book 3) Character Ingestion")
+        print("Fictotum: Venus in Copper (Book 3) Character Ingestion")
         print("="*80)
 
         print("\n[1/6] Setting up schema constraints...")

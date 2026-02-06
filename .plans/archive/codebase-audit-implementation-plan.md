@@ -2,12 +2,12 @@
 
 **Overall Progress:** `0%` (0/12 tasks complete)
 
-**Linear Issue:** [CHR-7](https://linear.app/chronosgraph/issue/CHR-7/audit-codebase-to-identify-well-built-vs-half-baked-features)
+**Linear Issue:** [CHR-7](https://linear.app/fictotum/issue/CHR-7/audit-codebase-to-identify-well-built-vs-half-baked-features)
 
 ---
 
 ## TL;DR
-Systematically audit the entire ChronosGraph codebase to categorize features as production-ready (keep), half-baked (remove), or promising but unfinished (refactor). This audit will create a clear inventory to guide subsequent cleanup issues and enable more focused, iterative development.
+Systematically audit the entire Fictotum codebase to categorize features as production-ready (keep), half-baked (remove), or promising but unfinished (refactor). This audit will create a clear inventory to guide subsequent cleanup issues and enable more focused, iterative development.
 
 ---
 
@@ -236,7 +236,7 @@ Systematically audit the entire ChronosGraph codebase to categorize features as 
 **File:** `.plans/codebase-audit-results.md`
 
 ```markdown
-# ChronosGraph Codebase Audit Results
+# Fictotum Codebase Audit Results
 **Date:** [completion date]
 **Linear Issue:** CHR-7
 

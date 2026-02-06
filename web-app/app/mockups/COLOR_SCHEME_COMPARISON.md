@@ -1,4 +1,4 @@
-# ChronosGraph Color Scheme Comparison
+# Fictotum Color Scheme Comparison
 ## Wes Anderson Aesthetic with Gender-Neutral Palettes
 
 ### Executive Summary

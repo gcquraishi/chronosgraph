@@ -1,4 +1,4 @@
-# ChronosGraph Performance Guide
+# Fictotum Performance Guide
 
 *What we optimized and what it means for you*
 
@@ -9,7 +9,7 @@
 
 ## Overview
 
-In February 2026, we completed a comprehensive performance optimization of ChronosGraph, making the platform **up to 3,487x faster** for common operations. This guide explains what changed and how it improves your experience.
+In February 2026, we completed a comprehensive performance optimization of Fictotum, making the platform **up to 3,487x faster** for common operations. This guide explains what changed and how it improves your experience.
 
 ---
 
@@ -583,4 +583,4 @@ for (const [letter, group] of Object.entries(grouped)) {
 
 ---
 
-*For technical questions or performance concerns, contact the ChronosGraph DevOps team or create an issue on GitHub.*
+*For technical questions or performance concerns, contact the Fictotum DevOps team or create an issue on GitHub.*

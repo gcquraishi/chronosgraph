@@ -4,7 +4,7 @@
 
 ## Overview
 
-Automated weekly health monitoring for the ChronosGraph Neo4j database using GitHub Actions. Generates comprehensive health reports and commits them to the repository for historical tracking.
+Automated weekly health monitoring for the Fictotum Neo4j database using GitHub Actions. Generates comprehensive health reports and commits them to the repository for historical tracking.
 
 ## Schedule
 
@@ -259,9 +259,9 @@ Or use a GitHub Action for custom notifications:
     server_port: 465
     username: ${{ secrets.EMAIL_USERNAME }}
     password: ${{ secrets.EMAIL_PASSWORD }}
-    subject: ChronosGraph Health Check Failed
+    subject: Fictotum Health Check Failed
     body: Weekly health check detected issues. Review the workflow logs.
-    to: admin@chronosgraph.com
+    to: admin@fictotum.com
 ```
 
 ## Cost Considerations

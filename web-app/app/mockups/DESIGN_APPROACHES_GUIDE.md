@@ -1,6 +1,6 @@
-# ChronosGraph Design Approaches
+# Fictotum Design Approaches
 
-Three completely distinct visual design philosophies for ChronosGraph, each with landing page and figure detail page (Henry VIII).
+Three completely distinct visual design philosophies for Fictotum, each with landing page and figure detail page (Henry VIII).
 
 ## How to View
 

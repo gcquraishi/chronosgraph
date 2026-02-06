@@ -1,4 +1,4 @@
-# ChronosGraph Research Log Archive
+# Fictotum Research Log Archive
 
 ## Session: 2026-02-01 - WWII Historical Cluster Ingestion (CHR-34)
 

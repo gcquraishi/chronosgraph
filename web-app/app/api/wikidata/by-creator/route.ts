@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json',
-        'User-Agent': 'ChronosGraph/1.0 (https://chronosgraph.com)',
+        'User-Agent': 'Fictotum/1.0 (https://fictotum.com)',
       },
       body: `query=${encodeURIComponent(sparqlQuery)}`,
     });

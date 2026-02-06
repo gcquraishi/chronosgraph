@@ -1,5 +1,5 @@
 """
-ChronosGraph: Duplicate Entity Resolver
+Fictotum: Duplicate Entity Resolver
 Detects potential duplicate HistoricalFigure nodes using multi-pass detection.
 """
 
@@ -260,7 +260,7 @@ class EntityResolver:
         print(f"📝 Generating merge proposals report...")
 
         with open(output_path, 'w') as f:
-            f.write("# ChronosGraph: Entity Merge Proposals\n\n")
+            f.write("# Fictotum: Entity Merge Proposals\n\n")
             f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
             f.write(f"**Total Clusters Found:** {len(clusters)}\n\n")
             f.write("---\n\n")
@@ -309,7 +309,7 @@ def main():
     resolver = EntityResolver(uri, user, pwd)
 
     try:
-        print(f"--- ChronosGraph Duplicate Entity Resolver: {datetime.now()} ---\n")
+        print(f"--- Fictotum Duplicate Entity Resolver: {datetime.now()} ---\n")
 
         # Step 1: Fetch all figures from Neo4j
         resolver.fetch_figures()

@@ -1,4 +1,4 @@
-# ChronosGraph Q1 2026 Roadmap
+# Fictotum Q1 2026 Roadmap
 **Quarter:** January - March 2026
 **Strategic Theme:** Foundation & Launch Readiness
 
@@ -6,7 +6,7 @@
 
 ## Quarter Overview
 
-**Mission:** Transform ChronosGraph from a prototype into a production-ready platform with quality data, polished UX, and sustainable contribution workflows.
+**Mission:** Transform Fictotum from a prototype into a production-ready platform with quality data, polished UX, and sustainable contribution workflows.
 
 **Key Results:**
 1. Ship polished user experience with cohesive design system

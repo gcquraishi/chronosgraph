@@ -1,5 +1,5 @@
 /**
- * Shared sentiment parsing utility for ChronosGraph
+ * Shared sentiment parsing utility for Fictotum
  * Handles hyphenated compound sentiments like "villainous-desperate"
  *
  * Problem: 140+ unique sentiment values exist in the database, but only 6 are mapped.

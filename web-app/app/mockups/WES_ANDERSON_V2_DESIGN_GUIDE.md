@@ -1,4 +1,4 @@
-# ChronosGraph Design System v2.0
+# Fictotum Design System v2.0
 ## Wes Anderson Visual Language
 
 **Version:** 2.0
@@ -785,4 +785,4 @@ function mapSentimentToColor(sentiment: string): 'villainous' | 'critical' | 'ne
 
 **End of Design Guide v2.0**
 
-For questions or contributions, contact the ChronosGraph design team.
+For questions or contributions, contact the Fictotum design team.

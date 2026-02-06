@@ -195,7 +195,7 @@ export interface CreatorWork {
   title: string;
   year: number | null;
   type: string;
-  inDatabase: boolean;  // Already exists in ChronosGraph
+  inDatabase: boolean;  // Already exists in Fictotum
 }
 
 export interface BulkAddResults {

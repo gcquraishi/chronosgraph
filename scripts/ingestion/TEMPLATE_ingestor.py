@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ChronosGraph: Ingestion Template
+Fictotum: Ingestion Template
 SCALABILITY-COMPLIANT TEMPLATE (2026-01-18)
 
 This template follows all scalability best practices:
@@ -27,7 +27,7 @@ from schema import SCHEMA_CONSTRAINTS
 
 class ScalableIngestor:
     """
-    Template ingestor class following ChronosGraph scalability guidelines.
+    Template ingestor class following Fictotum scalability guidelines.
     """
 
     def __init__(self, uri, user, pwd, batch_name="custom_batch"):

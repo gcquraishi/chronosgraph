@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Transformed the ChronosGraph landing page from a text-heavy, cluttered interface into a clean, graph-first exploration experience with an intuitive three-field path query system.
+Transformed the Fictotum landing page from a text-heavy, cluttered interface into a clean, graph-first exploration experience with an intuitive three-field path query system.
 
 ---
 
@@ -30,7 +30,7 @@ Transformed the ChronosGraph landing page from a text-heavy, cluttered interface
 
 ### 1. Visual Hierarchy Transformation
 
-**User Goal**: Immediately understand what ChronosGraph does through interaction, not reading.
+**User Goal**: Immediately understand what Fictotum does through interaction, not reading.
 
 **Implementation**:
 - Minimal header (3-line tagline vs. multi-paragraph explanation)

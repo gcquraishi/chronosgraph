@@ -1,5 +1,5 @@
 """
-ChronosGraph: Batch 10 Ingestion
+Fictotum: Batch 10 Ingestion
 Ingests deduplicated batch 10 data into Neo4j.
 Focus: Fall of Han Dynasty, Three Kingdoms (Wei, Shu, Wu), Red Cliff Strategic Axis
 """
@@ -244,7 +244,7 @@ def main():
         data = json.load(f)
 
     print("=" * 70)
-    print("ChronosGraph: Batch 10 Ingestion")
+    print("Fictotum: Batch 10 Ingestion")
     print("=" * 70)
     print(f"Dataset: {data['metadata']['project']}")
     print(f"Description: {data['metadata']['description']}")

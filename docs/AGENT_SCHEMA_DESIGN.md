@@ -1,7 +1,7 @@
 # Agent Node Schema Design (CHR-26)
 
 ## Overview
-This document defines the enhanced schema for `:Agent` nodes and `:CREATED_BY` relationships in ChronosGraph, enabling comprehensive provenance tracking for all contributed data.
+This document defines the enhanced schema for `:Agent` nodes and `:CREATED_BY` relationships in Fictotum, enabling comprehensive provenance tracking for all contributed data.
 
 ## Agent Node Schema
 

@@ -85,8 +85,8 @@ relationshipType: 'INTERACTED_WITH',
 
 ## Test Scripts Created
 
-1. `/Users/gcquraishi/Documents/chronosgraph/scripts/qa/test_node_neighbors.py`
-2. `/Users/gcquraishi/Documents/chronosgraph/scripts/qa/test_media_neighbors.py`
+1. `/Users/gcquraishi/Documents/big-heavy/fictotum/scripts/qa/test_node_neighbors.py`
+2. `/Users/gcquraishi/Documents/big-heavy/fictotum/scripts/qa/test_media_neighbors.py`
 
 **Run tests:**
 ```bash
@@ -126,5 +126,5 @@ The backend is ready. Frontend can now:
 
 ---
 
-**Verified by:** Claude Sonnet 4.5 (ChronosGraph Data Architect)
+**Verified by:** Claude Sonnet 4.5 (Fictotum Data Architect)
 **Next Task:** Frontend implementation (Tasks 1.1-1.4, 1.6-1.8)

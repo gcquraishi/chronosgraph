@@ -58,7 +58,7 @@ export default function SettingsPage() {
             <h1 className="text-3xl font-bold text-brand-primary">Settings</h1>
           </div>
           <p className="text-brand-text/70">
-            Manage your ChronosGraph preferences
+            Manage your Fictotum preferences
           </p>
         </div>
 

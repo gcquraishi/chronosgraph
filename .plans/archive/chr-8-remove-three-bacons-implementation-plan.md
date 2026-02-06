@@ -2,7 +2,7 @@
 
 **Overall Progress:** `0%` (0/6 tasks complete)
 
-**Linear Issue:** [CHR-8](https://linear.app/chronosgraph/issue/CHR-8/remove-hardcoded-three-bacons-graph)
+**Linear Issue:** [CHR-8](https://linear.app/fictotum/issue/CHR-8/remove-hardcoded-three-bacons-graph)
 
 ---
 
@@ -122,7 +122,7 @@ Remove all hardcoded "three bacons" (Kevin Bacon, Francis Bacon painter, Francis
 - **Error messaging UX**: Not redesigning error states, just removing silent fallback
 - **Alternative fallback**: Not implementing any replacement fallback mechanism
 - **Testing database queries**: Assuming `getHighDegreeNetwork()` works correctly (already in production)
-- **Removing mentions in logs**: CHRONOS_LOG.md and CHRONOS_LOG.archive.md mentions are historical records, leave as-is
+- **Removing mentions in logs**: FICTOTUM_LOG.md and FICTOTUM_LOG.archive.md mentions are historical records, leave as-is
 - **Removing audit plan mentions**: `.plans/codebase-audit-*.md` files reference this work, leave as-is (they're meta-documentation)
 
 ---
@@ -147,12 +147,12 @@ This was a proof-of-concept "Six Degrees" demonstration built during early YOLO 
 ### What We're Keeping
 - **Live database data**: Actual Kevin Bacon/Francis Bacon nodes and relationships in Neo4j (valid data)
 - **GraphExplorer component**: Already handles any graph data, including Bacon connections from live DB
-- **Historical logs**: CHRONOS_LOG mentions are historical records (archive context)
+- **Historical logs**: FICTOTUM_LOG mentions are historical records (archive context)
 
 ### Why We're Removing This
 1. **Fallback obscures problems**: Silent fallback to hardcoded data hides database issues
 2. **Maintenance burden**: Hardcoded data gets stale, creates confusion about data source
-3. **Focus on live data**: ChronosGraph should showcase real-time database queries, not static demos
+3. **Focus on live data**: Fictotum should showcase real-time database queries, not static demos
 4. **Cleanup goal**: Part of broader effort to remove half-baked features from early YOLO phase (CHR-7 audit)
 
 ---

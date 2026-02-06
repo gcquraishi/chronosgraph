@@ -17,7 +17,7 @@ Phase 2.1 implementation is complete. All code has been written, tested in dry-r
 
 ## What This Does
 
-Adds comprehensive provenance tracking to ChronosGraph:
+Adds comprehensive provenance tracking to Fictotum:
 - **Who created each entity** (AI agent or human user)
 - **When it was created** (timestamp)
 - **How it was created** (bulk ingestion, web UI, API)

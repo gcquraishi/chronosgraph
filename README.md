@@ -1,15 +1,15 @@
-# ChronosGraph
+# Fictotum
 
 A knowledge graph visualizing how historical figures are portrayed differently across fiction and history.
 
 ## Project Overview
 
-ChronosGraph uses Neo4j to map relationships between historical figures and their depictions in various media works (TV series, films, video games, books, etc.), tracking sentiment and characterization across different portrayals.
+Fictotum uses Neo4j to map relationships between historical figures and their depictions in various media works (TV series, films, video games, books, etc.), tracking sentiment and characterization across different portrayals.
 
 ## Project Structure
 
 ```
-chronosgraph/
+fictotum/
 ├── web-app/               # Next.js web application
 ├── scripts/               # Python scripts for database management
 │   ├── ingestion/         # Data ingestion scripts
@@ -43,7 +43,7 @@ chronosgraph/
 
 ```bash
 git clone <repository-url>
-cd chronosgraph
+cd fictotum
 ```
 
 ### 2. Configure Environment
@@ -172,7 +172,7 @@ Expansion JSON files should follow this format:
 
 ## Contributing
 
-ChronosGraph welcomes contributions! We've unified the contribution experience into a single hub at `/contribute`.
+Fictotum welcomes contributions! We've unified the contribution experience into a single hub at `/contribute`.
 
 **For Contributors:**
 - See `UNIFIED_CONTRIBUTE_GUIDE.md` for step-by-step instructions on adding historical figures and media works
@@ -197,9 +197,9 @@ ChronosGraph welcomes contributions! We've unified the contribution experience i
 
 ### Project Documentation
 - `docs/` - Project reports and decisions
-- `CHRONOS_LOG.md` - Recent development session logs
-- `CHRONOS_LOG.archive.md` - Historical session archive
+- `FICTOTUM_LOG.md` - Recent development session logs
+- `FICTOTUM_LOG.archive.md` - Historical session archive
 
 ## License
 
-Part of the ChronosGraph project.
+Part of the Fictotum project.

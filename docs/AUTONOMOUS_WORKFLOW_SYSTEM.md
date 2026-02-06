@@ -1,4 +1,4 @@
-# ChronosGraph Autonomous Workflow System
+# Fictotum Autonomous Workflow System
 
 **Version:** 1.0
 **Effective Date:** 2026-01-18
@@ -8,7 +8,7 @@
 
 ## Overview
 
-This document defines how the ChronosGraph agent ecosystem operates as an autonomous product development organization. Each agent develops quarterly roadmaps, breaks work into 2-week sprints, coordinates with other agents, and presents plans to the CEO for greenlight rather than prompting-from-scratch execution.
+This document defines how the Fictotum agent ecosystem operates as an autonomous product development organization. Each agent develops quarterly roadmaps, breaks work into 2-week sprints, coordinates with other agents, and presents plans to the CEO for greenlight rather than prompting-from-scratch execution.
 
 ## Organizational Structure
 
@@ -59,7 +59,7 @@ This document defines how the ChronosGraph agent ecosystem operates as an autono
 |-------|-------|------------------|
 | **data-architect** | Sonnet | Neo4j schema, Cypher queries, entity resolution, data integrity |
 | **frontend-polish-specialist** | Sonnet | Visual design, CSS, animations, responsive layouts |
-| **code-review-tester** | Sonnet | Code quality, testing, ChronosGraph protocol compliance |
+| **code-review-tester** | Sonnet | Code quality, testing, Fictotum protocol compliance |
 | **devops-infrastructure-engineer** | Sonnet | CI/CD, deployment, monitoring, production debugging |
 
 ### Research & Content Layer
@@ -103,7 +103,7 @@ This document defines how the ChronosGraph agent ecosystem operates as an autono
 # [Agent Name] Q[X] 202X Roadmap
 
 ## Mission Alignment
-How my work this quarter advances ChronosGraph's mission:
+How my work this quarter advances Fictotum's mission:
 [1-2 sentences]
 
 ## Strategic Objectives (3 max)
@@ -213,7 +213,7 @@ frontend:component --> ux-designer:review
 
 ## Definition of Done
 - [ ] All committed tasks completed or explicitly deprioritized
-- [ ] CHRONOS_LOG updated with session summaries
+- [ ] FICTOTUM_LOG updated with session summaries
 - [ ] Handoffs completed for downstream agents
 - [ ] Next sprint planned
 ```
@@ -381,7 +381,7 @@ Agents operate asynchronously with clear handoff protocols.
 
 ### Async Principles
 
-1. **Document Everything** - Decisions, progress, and blockers go in CHRONOS_LOG.md
+1. **Document Everything** - Decisions, progress, and blockers go in FICTOTUM_LOG.md
 2. **Clear Handoffs** - Use handoff template when work moves between agents
 3. **Proactive Communication** - Surface blockers before they become urgent
 4. **Explicit Status** - Every task is clearly: Not Started / In Progress / Blocked / Complete
@@ -390,7 +390,7 @@ Agents operate asynchronously with clear handoff protocols.
 
 | Type | Channel | When to Use |
 |------|---------|-------------|
-| **Work log** | CHRONOS_LOG.md | Session summaries, decisions, progress |
+| **Work log** | FICTOTUM_LOG.md | Session summaries, decisions, progress |
 | **Sprint status** | Sprint plan doc | Current sprint progress, blockers |
 | **Handoffs** | Handoff notes | When work moves between agents |
 | **Escalations** | Clarifying questions | CEO input needed |
@@ -438,8 +438,8 @@ Agents operate asynchronously with clear handoff protocols.
     ...
   AUTONOMOUS_WORKFLOW_SYSTEM.md (this file)
 
-/CHRONOS_LOG.md (active session log)
-/CHRONOS_LOG.archive.md (historical sessions)
+/FICTOTUM_LOG.md (active session log)
+/FICTOTUM_LOG.archive.md (historical sessions)
 ```
 
 ---
@@ -453,7 +453,7 @@ To fully activate this system:
 - [ ] Each agent has submitted their Q1 roadmap draft
 - [ ] CEO has conducted Quarterly Greenlight ceremony
 - [ ] First sprint plan has been created and greenlighted
-- [ ] CHRONOS_LOG rotation policy is being followed
+- [ ] FICTOTUM_LOG rotation policy is being followed
 - [ ] Handoff protocol has been demonstrated at least once
 
 ---

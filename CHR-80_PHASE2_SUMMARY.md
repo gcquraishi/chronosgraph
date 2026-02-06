@@ -139,7 +139,7 @@ Connected all 120 18th century figures:
 
 1. **CHR-80_ORPHAN_REDUCTION_PHASE2_REPORT.md** - Detailed technical report
 2. **CHR-80_RECOMMENDED_MEDIA_ADDITIONS.md** - 32 high-priority media works to ingest
-3. **CHRONOS_LOG.md** - Updated with Phase 2 results
+3. **FICTOTUM_LOG.md** - Updated with Phase 2 results
 4. **CHR-80_PHASE2_SUMMARY.md** - This executive summary
 
 ---

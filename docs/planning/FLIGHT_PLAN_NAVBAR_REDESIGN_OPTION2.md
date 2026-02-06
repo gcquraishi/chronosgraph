@@ -1,4 +1,4 @@
-# ChronosGraph Gemini Flight Plan: Navigation Bar Redesign (Option 2)
+# Fictotum Gemini Flight Plan: Navigation Bar Redesign (Option 2)
 
 **OBJECTIVE:** Implement a modern, clean, and user-friendly top navigation bar based on Option 2 (Slightly More Descriptive), aligning with the new friendly, accessible, and modern design goals.
 
@@ -10,7 +10,7 @@
 -   **Styling:** Based on "Option 1: Soft & Inviting" palette (Primary Blue `#4FC3F7`, Secondary Light Gray `#F5F5F5`, Accent Coral Pink `#FF8A65`, Text Deep Charcoal `#37474F`) and typefaces (Montserrat for headings, Lato for body).
 
 ### B. Key Navigation Items
--   **ChronosGraph Logo/Name:** Links to the Dashboard/Home.
+-   **Fictotum Logo/Name:** Links to the Dashboard/Home.
 -   **Search:** A dedicated button/link triggering the universal search functionality.
 -   **Contribute:** A dropdown menu for various data addition workflows.
 -   **Analyze:** A dropdown menu for analytical tools.
@@ -27,7 +27,7 @@
 
 2.  **Implement Navigation Items:**
     -   **Logo/App Name:**
-        *   Display "ChronosGraph".
+        *   Display "Fictotum".
         *   Link to the root `/` path.
     -   **Search:**
         *   A button or link labeled "Search".
@@ -64,7 +64,7 @@
 
 **MODIFICATIONS**:
 
--   **Update `CHRONOS_LOG.md`:** Append a structured entry logging the implementation of the new navigation bar based on Option 2, detailing the changes made.
+-   **Update `FICTOTUM_LOG.md`:** Append a structured entry logging the implementation of the new navigation bar based on Option 2, detailing the changes made.
 
 **VERIFICATION**:
 

@@ -1,4 +1,4 @@
-# ChronosGraph Character Connection Prioritization Report
+# Fictotum Character Connection Prioritization Report
 **Generated:** 2026-01-18
 **Analyst:** Claude Code (Sonnet 4.5)
 **Database:** Neo4j Aura (c78564a4)
@@ -320,7 +320,7 @@ These works have large casts but no character relationship data. Highest impact 
 - [ ] Validation phase: Cross-reference with historical sources (Wikipedia, academic sources)
 - [ ] Ingestion phase: Create Cypher scripts following template
 - [ ] QA phase: Verify relationships appear correctly in database
-- [ ] Update CHRONOS_LOG.md with findings and statistics
+- [ ] Update FICTOTUM_LOG.md with findings and statistics
 
 ### After Completion
 - [ ] Generate final statistics report
@@ -390,4 +390,4 @@ LIMIT 20;
 ---
 
 **Report End**
-For questions or clarifications, consult CHRONOS_LOG.md or review database audit queries in `scripts/qa/`.
+For questions or clarifications, consult FICTOTUM_LOG.md or review database audit queries in `scripts/qa/`.

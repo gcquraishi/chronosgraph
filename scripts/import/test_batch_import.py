@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ChronosGraph Batch Import Test Suite
+Fictotum Batch Import Test Suite
 
 Tests the batch import functionality with example data.
 Verifies duplicate detection, validation, and import logic.
@@ -246,7 +246,7 @@ def test_similarity_calculation():
 def run_all_tests():
     """Run all tests."""
     print("=" * 80)
-    print("ChronosGraph Batch Import Test Suite")
+    print("Fictotum Batch Import Test Suite")
     print("=" * 80)
 
     try:

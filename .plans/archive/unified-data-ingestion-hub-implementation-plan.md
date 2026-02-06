@@ -233,7 +233,7 @@ Key architectural/implementation choices:
 - **Bulk Import Workflow**: Uploading CSV/JSON files to create multiple entities at once (future enhancement)
 - **AI-Powered Entity Extraction**: Automatically detecting entities from unstructured text (future enhancement)
 - **Collaborative Editing**: Multiple users editing same entity simultaneously with conflict resolution
-- **Advanced Wikidata Integration**: Syncing ChronosGraph data back to Wikidata (read-only for now)
+- **Advanced Wikidata Integration**: Syncing Fictotum data back to Wikidata (read-only for now)
 - **Location/Era Creation UI**: For MVP, assume Locations and Eras are seeded by admins (can add later)
 - **Relationship Editing**: Editing/deleting existing relationships (separate feature)
 - **Version History**: Tracking changes to entities over time (future enhancement)

@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-Completed critical infrastructure work across 4 Linear tickets to ensure ChronosGraph's operational reliability and performance as the database scales beyond 640+ nodes and 2000+ relationships.
+Completed critical infrastructure work across 4 Linear tickets to ensure Fictotum's operational reliability and performance as the database scales beyond 640+ nodes and 2000+ relationships.
 
 ### Tickets Completed
 
@@ -258,7 +258,7 @@ Comprehensive analytics dashboard:
 - No tracking across websites
 - Anonymous session IDs (not cookies)
 - No IP address logging
-- Data stored in ChronosGraph's own database
+- Data stored in Fictotum's own database
 
 ✅ **CCPA Compliant:**
 - No sale of personal information

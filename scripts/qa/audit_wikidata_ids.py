@@ -38,7 +38,7 @@ def fetch_wikidata_label(qid: str) -> str | None:
             'format': 'json'
         }
         headers = {
-            'User-Agent': 'ChronosGraph/1.0 (https://github.com/gcquraishi/chronosgraph; Data Quality Audit)'
+            'User-Agent': 'Fictotum/1.0 (https://github.com/gcquraishi/fictotum; Data Quality Audit)'
         }
 
         response = requests.get(url, params=params, headers=headers, timeout=10)

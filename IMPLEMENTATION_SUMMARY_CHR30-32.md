@@ -3,11 +3,11 @@
 **Date**: 2026-02-01
 **Tickets**: CHR-30, CHR-31, CHR-32
 **Status**: ✅ COMPLETE
-**Implemented By**: Claude Sonnet 4.5 (ChronosGraph Co-CEO)
+**Implemented By**: Claude Sonnet 4.5 (Fictotum Co-CEO)
 
 ## Executive Summary
 
-Successfully implemented a comprehensive duplicate detection and management system for ChronosGraph's HistoricalFigure nodes. The system uses enhanced similarity scoring (70% lexical Levenshtein + 30% phonetic Double Metaphone) to identify potential duplicates, provides an admin dashboard for review, and enables safe merge operations with full audit trails.
+Successfully implemented a comprehensive duplicate detection and management system for Fictotum's HistoricalFigure nodes. The system uses enhanced similarity scoring (70% lexical Levenshtein + 30% phonetic Double Metaphone) to identify potential duplicates, provides an admin dashboard for review, and enables safe merge operations with full audit trails.
 
 **Current Database State**:
 - Total Historical Figures: 520
@@ -134,7 +134,7 @@ Purpose: Mark pairs as non-duplicates, exclude from future detection.
 ```cypher
 (:Agent {
   agent_id: "merge-operation",
-  name: "ChronosGraph Merge Operation",
+  name: "Fictotum Merge Operation",
   type: "system",
   created_at: datetime,
   metadata: '{"operation":"duplicate_merge"}'
@@ -207,7 +207,7 @@ Based on current database scan (520 figures):
 
 **Usage**:
 ```bash
-cd /Users/gcquraishi/Documents/big-heavy/chronosgraph
+cd /Users/gcquraishi/Documents/big-heavy/fictotum
 python scripts/test_duplicate_detection.py
 ```
 
@@ -428,7 +428,7 @@ Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
 
 ## Conclusion
 
-Phase 2.2 (Duplicate Detection Dashboard) is **COMPLETE** and ready for deployment. The implementation provides a robust, safe, and user-friendly system for identifying and resolving duplicate HistoricalFigure nodes in the ChronosGraph database.
+Phase 2.2 (Duplicate Detection Dashboard) is **COMPLETE** and ready for deployment. The implementation provides a robust, safe, and user-friendly system for identifying and resolving duplicate HistoricalFigure nodes in the Fictotum database.
 
 **Key Achievements**:
 ✅ Advanced similarity algorithm (lexical + phonetic)

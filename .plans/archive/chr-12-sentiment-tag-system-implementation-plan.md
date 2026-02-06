@@ -344,7 +344,7 @@ ON EACH [r.sentiment_tags];
 ---
 
 **Plan Created**: 2026-01-21
-**Linear Issue**: [CHR-12](https://linear.app/chronosgraph/issue/CHR-12)
+**Linear Issue**: [CHR-12](https://linear.app/fictotum/issue/CHR-12)
 **Implementation Completed**: 2026-01-21
 **Status**: ✅ COMPLETE - Ready for deployment
 

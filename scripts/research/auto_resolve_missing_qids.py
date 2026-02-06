@@ -1,5 +1,5 @@
 """
-ChronosGraph Automated Q-ID Resolver
+Fictotum Automated Q-ID Resolver
 Attempts to resolve missing Wikidata Q-IDs for HistoricalFigure nodes using SPARQL queries.
 
 Strategy:
@@ -202,7 +202,7 @@ class QIDResolver:
     def run_resolution(self):
         """Main resolution workflow."""
         print("=" * 80)
-        print("ChronosGraph Automated Q-ID Resolution")
+        print("Fictotum Automated Q-ID Resolution")
         print(f"Mode: {'DRY RUN' if self.dry_run else 'LIVE EXECUTION'}")
         print("=" * 80)
         print()
@@ -238,7 +238,7 @@ class QIDResolver:
         print("=" * 80)
 
         with open(output_path, 'w') as f:
-            f.write("# ChronosGraph Q-ID Auto-Resolution Report\n\n")
+            f.write("# Fictotum Q-ID Auto-Resolution Report\n\n")
             f.write(f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
             f.write(f"**Mode:** {'DRY RUN (no changes made)' if self.dry_run else 'LIVE EXECUTION'}\n\n")
 

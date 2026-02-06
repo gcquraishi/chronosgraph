@@ -106,7 +106,7 @@ def main():
         raise ValueError("NEO4J_PASSWORD not found in environment")
 
     print("=" * 60)
-    print("ChronosGraph: Wikidata Q-ID Migration")
+    print("Fictotum: Wikidata Q-ID Migration")
     print("=" * 60)
 
     migrate_wikidata_ids(uri, username, password)

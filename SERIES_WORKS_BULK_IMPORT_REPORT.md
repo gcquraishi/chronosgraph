@@ -272,7 +272,7 @@ ORDER BY s.name
 
 The Series Works Bulk Import operation was **highly successful**, importing 189 individual book MediaWork nodes with full provenance tracking and relationship integrity. The 60.8% Wikidata coverage provides a strong canonical foundation, while the 74 provisional nodes are marked for future enrichment.
 
-This import enables CHR-79 Series PART_OF expansion and provides the foundation for series-based exploration features in the ChronosGraph web application.
+This import enables CHR-79 Series PART_OF expansion and provides the foundation for series-based exploration features in the Fictotum web application.
 
 **Data Architect:** Claude Code (Sonnet 4.5)
 **Session Date:** February 3, 2026

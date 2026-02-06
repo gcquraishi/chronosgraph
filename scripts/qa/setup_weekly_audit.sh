@@ -1,8 +1,8 @@
 #!/bin/bash
-# Setup weekly disambiguation audits for ChronosGraph
+# Setup weekly disambiguation audits for Fictotum
 # Run this script once to configure automatic weekly audits
 
-PROJECT_ROOT="/Users/gcquraishi/Documents/chronosgraph"
+PROJECT_ROOT="/Users/gcquraishi/Documents/big-heavy/fictotum"
 AUDIT_SCRIPT="$PROJECT_ROOT/scripts/qa/run_disambiguation_audit.py"
 LOG_DIR="$PROJECT_ROOT/logs/audits"
 CRON_JOB="0 2 * * 1 cd $PROJECT_ROOT && python3 $AUDIT_SCRIPT >> $LOG_DIR/audit_$(date +\%Y\%m\%d_\%H\%M\%S).log 2>&1"

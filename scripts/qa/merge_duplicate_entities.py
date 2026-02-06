@@ -1,5 +1,5 @@
 """
-ChronosGraph Duplicate Entity Merger
+Fictotum Duplicate Entity Merger
 Merges duplicate HistoricalFigure and MediaWork nodes identified by disambiguation audit.
 
 CRITICAL: This script performs DESTRUCTIVE operations (deletes duplicate nodes).
@@ -26,7 +26,7 @@ from neo4j import GraphDatabase
 
 
 class EntityMerger:
-    """Merges duplicate entities in ChronosGraph database."""
+    """Merges duplicate entities in Fictotum database."""
 
     def __init__(self, uri: str, user: str, pwd: str, dry_run: bool = True):
         """Initialize Neo4j connection."""
@@ -277,7 +277,7 @@ class EntityMerger:
         print("=" * 80)
 
         with open(output_path, 'w') as f:
-            f.write("# ChronosGraph Entity Merge Report\n\n")
+            f.write("# Fictotum Entity Merge Report\n\n")
             f.write(f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
             f.write(f"**Mode:** {'DRY RUN (no changes made)' if self.dry_run else 'LIVE EXECUTION'}\n\n")
 
@@ -344,7 +344,7 @@ def main():
 
     try:
         print("=" * 80)
-        print("ChronosGraph Duplicate Entity Merger")
+        print("Fictotum Duplicate Entity Merger")
         print(f"Timestamp: {datetime.now().isoformat()}")
         print("=" * 80)
 

@@ -19,7 +19,7 @@ def get_wikidata_entity(qid: str) -> dict:
         "format": "json"
     }
     headers = {
-        "User-Agent": "ChronosGraph/1.0 (CHR-79 Series Linking)"
+        "User-Agent": "Fictotum/1.0 (CHR-79 Series Linking)"
     }
 
     try:

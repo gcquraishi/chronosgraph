@@ -1,5 +1,5 @@
 """
-ChronosGraph Disambiguation Audit Runner
+Fictotum Disambiguation Audit Runner
 Executes comprehensive entity resolution audit and generates detailed report.
 
 Purpose:
@@ -22,7 +22,7 @@ from neo4j import GraphDatabase
 
 
 class DisambiguationAuditor:
-    """Comprehensive auditor for ChronosGraph entity resolution."""
+    """Comprehensive auditor for Fictotum entity resolution."""
 
     def __init__(self, uri: str, user: str, pwd: str):
         """Initialize Neo4j connection."""
@@ -50,7 +50,7 @@ class DisambiguationAuditor:
     def run_audit(self):
         """Execute all audit queries and collect results."""
         print("=" * 80)
-        print("ChronosGraph Disambiguation Audit")
+        print("Fictotum Disambiguation Audit")
         print(f"Timestamp: {datetime.now().isoformat()}")
         print("=" * 80)
         print()
@@ -528,7 +528,7 @@ class DisambiguationAuditor:
         print("=" * 80)
 
         with open(output_path, 'w') as f:
-            f.write("# ChronosGraph Disambiguation Audit Report\n\n")
+            f.write("# Fictotum Disambiguation Audit Report\n\n")
             f.write(f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
             f.write(f"**Database:** Neo4j Aura (instance c78564a4)\n\n")
             f.write(f"**Auditor:** Claude Code (Data Architect)\n\n")

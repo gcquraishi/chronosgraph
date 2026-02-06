@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ChronosGraph JSON Schema Validator
+Fictotum JSON Schema Validator
 
 Validates batch import JSON files against the official schema.
 Provides detailed error messages for schema violations.
@@ -16,7 +16,7 @@ from typing import List, Tuple
 
 def validate_structure(data: dict) -> Tuple[bool, List[str]]:
     """
-    Validate JSON structure against ChronosGraph batch import schema.
+    Validate JSON structure against Fictotum batch import schema.
 
     Returns:
         Tuple of (is_valid, error_messages)
@@ -256,7 +256,7 @@ def validate_relationship(rel: dict, idx: int) -> List[str]:
 def print_validation_report(is_valid: bool, errors: List[str], filepath: str):
     """Print formatted validation report."""
     print("=" * 80)
-    print("ChronosGraph JSON Validation Report")
+    print("Fictotum JSON Validation Report")
     print("=" * 80)
     print(f"File: {filepath}")
     print(f"Status: {'✅ VALID' if is_valid else '❌ INVALID'}")

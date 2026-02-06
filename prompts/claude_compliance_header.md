@@ -2,11 +2,11 @@
 Before executing this task, you MUST perform the following two steps:
 
 **Step 1: Review Project Log**
-- You MUST read the file `CHRONOS_LOG.md` to understand the current state of the project and the last actions taken by the other AI agent.
+- You MUST read the file `FICTOTUM_LOG.md` to understand the current state of the project and the last actions taken by the other AI agent.
 - In your response, you MUST begin by stating the summary of the last log entry. For example: "Acknowledged: The last action was the migration to `historicity_status`."
 
 **Step 2: Log Your Work**
-- Before you complete your session, you MUST append a new entry to `CHRONOS_LOG.md`.
+- Before you complete your session, you MUST append a new entry to `FICTOTUM_LOG.md`.
 - The entry MUST follow this exact format:
   ---
   **TIMESTAMP:** [Use the current ISO 8601 timestamp]

@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://chronosgraph.com/schemas/bulk-import-media.json",
-  "title": "ChronosGraph Bulk Media Work Import Schema",
+  "$id": "https://fictotum.com/schemas/bulk-import-media.json",
+  "title": "Fictotum Bulk Media Work Import Schema",
   "description": "JSON schema for importing media works with portrayals in bulk",
   "type": "object",
   "required": ["media_works"],

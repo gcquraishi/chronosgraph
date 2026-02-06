@@ -1,6 +1,6 @@
 # Seed Entities Registry
 
-This document maintains a registry of all critical entities used across the ChronosGraph application. These entities are considered "seed data" - foundational nodes that are referenced in code and must exist in the database.
+This document maintains a registry of all critical entities used across the Fictotum application. These entities are considered "seed data" - foundational nodes that are referenced in code and must exist in the database.
 
 ## Purpose
 
@@ -104,4 +104,4 @@ This script:
 ---
 
 **Last Updated**: 2026-02-02
-**Maintained By**: ChronosGraph Development Team
+**Maintained By**: Fictotum Development Team

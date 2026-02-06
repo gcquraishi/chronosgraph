@@ -2,7 +2,7 @@
 
 ## Mission Accomplished ✅
 
-I've created 4 alternative color schemes for the ChronosGraph webapp that maintain the Wes Anderson aesthetic while addressing the pink-dominance concern for male early adopters.
+I've created 4 alternative color schemes for the Fictotum webapp that maintain the Wes Anderson aesthetic while addressing the pink-dominance concern for male early adopters.
 
 ---
 

@@ -1,4 +1,4 @@
-# ChronosGraph Web App
+# Fictotum Web App
 
 A Next.js web application that visualizes how historical figures are portrayed differently across fiction and history.
 
@@ -162,4 +162,4 @@ Dark mode is enabled by default. To modify, edit `app/globals.css` and `app/layo
 
 ## License
 
-Part of the ChronosGraph project.
+Part of the Fictotum project.

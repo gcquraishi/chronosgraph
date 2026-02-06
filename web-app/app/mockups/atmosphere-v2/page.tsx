@@ -65,7 +65,7 @@ export default function AtmosphereV2Index() {
           </Link>
           <h1 className="text-6xl font-black tracking-tighter text-white mb-2 italic uppercase">Atmosphere V2</h1>
           <p className="text-xl text-stone-400 max-w-2xl font-light">
-            Pushing the tactile boundaries of the ChronosGraph interface. 
+            Pushing the tactile boundaries of the Fictotum interface. 
             From industrial systematicism to ancient artisanry.
           </p>
         </header>
@@ -96,7 +96,7 @@ export default function AtmosphereV2Index() {
         </div>
 
         <footer className="mt-24 border-t border-stone-800 pt-8 flex justify-between items-center text-[10px] uppercase tracking-[0.4em] text-stone-600">
-          <div>ChronosGraph Design Lab</div>
+          <div>Fictotum Design Lab</div>
           <div>Project: heavy-big // 2026</div>
         </footer>
       </div>

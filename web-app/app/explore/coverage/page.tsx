@@ -92,7 +92,7 @@ export default function CoveragePage() {
                 Temporal Coverage Explorer
               </h1>
               <p className="text-lg text-stone-600 leading-relaxed max-w-3xl">
-                Comprehensive visualization of ChronosGraph's historical coverage across all time periods, showing content density, media type distribution, and identification of under-represented eras.
+                Comprehensive visualization of Fictotum's historical coverage across all time periods, showing content density, media type distribution, and identification of under-represented eras.
               </p>
             </div>
           </div>

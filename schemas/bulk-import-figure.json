@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://chronosgraph.com/schemas/bulk-import-figure.json",
-  "title": "ChronosGraph Bulk Figure Import Schema",
+  "$id": "https://fictotum.com/schemas/bulk-import-figure.json",
+  "title": "Fictotum Bulk Figure Import Schema",
   "description": "JSON schema for importing historical figures in bulk",
   "type": "object",
   "required": ["figures"],

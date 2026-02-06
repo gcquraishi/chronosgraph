@@ -112,7 +112,7 @@ All endpoints showed clear cache hit patterns:
 ## Architecture Notes
 
 ### API Route Structure
-ChronosGraph uses a **hybrid data fetching architecture**:
+Fictotum uses a **hybrid data fetching architecture**:
 
 1. **API Routes** (tested successfully):
    - `/api/figures/search` - Figure name search

@@ -8,7 +8,7 @@
 
 ## Overview
 
-The Entity Resolution Protocol defines how ChronosGraph identifies, deduplicates, and canonicalizes historical figures to prevent duplicate entries. This protocol uses a **Wikidata-First** strategy combined with enhanced phonetic matching to ensure high-quality, globally unique identifiers.
+The Entity Resolution Protocol defines how Fictotum identifies, deduplicates, and canonicalizes historical figures to prevent duplicate entries. This protocol uses a **Wikidata-First** strategy combined with enhanced phonetic matching to ensure high-quality, globally unique identifiers.
 
 **Key Principles**:
 1. Wikidata Q-IDs are canonical identifiers when available
@@ -211,7 +211,7 @@ RETURN f
 
 ### Overview
 
-ChronosGraph uses **enhanced similarity scoring** that combines:
+Fictotum uses **enhanced similarity scoring** that combines:
 - **70% Lexical (Levenshtein Distance)**: Exact spelling similarity
 - **30% Phonetic (Double Metaphone)**: Pronunciation similarity
 

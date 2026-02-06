@@ -1,4 +1,4 @@
-# Working Session Protocol for ChronosGraph Agents
+# Working Session Protocol for Fictotum Agents
 
 ## Philosophy: Real-Time Collaboration
 
@@ -36,7 +36,7 @@ This system is designed for a CEO who wants to work alongside their agents in re
 **Questions:** [Any clarifications needed]
 ```
 
-### Tier 3: CHRONOS_LOG.md (Major Milestones)
+### Tier 3: FICTOTUM_LOG.md (Major Milestones)
 **Purpose:** Historical record of SIGNIFICANT achievements and architectural decisions
 **Updated by:** Agents (only for major milestones)
 **Read by:** CEO + all agents (for historical context and learning)
@@ -258,12 +258,12 @@ CEO approves resolution.
 
 | Situation | Use | Not |
 |-----------|-----|-----|
-| Starting work on approved task | STATUS_BOARD "Currently Active" | CHRONOS_LOG |
-| Completed routine data ingestion | Session handoff note | CHRONOS_LOG |
-| Completed major feature | Session handoff note + CHRONOS_LOG | Just handoff |
-| Proposing next step | STATUS_BOARD "Proposed Next Steps" | CHRONOS_LOG |
-| Hit a blocker | STATUS_BOARD "Blockers" | CHRONOS_LOG |
-| Architectural decision made | CHRONOS_LOG | Just handoff |
+| Starting work on approved task | STATUS_BOARD "Currently Active" | FICTOTUM_LOG |
+| Completed routine data ingestion | Session handoff note | FICTOTUM_LOG |
+| Completed major feature | Session handoff note + FICTOTUM_LOG | Just handoff |
+| Proposing next step | STATUS_BOARD "Proposed Next Steps" | FICTOTUM_LOG |
+| Hit a blocker | STATUS_BOARD "Blockers" | FICTOTUM_LOG |
+| Architectural decision made | FICTOTUM_LOG | Just handoff |
 | Want to know what's happening | STATUS_BOARD | Ask CEO |
 
 ---
@@ -363,7 +363,7 @@ Updates STATUS_BOARD and continues to next approved task.
 - ✅ CEO approves in seconds, not meetings
 - ✅ No scheduling overhead (no sprint planning, no reviews, no retrospectives)
 - ✅ Real-time visibility and coordination
-- ✅ Historical preservation of major milestones (CHRONOS_LOG)
+- ✅ Historical preservation of major milestones (FICTOTUM_LOG)
 
 ### What This System Eliminates:
 - ❌ Quarterly roadmaps

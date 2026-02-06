@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ChronosGraph: Apply Scalability Indexes
+Fictotum: Apply Scalability Indexes
 Executes index creation statements identified in SCALABILITY_AUDIT.md
 Database: Neo4j Aura (instance c78564a4)
 Date: 2026-01-18
@@ -85,7 +85,7 @@ class IndexManager:
         ]
 
         print("=" * 70)
-        print("ChronosGraph: Creating Scalability Indexes")
+        print("Fictotum: Creating Scalability Indexes")
         print("=" * 70)
         print(f"Total indexes to create: {len(indexes)}\n")
 

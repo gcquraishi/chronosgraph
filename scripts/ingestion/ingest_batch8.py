@@ -1,5 +1,5 @@
 """
-ChronosGraph: Batch 8 Ingestion
+Fictotum: Batch 8 Ingestion
 Ingests deduplicated batch 8 data into Neo4j.
 Focus: Greco-Persian Wars, Alexander the Great, Trojan War (Myth-History)
 """
@@ -240,7 +240,7 @@ def main():
         data = json.load(f)
 
     print("=" * 70)
-    print("ChronosGraph: Batch 8 Ingestion")
+    print("Fictotum: Batch 8 Ingestion")
     print("=" * 70)
     print(f"Dataset: {data['metadata']['project']}")
     print(f"Description: {data['metadata']['description']}")

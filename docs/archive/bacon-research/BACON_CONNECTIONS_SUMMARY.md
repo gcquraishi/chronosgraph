@@ -2,7 +2,7 @@
 
 **Date:** 2026-01-18
 **Agent:** Claude Code (Sonnet 4.5)
-**Status:** Complete - All entities ingested into ChronosGraph Neo4j database
+**Status:** Complete - All entities ingested into Fictotum Neo4j database
 
 ## Overview
 
@@ -185,6 +185,6 @@ python scripts/verify_bacon_connections.py
 
 ## Conclusion
 
-This research successfully demonstrated the "six degrees of separation" concept by establishing multiple verifiable connection paths between Kevin Bacon (actor) and Francis Bacon (painter) through the film industry network. All entities were ingested following strict canonical identification protocols with Wikidata Q-IDs, ensuring data integrity and preventing duplicates in the ChronosGraph knowledge graph.
+This research successfully demonstrated the "six degrees of separation" concept by establishing multiple verifiable connection paths between Kevin Bacon (actor) and Francis Bacon (painter) through the film industry network. All entities were ingested following strict canonical identification protocols with Wikidata Q-IDs, ensuring data integrity and preventing duplicates in the Fictotum knowledge graph.
 
-The knowledge graph now contains verified pathways showing how modern cinema creates unexpected connections between historical figures separated by centuries, illustrating the core value proposition of ChronosGraph: revealing hidden connections across time through media portrayals.
+The knowledge graph now contains verified pathways showing how modern cinema creates unexpected connections between historical figures separated by centuries, illustrating the core value proposition of Fictotum: revealing hidden connections across time through media portrayals.

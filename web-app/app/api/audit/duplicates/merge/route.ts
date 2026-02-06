@@ -159,7 +159,7 @@ export async function POST(request: NextRequest) {
       // Ensure Merge Agent exists
       MERGE (agent:Agent {agent_id: "merge-operation"})
       ON CREATE SET
-        agent.name = "ChronosGraph Merge Operation",
+        agent.name = "Fictotum Merge Operation",
         agent.type = "system",
         agent.created_at = datetime(),
         agent.metadata = '{"operation":"duplicate_merge","description":"Automated merge of duplicate figures"}'

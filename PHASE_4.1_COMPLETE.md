@@ -4,7 +4,7 @@
 **Status:** ✅ COMPLETE
 
 ## Overview
-Successfully built end-to-end bulk data ingestion pipeline for ChronosGraph. The system enables importing hundreds of historical figures and media works from curated JSON files with full validation, enrichment, duplicate prevention, and provenance tracking.
+Successfully built end-to-end bulk data ingestion pipeline for Fictotum. The system enables importing hundreds of historical figures and media works from curated JSON files with full validation, enrichment, duplicate prevention, and provenance tracking.
 
 ## Sessions Completed (4/4)
 
@@ -361,7 +361,7 @@ Phase 4.1 (Bulk Data Ingestion) is **complete and production-ready**. All four s
 3. ✅ **Duplicate Prevention** - Three-tier matching + resolution cache
 4. ✅ **Import Execution** - Transaction safety + provenance tracking
 
-The ChronosGraph database can now efficiently import curated datasets while maintaining:
+The Fictotum database can now efficiently import curated datasets while maintaining:
 - Data quality (validation + enrichment)
 - Database integrity (duplicate prevention)
 - Audit trail (provenance tracking)

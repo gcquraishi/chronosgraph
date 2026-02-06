@@ -1,4 +1,4 @@
-# ChronosGraph Product Roadmap
+# Fictotum Product Roadmap
 *Last updated: 2026-02-02*
 
 ---
@@ -13,7 +13,7 @@
 
 ## Vision
 
-ChronosGraph is a knowledge graph exploring how historical figures have been portrayed across media (film, TV, books, games). Users discover connections between figures, analyze portrayal sentiment, and contribute new data.
+Fictotum is a knowledge graph exploring how historical figures have been portrayed across media (film, TV, books, games). Users discover connections between figures, analyze portrayal sentiment, and contribute new data.
 
 ## Current State (February 2026)
 

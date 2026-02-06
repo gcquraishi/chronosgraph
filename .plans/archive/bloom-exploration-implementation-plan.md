@@ -2,7 +2,7 @@
 
 **Overall Progress:** `86%` (12/14 tasks complete - Core implementation complete, testing remaining)
 
-**GitHub Issue:** [#1](https://github.com/gcquraishi/chronosgraph/issues/1)
+**GitHub Issue:** [#1](https://github.com/gcquraishi/fictotum/issues/1)
 
 ---
 
@@ -273,7 +273,7 @@ Key architectural/implementation choices made during exploration:
 - Test in Chrome and Safari (force graph uses Canvas, browser differences possible)
 
 ### Communication
-- Update CHRONOS_LOG.md at end of each day with progress and blockers
+- Update FICTOTUM_LOG.md at end of each day with progress and blockers
 - Flag any deviation from plan immediately (don't silently adjust scope)
 - If Day 1 camera control takes >1.5 days, reassess timeline
 
@@ -304,7 +304,7 @@ Key architectural/implementation choices made during exploration:
 
 ## Related Documents
 
-- **GitHub Issue**: [#1 - Interactive node-to-node graph exploration](https://github.com/gcquraishi/chronosgraph/issues/1)
+- **GitHub Issue**: [#1 - Interactive node-to-node graph exploration](https://github.com/gcquraishi/fictotum/issues/1)
 - **Exploration Notes**: See conversation transcript with 12 clarification questions and answers
 - **Chief-of-Staff Review**: Agent a5719e4 approved with timeline caveat (may need +2 days for camera control)
 - **Code Files**:

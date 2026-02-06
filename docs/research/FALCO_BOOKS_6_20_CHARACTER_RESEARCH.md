@@ -2,7 +2,7 @@
 ## Comprehensive Analysis for Database Ingestion
 
 **Research Date:** 2026-01-18
-**Project:** ChronosGraph Character Network Ingestion
+**Project:** Fictotum Character Network Ingestion
 **Series:** Marcus Didius Falco (20-book series by Lindsey Davis)
 **Target:** Books 6-20 comprehensive character mapping and ingestion
 

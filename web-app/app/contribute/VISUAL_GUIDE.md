@@ -5,7 +5,7 @@
 ### Step 1: Search Interface (Desktop)
 ```
 ┌───────────────────────────────────────────────────────────────────┐
-│  🎯 Add to ChronosGraph                                           │
+│  🎯 Add to Fictotum                                           │
 │  Unified hub for contributing historical figures and media works  │
 └───────────────────────────────────────────────────────────────────┘
 
@@ -18,10 +18,10 @@
 │  │ 🔍 Search by name or title...                               │ │
 │  └─────────────────────────────────────────────────────────────┘ │
 │                                                                   │
-│  [        🔍 Search ChronosGraph & Wikidata                    ]  │
+│  [        🔍 Search Fictotum & Wikidata                    ]  │
 │                                                                   │
 │  ┌─────────────────────────────────────────────────────────────┐ │
-│  │ 💾 Already in ChronosGraph                                   │ │
+│  │ 💾 Already in Fictotum                                   │ │
 │  ├─────────────────────────────────────────────────────────────┤ │
 │  │ Henry VIII                           [Figure]          →    │ │
 │  │ 1491                                                         │ │
@@ -87,7 +87,7 @@ Step 3 of 3                                             100% complete
 ┌───────────────────────────────────────────────────────────────────┐
 │                                                                   │
 │  Confirm & Create                                                 │
-│  Review the details before adding to ChronosGraph                 │
+│  Review the details before adding to Fictotum                 │
 │                                                                   │
 │  ┌─────────────────────────────────────────────────────────────┐ │
 │  │ 🎬                                                            │ │
@@ -113,7 +113,7 @@ Step 3 of 3                                             100% complete
 │                       (spinning)                                  │
 │                                                                   │
 │                     Creating Entity...                            │
-│           Please wait while we add this to ChronosGraph          │
+│           Please wait while we add this to Fictotum          │
 │                                                                   │
 │                                                                   │
 └───────────────────────────────────────────────────────────────────┘
@@ -126,7 +126,7 @@ Step 3 of 3                                             100% complete
 ### Search Step (Mobile)
 ```
 ┌──────────────────────────┐
-│ 🎯 Add to ChronosGraph   │
+│ 🎯 Add to Fictotum   │
 │ Unified hub for contrib  │
 │ uting...                 │
 └──────────────────────────┘
@@ -142,7 +142,7 @@ Step 3 of 3                                             100% complete
 │                          │
 │ ┌──────────────────────┐ │
 │ │     🔍 Search        │ │
-│ │   ChronosGraph &     │ │
+│ │   Fictotum &     │ │
 │ │     Wikidata         │ │
 │ └──────────────────────┘ │
 │                          │
@@ -218,10 +218,10 @@ Contrast on white: 9.8:1 (AAA)
 
 ### Button States
 ```
-Normal:     [  Search ChronosGraph  ]
-Hover:      [  Search ChronosGraph  ]  ← Slightly darker
-Active:     [  Search ChronosGraph  ]  ← Pressed effect
-Disabled:   [  Search ChronosGraph  ]  ← Grayed out, no cursor
+Normal:     [  Search Fictotum  ]
+Hover:      [  Search Fictotum  ]  ← Slightly darker
+Active:     [  Search Fictotum  ]  ← Pressed effect
+Disabled:   [  Search Fictotum  ]  ← Grayed out, no cursor
 
 Loading:    [  ⊙ Searching...       ]  ← Spinner + text
 ```
@@ -312,13 +312,13 @@ Icon + Text:       gap-2 (8px) for small, gap-3 (12px) for large
 ### Desktop
 ```
 H1: 3xl (30px) font-bold text-brand-primary
-    Add to ChronosGraph
+    Add to Fictotum
 
 H2: 2xl (24px) font-bold text-brand-primary
     What would you like to add?
 
 H3: lg (18px) font-semibold text-brand-primary
-    Already in ChronosGraph
+    Already in Fictotum
 
 Body: base (16px) text-brand-text/70
     Unified hub for contributing...
@@ -375,10 +375,10 @@ Custom:           ring-2 ring-brand-accent
 ### Screen Reader Announcements
 ```
 [Search initiated]
-→ "Searching ChronosGraph and Wikidata"
+→ "Searching Fictotum and Wikidata"
 
 [Results loaded]
-→ "Found 3 results in ChronosGraph, 2 from Wikidata"
+→ "Found 3 results in Fictotum, 2 from Wikidata"
 
 [Creating entity]
 → "Creating entity, please wait"

@@ -1,4 +1,4 @@
-# ChronosGraph Contributor Quick Start Guide
+# Fictotum Contributor Quick Start Guide
 
 *Your step-by-step guide to adding historical figures and media works*
 
@@ -21,7 +21,7 @@
 
 ### What You Need
 
-✅ A ChronosGraph account (sign up at `/auth/signin`)
+✅ A Fictotum account (sign up at `/auth/signin`)
 ✅ Basic knowledge of the historical figure or media work you're adding
 ✅ 5-10 minutes of research time
 
@@ -44,7 +44,7 @@ Follow these three simple rules and you'll be a successful contributor:
 - Historical Figure Example: "Napoleon Bonaparte" → **Q517**
 - Media Work Example: "War and Peace" → **Q180736**
 
-**Why?** Wikidata Q-IDs are like ISBN numbers for books—they're globally unique identifiers that prevent duplicates and connect ChronosGraph to the wider knowledge ecosystem.
+**Why?** Wikidata Q-IDs are like ISBN numbers for books—they're globally unique identifiers that prevent duplicates and connect Fictotum to the wider knowledge ecosystem.
 
 **How long should I search?** Spend at least 2-3 minutes trying different name variations and spellings.
 
@@ -52,7 +52,7 @@ Follow these three simple rules and you'll be a successful contributor:
 
 ### Rule #2: Check Before You Create
 
-**Always search ChronosGraph** before adding a new entity.
+**Always search Fictotum** before adding a new entity.
 
 **Where to check:**
 1. Go to `/contribute`
@@ -123,7 +123,7 @@ Search Results:
 **What you'll see:**
 ```
 ┌─────────────────────────────────────┐
-│  Add to ChronosGraph                │
+│  Add to Fictotum                │
 │                                     │
 │  What would you like to add?        │
 │                                     │
@@ -135,7 +135,7 @@ Search Results:
 
 ---
 
-#### Step 3: Search in ChronosGraph
+#### Step 3: Search in Fictotum
 
 **Type:** "Cleopatra"
 
@@ -153,7 +153,7 @@ Search Results:
 ```
 🟢 Cleopatra (Q635)
    High confidence · Last pharaoh of Egypt
-   → Add to ChronosGraph
+   → Add to Fictotum
 ```
 **If you see this:** Click to proceed with adding this figure (see next step)
 
@@ -370,7 +370,7 @@ War and Peace (Q180736)
 
 **Click Confirm & Create**
 
-**Success!** The media work is now in ChronosGraph.
+**Success!** The media work is now in Fictotum.
 
 ---
 
@@ -656,7 +656,7 @@ Skip:
 
 ### Q: What if Wikidata has the wrong birth year for my figure?
 
-**A:** Use Wikidata's Q-ID but correct the year in ChronosGraph. Document the discrepancy in your session notes with a source.
+**A:** Use Wikidata's Q-ID but correct the year in Fictotum. Document the discrepancy in your session notes with a source.
 
 ---
 
@@ -665,7 +665,7 @@ Skip:
 **A:** After creating an entity:
 1. You'll be redirected to the entity's page
 2. The entity will have a unique ID (Q-ID or PROV:slug-timestamp)
-3. You can search for it in ChronosGraph and it will appear
+3. You can search for it in Fictotum and it will appear
 4. It will have a CREATED_BY relationship linking to your account
 
 ---
@@ -762,12 +762,12 @@ Admins can edit or delete entries if needed.
 ### Getting Help
 - **Questions?** Post in the contributor forum
 - **Found a bug?** Create an issue on GitHub
-- **Need guidance?** Reach out to the ChronosGraph team
+- **Need guidance?** Reach out to the Fictotum team
 
 ---
 
 **Last Updated:** February 2026
 **Version:** 1.0.0
-**For:** ChronosGraph Contributors
+**For:** Fictotum Contributors
 
 *Thank you for helping build the world's knowledge graph of historical portrayals!* 🎉

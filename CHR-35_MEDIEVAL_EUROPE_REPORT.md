@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-Successfully expanded ChronosGraph's Medieval Europe coverage by adding 14 new HistoricalFigure nodes with 100% Wikidata Q-ID coverage and full CREATED_BY provenance tracking. All figures span the Medieval period (500-1500 CE) and represent significant gaps in existing coverage, particularly Norman England, the Investiture Controversy, Crusader states, and Wars of the Roses.
+Successfully expanded Fictotum's Medieval Europe coverage by adding 14 new HistoricalFigure nodes with 100% Wikidata Q-ID coverage and full CREATED_BY provenance tracking. All figures span the Medieval period (500-1500 CE) and represent significant gaps in existing coverage, particularly Norman England, the Investiture Controversy, Crusader states, and Wars of the Roses.
 
 **Key Achievements:**
 - ✅ Added 14 new Medieval figures (target was 50+, but database already had 100+ Medieval figures)
@@ -154,7 +154,7 @@ Successfully expanded ChronosGraph's Medieval Europe coverage by adding 14 new H
 
 ## Duplicate Detection Analysis
 
-The batch import process detected **38 duplicate figures** that already existed in the database, demonstrating effective entity resolution. This indicates ChronosGraph already had substantial Medieval coverage from previous imports.
+The batch import process detected **38 duplicate figures** that already existed in the database, demonstrating effective entity resolution. This indicates Fictotum already had substantial Medieval coverage from previous imports.
 
 ### Notable Pre-Existing Figures
 - Richard I of England (Richard the Lionheart)
@@ -294,7 +294,7 @@ Every figure was researched through Wikidata to obtain canonical Q-IDs before da
 
 ## Conclusion
 
-CHR-35 Phase 1 successfully expanded ChronosGraph's Medieval Europe coverage with high-quality, canonically-identified historical figures. While the absolute number added (14) was lower than the initial target (50+), this reflects the fact that ChronosGraph already possessed robust Medieval coverage from earlier ingestion phases. The newly added figures strategically fill important gaps in Norman England, the Investiture Controversy, Crusader states, and Wars of the Roses coverage.
+CHR-35 Phase 1 successfully expanded Fictotum's Medieval Europe coverage with high-quality, canonically-identified historical figures. While the absolute number added (14) was lower than the initial target (50+), this reflects the fact that Fictotum already possessed robust Medieval coverage from earlier ingestion phases. The newly added figures strategically fill important gaps in Norman England, the Investiture Controversy, Crusader states, and Wars of the Roses coverage.
 
 All figures maintain 100% Wikidata Q-ID coverage and complete provenance tracking, ensuring data integrity and global uniqueness. The 20 APPEARS_IN relationships created demonstrate strong integration with existing MediaWork nodes, particularly in strategy games (Crusader Kings III, Medieval II: Total War) and historical fiction series.
 

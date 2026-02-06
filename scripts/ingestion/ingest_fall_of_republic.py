@@ -1,5 +1,5 @@
 """
-ChronosGraph: Fall of the Republic - Deep Extraction
+Fictotum: Fall of the Republic - Deep Extraction
 
 Comprehensive ingestion of historical figures from the Fall of the Roman Republic era.
 Sources:
@@ -1798,7 +1798,7 @@ PORTRAYALS = [
 ]
 
 
-class ChronosGraphIngestor:
+class FictotumIngestor:
     """Handles ingestion of historical fiction data into Neo4j with error recovery."""
 
     def __init__(self, uri: str, username: str, password: str):
@@ -1951,7 +1951,7 @@ class ChronosGraphIngestor:
 def generate_overnight_report(results: dict, stats: dict) -> str:
     """Generate the overnight report markdown file."""
     report = []
-    report.append("# ChronosGraph Overnight Report")
+    report.append("# Fictotum Overnight Report")
     report.append(f"\n**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     report.append("\n## Database Statistics")
     report.append(f"- **Historical Figures:** {stats['figures']}")
@@ -2106,13 +2106,13 @@ def main():
         raise ValueError("NEO4J_PASSWORD not found in environment variables")
 
     print("=" * 70)
-    print("ChronosGraph: Fall of the Republic - Deep Extraction")
+    print("Fictotum: Fall of the Republic - Deep Extraction")
     print("=" * 70)
     print(f"Connecting to: {uri}")
     print(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
     try:
-        ingestor = ChronosGraphIngestor(uri, username, password)
+        ingestor = FictotumIngestor(uri, username, password)
     except (ServiceUnavailable, AuthError) as e:
         log_error("Database connection", e)
         print("\n[FATAL] Could not connect to Neo4j. Check credentials and try again.")

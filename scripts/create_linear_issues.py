@@ -8,8 +8,8 @@ import json
 import requests
 from typing import Dict, List
 
-LINEAR_API_KEY = ""
-LINEAR_TEAM_ID = ""
+LINEAR_API_KEY = os.environ.get("LINEAR_API_KEY", "")
+LINEAR_TEAM_ID = os.environ.get("LINEAR_TEAM_ID", "")
 LINEAR_API_URL = "https://api.linear.app/graphql"
 
 ISSUES = [

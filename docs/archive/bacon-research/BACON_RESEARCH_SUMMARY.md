@@ -2,7 +2,7 @@
 ## Six Degrees of Separation Analysis Complete
 
 **Research Date:** January 18, 2026
-**Project:** ChronosGraph Historical Media Database
+**Project:** Fictotum Historical Media Database
 **Task:** Document connection paths between Kevin Bacon (contemporary actor) and Francis Bacon through historical media
 
 ---
@@ -10,7 +10,7 @@
 ## RESEARCH COMPLETED: 3 COMPREHENSIVE DOCUMENTS CREATED
 
 ### 1. Main Research Report
-**File:** `/Users/gcquraishi/Documents/chronosgraph/docs/KEVIN_BACON_FRANCIS_BACON_SIX_DEGREES.md` (20 KB)
+**File:** `/Users/gcquraishi/Documents/big-heavy/fictotum/docs/KEVIN_BACON_FRANCIS_BACON_SIX_DEGREES.md` (20 KB)
 
 Contains:
 - Executive summary of findings
@@ -18,13 +18,13 @@ Contains:
 - All identified actors in Francis Bacon productions
 - Four detailed connection paths with varying degrees of verification
 - Derek Jacobi as central hub actor
-- Data model for ChronosGraph implementation
+- Data model for Fictotum implementation
 - Caveat: Francis Bacon (painter, 1909-1992) vs. Renaissance philosopher (1561-1626)
 - Wikidata integration points
 - Recommendations for database implementation
 
 ### 2. Visual Connection Maps
-**File:** `/Users/gcquraishi/Documents/chronosgraph/docs/BACON_CONNECTION_PATHS_VISUAL.md` (16 KB)
+**File:** `/Users/gcquraishi/Documents/big-heavy/fictotum/docs/BACON_CONNECTION_PATHS_VISUAL.md` (16 KB)
 
 Contains:
 - ASCII-formatted connection path diagrams
@@ -38,7 +38,7 @@ Contains:
 - Implementation framework
 
 ### 3. Database Implementation Guide
-**File:** `/Users/gcquraishi/Documents/chronosgraph/docs/BACON_NETWORK_DATABASE_IMPLEMENTATION.md` (25 KB)
+**File:** `/Users/gcquraishi/Documents/big-heavy/fictotum/docs/BACON_NETWORK_DATABASE_IMPLEMENTATION.md` (25 KB)
 
 Contains:
 - Complete Neo4j Cypher implementation code
@@ -322,13 +322,13 @@ The research demonstrates that:
 - Multiple connection paths exist with varying degrees of verification
 - Significant gaps exist in cinematic representation of some historical figures
 
-The ChronosGraph knowledge graph model is well-suited for capturing these complex relationships and enabling "six degrees" style queries across actors, films, documentaries, and historical subjects.
+The Fictotum knowledge graph model is well-suited for capturing these complex relationships and enabling "six degrees" style queries across actors, films, documentaries, and historical subjects.
 
 All research, analysis, and implementation code is documented and ready for database integration.
 
 ---
 
-**Prepared for:** ChronosGraph Project
+**Prepared for:** Fictotum Project
 **Prepared by:** Claude Haiku Research Agent
 **Date:** January 18, 2026
 **Status:** Research Complete, Ready for Implementation

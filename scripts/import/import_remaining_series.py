@@ -116,7 +116,7 @@ class RemainingSeriesImporter:
         """
 
         url = "https://query.wikidata.org/sparql"
-        headers = {"User-Agent": "ChronosGraph/1.0"}
+        headers = {"User-Agent": "Fictotum/1.0"}
 
         try:
             response = requests.get(
@@ -321,7 +321,7 @@ class RemainingSeriesImporter:
     def run(self):
         """Run import for remaining series."""
         print("\n" + "="*80)
-        print("ChronosGraph Remaining Series Import")
+        print("Fictotum Remaining Series Import")
         print("Target: Add 80+ books to reach 150-200 total")
         print("="*80 + "\n")
 
@@ -358,7 +358,7 @@ class RemainingSeriesImporter:
     def generate_report(self):
         """Generate markdown report."""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        report_path = f"/Users/gcquraishi/Documents/big-heavy/chronosgraph/remaining_series_import_report_{timestamp}.md"
+        report_path = f"/Users/gcquraishi/Documents/big-heavy/fictotum/remaining_series_import_report_{timestamp}.md"
 
         with open(report_path, "w") as f:
             f.write("# Remaining Series Import Report\n\n")

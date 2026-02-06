@@ -2,7 +2,7 @@
 # Automated disambiguation remediation triggered by weekly audits
 # This script runs after weekly audits to automatically fix detected issues
 
-PROJECT_ROOT="/Users/gcquraishi/Documents/chronosgraph"
+PROJECT_ROOT="/Users/gcquraishi/Documents/big-heavy/fictotum"
 MERGE_SCRIPT="$PROJECT_ROOT/scripts/qa/merge_duplicate_entities.py"
 AUDIT_SCRIPT="$PROJECT_ROOT/scripts/qa/run_disambiguation_audit.py"
 LOG_DIR="$PROJECT_ROOT/logs/audits"
@@ -15,7 +15,7 @@ AUDIT_LOG="$LOG_DIR/audit_$TIMESTAMP.log"
 MERGE_LOG="$LOG_DIR/merge_$TIMESTAMP.log"
 
 echo "=========================================="
-echo "🔍 ChronosGraph Weekly Disambiguation Audit & Remediation"
+echo "🔍 Fictotum Weekly Disambiguation Audit & Remediation"
 echo "Timestamp: $TIMESTAMP"
 echo "=========================================="
 

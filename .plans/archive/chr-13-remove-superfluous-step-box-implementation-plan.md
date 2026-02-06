@@ -4,7 +4,7 @@
 
 **Started:** 2026-01-22T02:30:00Z
 
-**Linear Issue:** [CHR-13](https://linear.app/chronosgraph/issue/CHR-13/remove-superfluous-step-box-from-create-appearance-ui)
+**Linear Issue:** [CHR-13](https://linear.app/fictotum/issue/CHR-13/remove-superfluous-step-box-from-create-appearance-ui)
 
 ---
 
@@ -161,7 +161,7 @@ Remove the unnecessary "Step 2: Add Portrayal" placeholder box from the Create A
 
 ### Design Philosophy
 
-This follows the **progressive disclosure** pattern used elsewhere in ChronosGraph:
+This follows the **progressive disclosure** pattern used elsewhere in Fictotum:
 - Show only what's needed at each step
 - Reveal next step only when previous step is complete
 - Avoid placeholder boxes that don't serve a functional purpose
@@ -287,7 +287,7 @@ This aligns with CHR-10 (Content Addition UX Redesign) which:
 
 ### Alignment with Design Philosophy
 
-This implementation follows ChronosGraph's **progressive disclosure** pattern:
+This implementation follows Fictotum's **progressive disclosure** pattern:
 - ✅ Show only what's needed at each step
 - ✅ Reveal next step only when previous step is complete
 - ✅ Avoid placeholder boxes that don't serve a functional purpose

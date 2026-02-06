@@ -1,4 +1,4 @@
-# ChronosGraph Data Quality Maintenance
+# Fictotum Data Quality Maintenance
 
 This directory contains scripts for maintaining data quality and integrity.
 
@@ -109,13 +109,13 @@ Add to crontab for weekly automated audits:
 
 ```bash
 # Every Sunday at 2 AM
-0 2 * * 0 cd /path/to/chronosgraph && python3 scripts/qa/audit_wikidata_ids.py > logs/audit_$(date +\%Y\%m\%d).log 2>&1
+0 2 * * 0 cd /path/to/fictotum && python3 scripts/qa/audit_wikidata_ids.py > logs/audit_$(date +\%Y\%m\%d).log 2>&1
 ```
 
 Email notification setup:
 
 ```bash
-0 2 * * 0 cd /path/to/chronosgraph && python3 scripts/qa/audit_wikidata_ids.py 2>&1 | mail -s "ChronosGraph Weekly Audit" admin@chronosgraph.com
+0 2 * * 0 cd /path/to/fictotum && python3 scripts/qa/audit_wikidata_ids.py 2>&1 | mail -s "Fictotum Weekly Audit" admin@fictotum.com
 ```
 
 ## Data Quality Metrics

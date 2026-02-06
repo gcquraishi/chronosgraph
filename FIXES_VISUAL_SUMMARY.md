@@ -236,12 +236,12 @@ export default function VolatilityLeaderboard({ maxDisplay = 7 }: VolatilityLead
 
 ## Files Modified (Absolute Paths)
 
-1. `/Users/gcquraishi/Documents/big-heavy/chronosgraph/web-app/components/ThemePicker.tsx`
-2. `/Users/gcquraishi/Documents/big-heavy/chronosgraph/web-app/components/RivalrySpotlight.tsx`
-3. `/Users/gcquraishi/Documents/big-heavy/chronosgraph/web-app/app/api/figure/[id]/reputation-timeline/route.ts`
-4. `/Users/gcquraishi/Documents/big-heavy/chronosgraph/web-app/components/ReputationTimeline.tsx`
-5. `/Users/gcquraishi/Documents/big-heavy/chronosgraph/web-app/components/VolatilityLeaderboard.tsx`
-6. `/Users/gcquraishi/Documents/big-heavy/chronosgraph/web-app/app/page.tsx`
+1. `/Users/gcquraishi/Documents/big-heavy/fictotum/web-app/components/ThemePicker.tsx`
+2. `/Users/gcquraishi/Documents/big-heavy/fictotum/web-app/components/RivalrySpotlight.tsx`
+3. `/Users/gcquraishi/Documents/big-heavy/fictotum/web-app/app/api/figure/[id]/reputation-timeline/route.ts`
+4. `/Users/gcquraishi/Documents/big-heavy/fictotum/web-app/components/ReputationTimeline.tsx`
+5. `/Users/gcquraishi/Documents/big-heavy/fictotum/web-app/components/VolatilityLeaderboard.tsx`
+6. `/Users/gcquraishi/Documents/big-heavy/fictotum/web-app/app/page.tsx`
 
 ---
 

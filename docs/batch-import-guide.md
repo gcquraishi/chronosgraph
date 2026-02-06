@@ -1,4 +1,4 @@
-# ChronosGraph Batch Import Guide (CHR-40)
+# Fictotum Batch Import Guide (CHR-40)
 
 ## Overview
 
@@ -17,7 +17,7 @@ The batch import tool enables importing large datasets of historical figures, me
 
 ## Installation
 
-The tool is located at `scripts/import/batch_import.py` and uses the standard ChronosGraph dependencies:
+The tool is located at `scripts/import/batch_import.py` and uses the standard Fictotum dependencies:
 
 ```bash
 # Ensure dependencies are installed
@@ -441,7 +441,7 @@ python scripts/import/batch_import.py data/batch.json --execute --skip-wikidata-
 
 Use Wikidata search before creating JSON:
 - https://www.wikidata.org/wiki/Special:Search
-- Or use the ChronosGraph web app's Wikidata search feature
+- Or use the Fictotum web app's Wikidata search feature
 
 ### 3. Split Large Imports
 

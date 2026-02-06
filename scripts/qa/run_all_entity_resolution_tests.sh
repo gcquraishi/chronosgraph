@@ -22,7 +22,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 echo "======================================================================"
-echo "ChronosGraph Entity Resolution Test Suite (CHR-54)"
+echo "Fictotum Entity Resolution Test Suite (CHR-54)"
 echo "======================================================================"
 echo ""
 

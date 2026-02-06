@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Test script for ChronosGraph Duplicate Detection System
+Test script for Fictotum Duplicate Detection System
 
 Tests the duplicate detection API and merge operations.
 Run after starting the Next.js dev server.
@@ -194,7 +194,7 @@ def display_summary():
 
 def main():
     print("\n" + "="*80)
-    print("ChronosGraph Duplicate Detection System - Test Suite")
+    print("Fictotum Duplicate Detection System - Test Suite")
     print("="*80)
     print("\nEnsure Next.js dev server is running on http://localhost:3000")
 

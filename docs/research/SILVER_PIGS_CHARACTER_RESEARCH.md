@@ -300,7 +300,7 @@
 
 ### Ingestion Script
 
-**Location:** `/Users/gcquraishi/Documents/chronosgraph/scripts/ingestion/ingest_silver_pigs.py`
+**Location:** `/Users/gcquraishi/Documents/big-heavy/fictotum/scripts/ingestion/ingest_silver_pigs.py`
 
 **Features:**
 - Fully automated ingestion with error logging

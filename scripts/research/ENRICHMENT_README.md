@@ -1,4 +1,4 @@
-# ChronosGraph Enrichment Worker - Digital Kanban System
+# Fictotum Enrichment Worker - Digital Kanban System
 
 A resilient, autonomous AI enrichment pipeline for processing large backlogs of media works.
 
@@ -50,13 +50,13 @@ GEMINI_API_KEY=your_api_key_here
 This merges your harvest files into the TODO queue:
 
 ```bash
-cd /Users/gcquraishi/Documents/chronosgraph
+cd /Users/gcquraishi/Documents/fictotum
 python scripts/research/setup_kanban.py
 ```
 
 Output:
 ```
-🎯 Initializing Kanban Board for ChronosGraph Enrichment
+🎯 Initializing Kanban Board for Fictotum Enrichment
 ✅ Loaded 42 works from century_harvest.json
 ✅ Loaded 38 works from davis_harvest.json
 📊 Total unique works to process: 80
@@ -73,7 +73,7 @@ python scripts/research/enrich_worker.py
 
 Output:
 ```
-🚀 ChronosGraph Enrichment Worker Started
+🚀 Fictotum Enrichment Worker Started
 📋 Kanban Board:
    TODO:   data/1_todo_harvest.json
    DONE:   data/2_done_enriched.json

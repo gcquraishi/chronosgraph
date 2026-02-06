@@ -22,7 +22,7 @@ def load_json(filepath):
 
 
 def main():
-    print("📊 ChronosGraph Enrichment Pipeline Status")
+    print("📊 Fictotum Enrichment Pipeline Status")
     print("=" * 50)
 
     todo = load_json(TODO_FILE)

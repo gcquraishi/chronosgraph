@@ -564,7 +564,7 @@ def main():
     print(f"MARCUS DIDIUS FALCO SERIES: BOOKS 6-20 INGESTION GENERATOR")
     print(f"{'='*70}\n")
 
-    scripts_dir = "/Users/gcquraishi/Documents/chronosgraph/scripts/ingestion"
+    scripts_dir = "/Users/gcquraishi/Documents/big-heavy/fictotum/scripts/ingestion"
 
     # Generate scripts
     for book_num, book_info in sorted(BOOKS_6_20.items()):

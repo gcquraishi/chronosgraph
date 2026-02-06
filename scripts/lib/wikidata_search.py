@@ -67,7 +67,7 @@ def search_wikidata_for_work(
             "type": "item"
         }
         headers = {
-            "User-Agent": "ChronosGraph/1.0 (https://github.com/chronosgraph; Q-ID Validation)"
+            "User-Agent": "Fictotum/1.0 (https://github.com/fictotum; Q-ID Validation)"
         }
 
         response = requests.get(url, params=params, headers=headers, timeout=timeout)
@@ -194,7 +194,7 @@ def validate_qid(qid: str, expected_title: str, timeout: int = 10) -> Dict:
             "format": "json"
         }
         headers = {
-            "User-Agent": "ChronosGraph/1.0 (https://github.com/chronosgraph; Q-ID Validation)"
+            "User-Agent": "Fictotum/1.0 (https://github.com/fictotum; Q-ID Validation)"
         }
 
         response = requests.get(url, params=params, headers=headers, timeout=timeout)
@@ -281,7 +281,7 @@ def search_by_creator(creator_name: str, limit: int = 50, timeout: int = 10) -> 
 
         url = "https://query.wikidata.org/sparql"
         headers = {
-            "User-Agent": "ChronosGraph/1.0 (https://github.com/chronosgraph; Creator Search)",
+            "User-Agent": "Fictotum/1.0 (https://github.com/fictotum; Creator Search)",
             "Accept": "application/json"
         }
 

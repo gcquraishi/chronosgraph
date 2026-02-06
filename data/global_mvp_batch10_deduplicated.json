@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "project": "ChronosGraph Global MVP - Batch 10 (Deduplicated)",
+    "project": "Fictotum Global MVP - Batch 10 (Deduplicated)",
     "description": "Expansion dataset with NEW figures, media, and characters only. Duplicates removed by Wikidata Q-ID matching.",
     "deduplication_summary": {
       "media_works": "0 duplicates removed, 6 new added",

@@ -1,4 +1,4 @@
-# ChronosGraph Duplicate Detection System
+# Fictotum Duplicate Detection System
 
 **Implementation Date**: 2026-02-01
 **Tickets**: CHR-30, CHR-31, CHR-32
@@ -6,7 +6,7 @@
 
 ## Overview
 
-The Duplicate Detection System provides automated identification and management of duplicate HistoricalFigure nodes in the ChronosGraph database. It uses enhanced similarity scoring combining lexical (Levenshtein) and phonetic (Double Metaphone) matching to catch spelling variations and pronunciation equivalents.
+The Duplicate Detection System provides automated identification and management of duplicate HistoricalFigure nodes in the Fictotum database. It uses enhanced similarity scoring combining lexical (Levenshtein) and phonetic (Double Metaphone) matching to catch spelling variations and pronunciation equivalents.
 
 ## Architecture
 
@@ -170,7 +170,7 @@ Mark a pair as "not a duplicate" to exclude from future scans.
     "id": "PROV:titus_caesar",
     "name": "Titus"
   },
-  "dismissed_by": "admin@chronosgraph.com",
+  "dismissed_by": "admin@fictotum.com",
   "note": "Different historical figures - Emperor vs. Caesar title holder"
 }
 ```
@@ -232,7 +232,7 @@ Mark a pair as "not a duplicate" to exclude from future scans.
 ```cypher
 (:Agent {
   agent_id: "merge-operation",
-  name: "ChronosGraph Merge Operation",
+  name: "Fictotum Merge Operation",
   type: "system",
   created_at: datetime,
   metadata: '{"operation":"duplicate_merge"}'
@@ -415,7 +415,7 @@ ORDER BY merge_count DESC
 
 ## Credits
 
-**Implementation**: Claude Sonnet 4.5 (ChronosGraph Co-CEO)
+**Implementation**: Claude Sonnet 4.5 (Fictotum Co-CEO)
 **Design System**: Evidence Locker (amber/stone palette)
 **Algorithm**: Enhanced Name Similarity (Levenshtein + Double Metaphone)
 **Database**: Neo4j Aura (instance c78564a4)

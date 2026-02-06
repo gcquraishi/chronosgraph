@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ChronosGraph Character Connection Prioritization Analysis
+Fictotum Character Connection Prioritization Analysis
 Purpose: Identify and rank MediaWorks for character relationship expansion
 Database: Neo4j Aura (instance c78564a4)
 Author: Claude Code (Sonnet 4.5)
@@ -299,7 +299,7 @@ def generate_prioritization_report(no_interaction_works, high_figure_works):
 def main():
     """Main analysis pipeline"""
     print("\n" + "=" * 80)
-    print("ChronosGraph Character Connection Prioritization Analysis")
+    print("Fictotum Character Connection Prioritization Analysis")
     print("=" * 80)
 
     try:

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ChronosGraph: Marcus Didius Falco Series - Books 2-5 Master Ingestion
+Fictotum: Marcus Didius Falco Series - Books 2-5 Master Ingestion
 
 Master ingestion script that runs all four book ingestion scripts in sequence,
 following the established protocol from Book 1 (The Silver Pigs).
@@ -148,7 +148,7 @@ def main():
 
     # Print header
     print("\n" + "#"*80)
-    print("# ChronosGraph: Marcus Didius Falco Series - Books 2-5 Master Ingestion")
+    print("# Fictotum: Marcus Didius Falco Series - Books 2-5 Master Ingestion")
     print("#"*80)
     print(f"Timestamp: {datetime.now().isoformat()}")
     print(f"Total books to ingest: {len(INGESTION_SCRIPTS)}")

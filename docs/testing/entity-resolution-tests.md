@@ -6,7 +6,7 @@
 
 ## Overview
 
-Comprehensive test suite for ChronosGraph's entity resolution system, covering:
+Comprehensive test suite for Fictotum's entity resolution system, covering:
 - Enhanced name similarity algorithm (70% lexical + 30% phonetic)
 - Wikidata Q-ID lookup and validation
 - Canonical ID collision prevention

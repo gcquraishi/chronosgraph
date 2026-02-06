@@ -1,4 +1,4 @@
-# ChronosGraph Icon Library - Wes Anderson Collection
+# Fictotum Icon Library - Wes Anderson Collection
 
 **Date:** February 4, 2026
 **Style:** Wes Anderson (Geometric, Symmetrical, Vintage 60s-70s)

@@ -1,5 +1,5 @@
 """
-ChronosGraph: Ingestion Engine for Batch 12 (Archaic Greece)
+Fictotum: Ingestion Engine for Batch 12 (Archaic Greece)
 """
 import os
 import json
@@ -136,7 +136,7 @@ def main():
 
     ingestor = Batch12Ingestor(uri, user, pwd)
     try:
-        print(f"--- ChronosGraph Batch 12 Ingestion: {datetime.now()} ---")
+        print(f"--- Fictotum Batch 12 Ingestion: {datetime.now()} ---")
         ingestor.setup_schema()
         ingestor.ingest_data(data)
         print("\n--- Ingestion Report ---")

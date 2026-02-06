@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ChronosGraph Batch Import Tool (CHR-40)
+Fictotum Batch Import Tool (CHR-40)
 
 Imports large batches of pre-validated historical figures and media works from structured JSON files.
 Implements duplicate detection, Wikidata validation, and transaction management.
@@ -858,7 +858,7 @@ class BatchImporter:
         print(f"\n📊 Generating import report...")
 
         with open(output_path, 'w') as f:
-            f.write("# ChronosGraph Batch Import Report\n\n")
+            f.write("# Fictotum Batch Import Report\n\n")
             f.write(f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
             f.write(f"**Batch ID:** {self.batch_id}\n\n")
             f.write(f"**Mode:** {'DRY RUN (no changes made)' if self.dry_run else 'LIVE EXECUTION'}\n\n")
@@ -955,7 +955,7 @@ class BatchImporter:
 def main():
     """Main entry point for batch import CLI."""
     parser = argparse.ArgumentParser(
-        description="ChronosGraph Batch Import Tool (CHR-40)",
+        description="Fictotum Batch Import Tool (CHR-40)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -1059,7 +1059,7 @@ Examples:
 
     # Print header
     print("=" * 80)
-    print("ChronosGraph Batch Import Tool (CHR-40)")
+    print("Fictotum Batch Import Tool (CHR-40)")
     print("=" * 80)
     print(f"Input file: {input_path}")
     print(f"Mode: {'DRY RUN (preview only)' if dry_run else 'LIVE EXECUTION'}")

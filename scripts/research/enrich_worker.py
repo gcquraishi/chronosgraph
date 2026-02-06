@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ChronosGraph Enrichment Worker - Digital Kanban System
+Fictotum Enrichment Worker - Digital Kanban System
 Processes works one-at-a-time with resilient API retry logic.
 """
 
@@ -207,7 +207,7 @@ def main():
     """
     Main worker loop - processes works one at a time until TODO list is empty.
     """
-    print("🚀 ChronosGraph Enrichment Worker Started")
+    print("🚀 Fictotum Enrichment Worker Started")
     print(f"📋 Kanban Board:")
     print(f"   TODO:   {TODO_FILE}")
     print(f"   DONE:   {DONE_FILE}")

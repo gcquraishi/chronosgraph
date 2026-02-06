@@ -241,7 +241,7 @@ automate product development given the cast of
                                                        
      … +372 lines (ctrl+o to expand)                   
                                                        
-⏺ Yes, absolutely! CHRONOS_LOG.md and the archive      
+⏺ Yes, absolutely! FICTOTUM_LOG.md and the archive      
   continue to serve an important purpose, but with a   
   narrower, more focused scope:                        
                                                        
@@ -266,14 +266,14 @@ automate product development given the cast of
   - Other agents read these to understand what just    
   shipped                                              
                                                        
-  3. CHRONOS_LOG.md (Major Milestones Only)            
+  3. FICTOTUM_LOG.md (Major Milestones Only)            
                                                        
   - Significant achievements and architectural         
   decisions                                            
   - Still rotates to archive when >3 entries           
   - Reserved for truly important events                
                                                        
-  What qualifies for CHRONOS_LOG:                      
+  What qualifies for FICTOTUM_LOG:                      
   - ✅ Major feature completions ("Implemented full    
   Wikidata integration")                               
   - ✅ Significant data milestones ("Ingested complete 
@@ -288,7 +288,7 @@ automate product development given the cast of
   - ❌ Small bug fixes ("Fixed typo in loading state") 
   - ❌ Polish work ("Improved button hover states")    
                                                        
-  This keeps CHRONOS_LOG as your project history and   
+  This keeps FICTOTUM_LOG as your project history and   
   learning archive while STATUS_BOARD handles real-time
    operational visibility.                             
                                                        

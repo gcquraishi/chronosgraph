@@ -1,6 +1,6 @@
-# Contributing to ChronosGraph
+# Contributing to Fictotum
 
-Welcome to ChronosGraph! This guide will help you understand how to contribute high-quality historical data to our knowledge graph. Whether you're a research analyst agent or a human contributor, following these guidelines ensures data integrity and consistency across the platform.
+Welcome to Fictotum! This guide will help you understand how to contribute high-quality historical data to our knowledge graph. Whether you're a research analyst agent or a human contributor, following these guidelines ensures data integrity and consistency across the platform.
 
 ## Table of Contents
 
@@ -19,7 +19,7 @@ Welcome to ChronosGraph! This guide will help you understand how to contribute h
 **Before you add any data**, always:
 
 1. Search Wikidata first for canonical Q-IDs
-2. Check ChronosGraph's existing database for duplicates
+2. Check Fictotum's existing database for duplicates
 3. Document your sources in session notes
 4. Follow the ingestion protocols below
 5. Never commit changes without verification
@@ -148,7 +148,7 @@ This is **automatically handled** by the contribution UI and ingestion scripts. 
 - ✅ Q180736 (War and Peace - original novel)
 - ❌ Q123456 (War and Peace - 2007 edition)
 
-### Step 2: Check ChronosGraph Database
+### Step 2: Check Fictotum Database
 
 **Via MCP (for agents)**:
 ```cypher
@@ -158,7 +158,7 @@ RETURN m
 
 **Via Contribute UI (for humans)**:
 - Search the title in the `/contribute` search bar
-- Existing works appear under "Already in ChronosGraph"
+- Existing works appear under "Already in Fictotum"
 
 ### Step 3: Create or Link
 
@@ -254,7 +254,7 @@ RETURN f
 
 #### 3. Name Matching Algorithm
 
-ChronosGraph uses **enhanced similarity scoring**:
+Fictotum uses **enhanced similarity scoring**:
 - 70% lexical (Levenshtein distance)
 - 30% phonetic (Double Metaphone)
 
@@ -276,11 +276,11 @@ ChronosGraph uses **enhanced similarity scoring**:
 
 ### 1. Creating Duplicate MediaWorks
 
-**Mistake**: Searching ChronosGraph but not Wikidata, leading to duplicate entries with different Q-IDs.
+**Mistake**: Searching Fictotum but not Wikidata, leading to duplicate entries with different Q-IDs.
 
 **Solution**:
 - Always search Wikidata **first**
-- Then search ChronosGraph with the Q-ID
+- Then search Fictotum with the Q-ID
 - Never create a MediaWork without a `wikidata_id`
 
 ### 2. Using Wrong Entity Type
@@ -417,7 +417,7 @@ If you encounter a conflict you cannot resolve:
 
 ## Code of Conduct
 
-ChronosGraph is a scholarly platform built on rigorous data quality and respectful collaboration. All contributors must adhere to these principles:
+Fictotum is a scholarly platform built on rigorous data quality and respectful collaboration. All contributors must adhere to these principles:
 
 ### 1. Respectful Discourse
 
@@ -508,7 +508,7 @@ The following behaviors will result in immediate revocation of contribution priv
 
 ## Credits
 
-ChronosGraph is built collaboratively by:
+Fictotum is built collaboratively by:
 - AI research agents (Claude Sonnet 4.5 and Opus 4.5)
 - Human contributors and researchers
 - Open data from Wikidata and Wikipedia

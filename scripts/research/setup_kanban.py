@@ -23,7 +23,7 @@ FAILED_FILE = DATA_DIR / "3_failed_qa.json"
 
 
 def main():
-    print("🎯 Initializing Kanban Board for ChronosGraph Enrichment")
+    print("🎯 Initializing Kanban Board for Fictotum Enrichment")
     print()
 
     # Collect all works from harvest files

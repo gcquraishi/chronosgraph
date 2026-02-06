@@ -1,5 +1,5 @@
 """
-ChronosGraph: Provenance System Test Suite
+Fictotum: Provenance System Test Suite
 
 This script tests the Phase 2.1 CREATED_BY provenance tracking system.
 Run after production migration to verify everything works correctly.
@@ -235,7 +235,7 @@ class ProvenanceSystemTester:
     def run_all_tests(self):
         """Run all test suites"""
         self.log("=" * 70)
-        self.log("ChronosGraph Provenance System Test Suite")
+        self.log("Fictotum Provenance System Test Suite")
         self.log("=" * 70)
 
         try:

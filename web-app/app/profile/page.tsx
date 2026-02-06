@@ -41,7 +41,7 @@ export default function ProfilePage() {
             <h1 className="text-3xl font-bold text-brand-primary">Your Profile</h1>
           </div>
           <p className="text-brand-text/70">
-            View and manage your ChronosGraph account
+            View and manage your Fictotum account
           </p>
         </div>
 

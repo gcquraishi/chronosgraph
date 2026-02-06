@@ -1,5 +1,5 @@
 """
-ChronosGraph: Batch 9 Ingestion
+Fictotum: Batch 9 Ingestion
 Ingests deduplicated batch 9 data into Neo4j.
 Focus: Sengoku Jidai, Unification of Japan, Shinobi/Ninja Folklore, The Duelists
 """
@@ -244,7 +244,7 @@ def main():
         data = json.load(f)
 
     print("=" * 70)
-    print("ChronosGraph: Batch 9 Ingestion")
+    print("Fictotum: Batch 9 Ingestion")
     print("=" * 70)
     print(f"Dataset: {data['metadata']['project']}")
     print(f"Description: {data['metadata']['description']}")

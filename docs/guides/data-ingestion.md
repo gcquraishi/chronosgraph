@@ -1,7 +1,7 @@
 # Data Ingestion Guide for Research Analysts
 
 **Audience**: Research analyst agents and human contributors
-**Scope**: Step-by-step tutorial for adding historical figures and media works to ChronosGraph
+**Scope**: Step-by-step tutorial for adding historical figures and media works to Fictotum
 **Prerequisites**: Familiarity with basic historical research and Wikidata
 
 ---
@@ -21,10 +21,10 @@
 
 ## Overview
 
-ChronosGraph uses a **Wikidata-First** strategy for data ingestion:
+Fictotum uses a **Wikidata-First** strategy for data ingestion:
 1. Search Wikidata for canonical Q-IDs
 2. Enrich entities with Wikidata metadata
-3. Verify against existing ChronosGraph database
+3. Verify against existing Fictotum database
 4. Create or link entities with full provenance
 
 **Two Ingestion Paths**:
@@ -39,12 +39,12 @@ ChronosGraph uses a **Wikidata-First** strategy for data ingestion:
 
 #### Step 1: Navigate to the Contribution Hub
 
-**URL**: `https://chronosgraph.com/contribute`
+**URL**: `https://fictotum.com/contribute`
 
 **Interface**:
 ```
 ┌─────────────────────────────────────────────────┐
-│  Add to ChronosGraph                            │
+│  Add to Fictotum                            │
 │  Unified hub for contributing historical        │
 │  figures and media works                        │
 ├─────────────────────────────────────────────────┤
@@ -66,12 +66,12 @@ ChronosGraph uses a **Wikidata-First** strategy for data ingestion:
 
 **What Happens**:
 - Debounced search (500ms delay) prevents excessive queries
-- Parallel search of ChronosGraph database AND Wikidata
+- Parallel search of Fictotum database AND Wikidata
 - Results appear in two tiers:
 
 **Two-Tier Results**:
 ```
-Already in ChronosGraph (Database Results)
+Already in Fictotum (Database Results)
 ┌─────────────────────────────────────────────────┐
 │ 🔵 Napoleon Bonaparte (Figure)                  │
 │    Q517 · 1769-1821 · Roman Empire              │
@@ -82,7 +82,7 @@ Add from Wikidata (External Results)
 ┌─────────────────────────────────────────────────┐
 │ 🟢 Napoleon Bonaparte (Q517)                    │
 │    High confidence · French military leader     │
-│    → Add to ChronosGraph                        │
+│    → Add to Fictotum                        │
 └─────────────────────────────────────────────────┘
 
 User-Generated Entity
@@ -130,10 +130,10 @@ Settings & Enrichment
 📍 Narrative Locations (Suggested from Wikidata)
 ┌─────────────────────────────────────────────────┐
 │ ✅ Ancient Rome                                 │
-│    Wikidata: Q220 → ChronosGraph ID: rome       │
+│    Wikidata: Q220 → Fictotum ID: rome       │
 │                                                 │
 │ ✅ Paris, France                                │
-│    Wikidata: Q90 → ChronosGraph ID: paris       │
+│    Wikidata: Q90 → Fictotum ID: paris       │
 │                                                 │
 │ ⚠️  Austerlitz (Q156186) - Not yet in database │
 │    [Create new location] [Skip this location]  │
@@ -206,7 +206,7 @@ Data source: Wikidata
 ### Success Indicators
 
 **After Creation**:
-- ✅ Entity appears in ChronosGraph database
+- ✅ Entity appears in Fictotum database
 - ✅ CREATED_BY relationship links to your agent/user account
 - ✅ Wikidata Q-ID stored in `wikidata_id` property (if applicable)
 - ✅ Canonical ID assigned (`Q######` or `PROV:slug-timestamp`)
@@ -251,7 +251,7 @@ Use this checklist for **every MediaWork** you add (whether via UI or script):
   - Verified Q-ID matches original work (not a specific edition)
   - Copied Q-ID to clipboard (format: `Q######`)
 
-- [ ] **Check ChronosGraph Database**: Verified work doesn't already exist
+- [ ] **Check Fictotum Database**: Verified work doesn't already exist
   - Searched by Q-ID in `/contribute` search bar
   - OR ran Cypher query: `MATCH (m:MediaWork {wikidata_id: $qid}) RETURN m`
 
@@ -275,7 +275,7 @@ Use this checklist for **every MediaWork** you add (whether via UI or script):
 
 - [ ] **Locations**: Selected narrative locations (where the story takes place)
   - Used Wikidata's "narrative location" property as starting point
-  - Mapped Wikidata Q-IDs to ChronosGraph Location nodes
+  - Mapped Wikidata Q-IDs to Fictotum Location nodes
   - Created new locations for unmapped ones (if critical to the story)
 
 - [ ] **Era Tags**: Reviewed AI suggestions and made adjustments
@@ -285,7 +285,7 @@ Use this checklist for **every MediaWork** you add (whether via UI or script):
 
 ### Post-Ingestion
 
-- [ ] **Session Notes**: Documented the work in CHRONOS_LOG.md or session notes
+- [ ] **Session Notes**: Documented the work in FICTOTUM_LOG.md or session notes
   - Included Wikidata Q-ID
   - Listed sources consulted
   - Noted any conflicts or uncertainties
@@ -602,7 +602,7 @@ Sentiment tags describe **how the media portrays a figure**, not your personal o
 
 ## Session Note-Taking Template
 
-### For Research Agents (CHRONOS_LOG.md)
+### For Research Agents (FICTOTUM_LOG.md)
 
 **Template**:
 ```markdown
@@ -771,7 +771,7 @@ All Wikidata entries verified via:
 
 ### Preparation
 
-**1. Create a Session Note** (CHRONOS_LOG.md):
+**1. Create a Session Note** (FICTOTUM_LOG.md):
 ```markdown
 ## Session: [Date] - [Cluster Name] ([Ticket ID])
 
@@ -827,7 +827,7 @@ RETURN count(f) AS figures_created
 **4. Execute via MCP**:
 ```bash
 # Use the write-cypher MCP tool
-mcp__chronos-neo4j__write-cypher(
+mcp__fictotum-neo4j__write-cypher(
   query: [your Cypher script],
   params: {}
 )
@@ -946,7 +946,7 @@ mcp__chronos-neo4j__write-cypher(
 
 **Phase 1: Research & Planning (Day 1)**
 
-1. **Create Session Note Header** in CHRONOS_LOG.md
+1. **Create Session Note Header** in FICTOTUM_LOG.md
 2. **Compile Entity List**:
    - 50 historical figures (kings, queens, scholars, warriors)
    - 25 media works (films, books, games)
@@ -979,7 +979,7 @@ RETURN f.canonical_id, f.name, f.wikidata_id
 
 7. **Execute Script via MCP**:
 ```bash
-mcp__chronos-neo4j__write-cypher(query: [script])
+mcp__fictotum-neo4j__write-cypher(query: [script])
 ```
 
 8. **Verify Creation**:
@@ -1016,7 +1016,7 @@ CREATE (henry)-[:INTERACTED_WITH {
 11. **Complete Session Note** with full statistics and quality checks
 12. **Update Linear Ticket** to "Done"
 
-**Session Note** (see Medieval example in CHRONOS_LOG.md template above)
+**Session Note** (see Medieval example in FICTOTUM_LOG.md template above)
 
 ---
 
@@ -1024,7 +1024,7 @@ CREATE (henry)-[:INTERACTED_WITH {
 
 **Before Every Contribution**:
 1. ✅ Search Wikidata for Q-ID
-2. ✅ Check ChronosGraph database for duplicates
+2. ✅ Check Fictotum database for duplicates
 3. ✅ Verify entity type (Figure vs Work)
 4. ✅ Document sources in session notes
 

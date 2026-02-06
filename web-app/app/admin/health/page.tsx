@@ -74,7 +74,7 @@ export default function HealthDashboardPage() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `chronosgraph-health-${Date.now()}.csv`;
+      a.download = `fictotum-health-${Date.now()}.csv`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);

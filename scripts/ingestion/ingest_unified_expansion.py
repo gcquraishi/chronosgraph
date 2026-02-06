@@ -1,5 +1,5 @@
 """
-ChronosGraph: Unified Ingestion Engine (v2.0)
+Fictotum: Unified Ingestion Engine (v2.0)
 Updated to support Fictional Anchors and Historical Figures.
 """
 
@@ -108,7 +108,7 @@ def main():
 
     ingestor = UnifiedChronosIngestor(uri, user, pwd)
     try:
-        print(f"--- ChronosGraph Unified Ingestion: {datetime.now()} ---")
+        print(f"--- Fictotum Unified Ingestion: {datetime.now()} ---")
         ingestor.setup_schema()
         ingestor.ingest_batch(seed_data)
     finally:

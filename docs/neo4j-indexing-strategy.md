@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-This document outlines the indexing strategy for ChronosGraph's Neo4j database to maintain sub-500ms query performance as the database scales beyond 640+ nodes and 2000+ relationships.
+This document outlines the indexing strategy for Fictotum's Neo4j database to maintain sub-500ms query performance as the database scales beyond 640+ nodes and 2000+ relationships.
 
 ## Index Inventory
 

@@ -1,4 +1,4 @@
-# ChronosGraph Neo4j Scalability Audit Report
+# Fictotum Neo4j Scalability Audit Report
 
 **Database:** Neo4j Aura (instance c78564a4)
 **Date:** 2026-01-18
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This audit identifies **8 critical scalability risks** that will impede ChronosGraph's ability to scale beyond 10,000 nodes. The most severe issue is the **dual ID strategy inconsistency** for MediaWork nodes, which creates technical debt and query ambiguity. Additionally, **missing indexes** on frequently-queried properties will cause exponential performance degradation at scale.
+This audit identifies **8 critical scalability risks** that will impede Fictotum's ability to scale beyond 10,000 nodes. The most severe issue is the **dual ID strategy inconsistency** for MediaWork nodes, which creates technical debt and query ambiguity. Additionally, **missing indexes** on frequently-queried properties will cause exponential performance degradation at scale.
 
 **Risk Level:** 🔴 HIGH - Immediate action recommended before next major ingestion phase.
 
@@ -634,7 +634,7 @@ For every new query, validate:
 
 ## 10. Conclusion
 
-ChronosGraph's current architecture is **functional at current scale** (270 figures, 526 media) but has **8 critical scalability blockers** that must be addressed before scaling to 10,000+ nodes.
+Fictotum's current architecture is **functional at current scale** (270 figures, 526 media) but has **8 critical scalability blockers** that must be addressed before scaling to 10,000+ nodes.
 
 **The single biggest risk is the MediaWork dual ID strategy**, which creates query ambiguity, technical debt, and prevents optimal index usage. Resolving this by standardizing on `wikidata_id` as the canonical identifier will eliminate 40% of the identified scalability risks.
 

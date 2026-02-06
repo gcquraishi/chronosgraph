@@ -1,4 +1,4 @@
-# How ChronosGraph Prevents Duplicate Historical Figures
+# How Fictotum Prevents Duplicate Historical Figures
 
 *A simple guide to our smart matching system*
 
@@ -8,7 +8,7 @@
 
 Imagine searching for Napoleon and finding three separate entries for the same person—one called "Napoleon Bonaparte," another "Napoleon I of France," and a third just "Napoleon." Confusing, right? That's the duplicate problem every historical database faces.
 
-ChronosGraph solves this by using smart technology to recognize when different names actually refer to the same person. This guide explains how it works—no technical background needed!
+Fictotum solves this by using smart technology to recognize when different names actually refer to the same person. This guide explains how it works—no technical background needed!
 
 ---
 
@@ -28,7 +28,7 @@ Without a system to catch these variations, we'd end up with dozens of duplicate
 
 ## Our Solution: The Two-Part Matching System
 
-ChronosGraph uses a **two-layer matching system** that works like having both a spell-checker and a pronunciation guide:
+Fictotum uses a **two-layer matching system** that works like having both a spell-checker and a pronunciation guide:
 
 ### Layer 1: Spelling Match (70% weight)
 This checks how similar two names look when written down. Think of it like autocorrect on your phone—it measures how many letters would need to change.
@@ -59,7 +59,7 @@ We blend both layers together (70% spelling + 30% pronunciation) to get a final 
 
 ## The Secret Weapon: Wikidata IDs
 
-Here's the really clever part: instead of relying only on names, ChronosGraph connects to **Wikidata**—think of it as the world's largest digital library catalog for historical figures.
+Here's the really clever part: instead of relying only on names, Fictotum connects to **Wikidata**—think of it as the world's largest digital library catalog for historical figures.
 
 ### What is Wikidata?
 
@@ -71,9 +71,9 @@ Wikidata is like the ISBN system for books, but for *everything*. Every person, 
 
 These codes never change, even if spellings or preferred names do. It's like how you stay the same person even if you get a nickname or change your name.
 
-### How ChronosGraph Uses Q-IDs
+### How Fictotum Uses Q-IDs
 
-When someone adds a historical figure to ChronosGraph:
+When someone adds a historical figure to Fictotum:
 
 1. **First, we search Wikidata** to see if this person already has a Q-ID
 2. **If we find a Q-ID**, we use it as the figure's permanent identifier
@@ -82,7 +82,7 @@ When someone adds a historical figure to ChronosGraph:
 This means:
 - ✅ **No duplicates**: If two people try to add "Napoleon Bonaparte" and "Napoleon I", both get linked to Q517
 - ✅ **Future-proof**: Even if historians change their preferred spelling, the Q-ID stays the same
-- ✅ **Connected data**: You can follow the same figure across Wikipedia, Wikidata, and ChronosGraph seamlessly
+- ✅ **Connected data**: You can follow the same figure across Wikipedia, Wikidata, and Fictotum seamlessly
 
 ---
 
@@ -91,7 +91,7 @@ This means:
 Let's walk through how this works with a real example from Roman history:
 
 ### The Situation
-Someone tries to add "Titus" to ChronosGraph, but there are already two entries:
+Someone tries to add "Titus" to Fictotum, but there are already two entries:
 1. "Titus" (Wikidata Q1421 - Roman Emperor)
 2. "Titus" (Wikidata Q1418 - Different historical figure)
 
@@ -229,7 +229,7 @@ Clean, deduplicated data means:
 
 ✅ **Accurate research**: No confusion about which media portrayed which figure
 ✅ **Better connections**: See true patterns in how historical figures relate
-✅ **Trustworthy source**: ChronosGraph becomes a reliable reference
+✅ **Trustworthy source**: Fictotum becomes a reliable reference
 ✅ **Easier exploration**: Find what you're looking for, not 10 duplicates
 
 When you're exploring how Napoleon has been portrayed across 200+ years of media, you want every portrayal linked to the same Napoleon—not scattered across multiple entries.
@@ -254,11 +254,11 @@ A: Absolutely! Check out our [Entity Resolution Protocol](/docs/protocols/entity
 
 ## The Bottom Line
 
-ChronosGraph uses a combination of **smart name matching**, **global identifiers** (Wikidata Q-IDs), and **human review** to keep the database clean and accurate. You get a better experience browsing, searching, and exploring historical connections—without the frustration of duplicate entries.
+Fictotum uses a combination of **smart name matching**, **global identifiers** (Wikidata Q-IDs), and **human review** to keep the database clean and accurate. You get a better experience browsing, searching, and exploring historical connections—without the frustration of duplicate entries.
 
 Think of it as having a really good librarian who makes sure every book is in the right place, with the right label, connected to all the right related topics. That's what our duplicate prevention system does for historical figures!
 
 ---
 
 *Last updated: February 2026*
-*Questions or feedback? Contact us at the ChronosGraph team.*
+*Questions or feedback? Contact us at the Fictotum team.*

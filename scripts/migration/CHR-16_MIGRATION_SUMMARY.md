@@ -316,7 +316,7 @@ After migrations complete, the ingestion pipeline should:
 
 ## Files Created
 
-All files located in `/Users/gcquraishi/Documents/chronosgraph/scripts/migration/`:
+All files located in `/Users/gcquraishi/Documents/big-heavy/fictotum/scripts/migration/`:
 
 1. `add_location_historical_names.py` (executable)
 2. `migrate_era_to_tags.py` (executable)

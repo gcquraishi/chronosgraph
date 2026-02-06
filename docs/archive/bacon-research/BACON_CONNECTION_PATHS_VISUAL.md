@@ -346,7 +346,7 @@ Unverified Potential Paths: 3
   - 4+ documentaries and interview programs
   - Multiple participants and commentators
 
-### For ChronosGraph Implementation
+### For Fictotum Implementation
 
 To extend this network to the **Renaissance philosopher**, you would need to:
 
@@ -375,7 +375,7 @@ This path demonstrates:
 - The importance of period drama specialists as network hubs
 - How contemporary actors connect to historical subjects through cinema
 
-The framework is ready for implementation in ChronosGraph's Neo4j database, with nodes for:
+The framework is ready for implementation in Fictotum's Neo4j database, with nodes for:
 - Contemporary actors
 - Historical films and documentaries
 - Historical subjects (both people and events)

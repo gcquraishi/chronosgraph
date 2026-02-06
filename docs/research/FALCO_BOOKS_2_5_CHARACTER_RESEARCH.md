@@ -2,7 +2,7 @@
 ## Detailed Analysis for Database Ingestion
 
 **Research Date:** 2026-01-18
-**Project:** ChronosGraph Character Network Ingestion
+**Project:** Fictotum Character Network Ingestion
 **Series:** Marcus Didius Falco (20-book series by Lindsey Davis)
 **Target:** Books 2-5 comprehensive character mapping
 
@@ -502,7 +502,7 @@ INTERACTED_WITH Relationships:
 - Poseidon's Gold: Q3824702
 
 **Fictional Characters (Wikidata Q-IDs from existing data):**
-- Marcus Didius Falco: Q933355 (or Q1469475 per CHRONOS_LOG)
+- Marcus Didius Falco: Q933355 (or Q1469475 per FICTOTUM_LOG)
 - Helena Justina: Q3784518
 
 ### Ingestion Strategy: Books 2-5
@@ -572,7 +572,7 @@ INTERACTED_WITH Relationships:
 4. Execute Book 5 (Poseidon's Gold) ingestion script
 5. Verify all relationships and character connections
 6. Document character progression for Books 6-20 research
-7. Update CHRONOS_LOG with session completion
+7. Update FICTOTUM_LOG with session completion
 
 ---
 **Document Version:** 1.0

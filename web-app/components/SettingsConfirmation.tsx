@@ -485,7 +485,7 @@ export default function SettingsConfirmation({
           <h3 className="text-lg font-semibold text-brand-primary">Unmapped Locations</h3>
         </div>
         <p className="text-sm text-brand-text/70">
-          These locations from Wikidata are not yet in ChronosGraph. Choose how to handle them:
+          These locations from Wikidata are not yet in Fictotum. Choose how to handle them:
         </p>
 
         <div className="space-y-2">
