@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useRef, useState, useTransition } from 'reac
 import { useRouter } from 'next/navigation';
 import { GraphNode, GraphLink, PathVisualization } from '@/lib/types';
 import { devLog, devWarn, devError } from '@/utils/devLog';
+import ImpressionisticTimeline from '@/components/graph/ImpressionisticTimeline';
 
 // CHR-22: Import directly instead of dynamic to enable ref forwarding
 // We'll handle SSR with a client-side mount check instead
@@ -2136,6 +2137,21 @@ export default function GraphExplorer({ canonicalId, nodes: initialNodes, links:
           )}
         </div>
       </ForceGraphErrorBoundary>
+
+      {/* Impressionistic Timeline - Shows temporal context for exploration path */}
+      {mounted && (
+        <ImpressionisticTimeline
+          explorationPath={explorationPath}
+          nodes={nodes}
+          onNodeClick={(nodeId) => {
+            const node = nodes.find(n => n.id === nodeId);
+            if (node) {
+              handleNodeClick(node);
+            }
+          }}
+          centerNodeId={centerNodeId}
+        />
+      )}
     </div>
   );
 }

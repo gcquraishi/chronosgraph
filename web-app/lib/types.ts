@@ -25,6 +25,7 @@ export interface HistoricalFigure {
 
 export interface MediaWork {
   title: string;
+  media_type?: string;
 
   /**
    * Release/Publication Year: When the work was originally published or released
@@ -85,6 +86,22 @@ export interface GraphNode {
     seriesTitle: string;
     isPartOfSeries: boolean;
     workCount?: number; // Total works in the series
+  };
+
+  // Temporal metadata for timeline visualization
+  temporal?: {
+    // For figures
+    birth_year?: number;
+    death_year?: number;
+
+    // For media works
+    release_year?: number;
+    setting_year?: number;
+    setting_year_end?: number;
+
+    // For both
+    era?: string; // e.g., "Tudor Period", "Victorian Era"
+    precision?: 'exact' | 'decade' | 'era' | 'unknown';
   };
 }
 
@@ -314,5 +331,49 @@ export interface DiscoveryBrowseResult {
     total_eras: number;
     most_works_location: string;
     most_works_era: string;
+  };
+}
+
+// Temporal Coverage Visualization Types
+
+export interface TimeBucket {
+  period: string;                    // e.g., "1400-1500"
+  startYear: number;                 // 1400
+  endYear: number;                   // 1500
+  workCount: number;                 // Total MediaWork nodes in period
+  figureCount: number;               // Total HistoricalFigure nodes in period
+  mediaTypes: Record<string, number>; // {"Book": 30, "Film": 10, "Game": 5}
+  topLocations: string[];            // ["England", "Italy", "France"]
+  seriesCount: number;               // Number of series works
+  standaloneCount: number;           // Number of standalone works
+  coverageStatus: 'sparse' | 'moderate' | 'rich'; // Coverage quality indicator
+}
+
+export interface TemporalCoverageData {
+  timeBuckets: TimeBucket[];
+  statistics: {
+    totalWorks: number;
+    totalFigures: number;
+    earliestYear: number;
+    latestYear: number;
+    coverageGaps: string[];          // Periods with <5 works
+  };
+}
+
+export interface PeriodDetail {
+  period: string;
+  startYear: number;
+  endYear: number;
+  works: Array<MediaWork & {
+    media_id: string;
+    media_type: string;
+    creator?: string;
+  }>;
+  figures: HistoricalFigure[];
+  statistics: {
+    workCount: number;
+    figureCount: number;
+    mediaTypeBreakdown: Record<string, number>;
+    topCreators: Array<{ name: string; workCount: number }>;
   };
 }

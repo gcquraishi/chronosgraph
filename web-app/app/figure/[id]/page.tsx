@@ -8,7 +8,10 @@ import HistoricityBadge from '@/components/HistoricityBadge';
 import AddAppearanceForm from '@/components/AddAppearanceForm';
 import ExploreGraphButton from '@/components/ExploreGraphButton';
 import SentimentTrendChart from '@/components/SentimentTrendChart';
-import { User } from 'lucide-react';
+import CulturalImpactScore from '@/components/CulturalImpactScore';
+import ReputationVolatilityIndex from '@/components/ReputationVolatilityIndex';
+import CharacterProfileMatrix from '@/components/CharacterProfileMatrix';
+import { User, FileText } from 'lucide-react';
 
 export default async function FigurePage({
   params,
@@ -33,32 +36,48 @@ export default async function FigurePage({
             ← Back to Dashboard
           </Link>
 
-          {/* Header - Subject Dossier */}
-          <div className="bg-white border-t-4 border-amber-600 shadow-xl p-8 mb-8">
-            <div className="text-[10px] font-black text-amber-700 uppercase tracking-[0.3em] mb-2">
-              Subject Dossier // {figure.canonical_id}
-            </div>
-            <div className="flex items-start gap-6">
-              <div className="flex-shrink-0">
-                <div className="w-20 h-20 bg-amber-50 border-2 border-amber-600 flex items-center justify-center">
-                  <User className="w-10 h-10 text-amber-600" />
-                </div>
+          {/* Header - CLASSIFIED DOSSIER */}
+          <div className="bg-white border-t-8 border-amber-600 shadow-2xl p-8 mb-8 relative overflow-hidden">
+            {/* Classification Banner */}
+            <div className="absolute top-0 left-0 right-0 bg-amber-600 text-white text-center py-1">
+              <div className="text-[10px] font-black uppercase tracking-[0.4em]">
+                CLASSIFIED DOSSIER
               </div>
-              <div className="flex-grow">
-                <div className="flex items-start justify-between gap-4 mb-2">
-                  <h1 className="text-4xl md:text-6xl font-bold text-stone-900 tracking-tighter uppercase">{figure.name}</h1>
-                  <HistoricityBadge status={figure.historicity_status} isFictional={figure.is_fictional} />
-                </div>
-                {figure.era && (
-                  <p className="text-lg text-stone-600 mb-4">{figure.era}</p>
-                )}
-                <div className="flex flex-wrap gap-3">
-                  <span className="inline-flex items-center px-3 py-1 text-[10px] font-black uppercase tracking-[0.15em] border-2 bg-amber-50 border-amber-600 text-amber-900">
-                    Portrayals: {figure.portrayals.length}
-                  </span>
+            </div>
 
-                  {/* Explore in Graph Button - Client Component for interactivity */}
-                  <ExploreGraphButton />
+            <div className="mt-6">
+              <div className="text-[10px] font-black text-amber-700 uppercase tracking-[0.3em] mb-2 flex items-center gap-2">
+                <FileText className="w-3 h-3" />
+                Subject File // {figure.canonical_id}
+              </div>
+              <div className="flex items-start gap-6">
+                <div className="flex-shrink-0">
+                  <div className="w-24 h-24 bg-amber-50 border-4 border-amber-600 flex items-center justify-center shadow-lg">
+                    <User className="w-12 h-12 text-amber-600" />
+                  </div>
+                  {/* Security Stamp */}
+                  <div className="mt-2 text-center">
+                    <div className="inline-block px-2 py-0.5 bg-red-600 text-white text-[8px] font-black uppercase tracking-wider transform -rotate-12">
+                      EVIDENCE
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-grow">
+                  <div className="flex items-start justify-between gap-4 mb-2">
+                    <h1 className="text-4xl md:text-6xl font-bold text-stone-900 tracking-tighter uppercase leading-none">{figure.name}</h1>
+                    <HistoricityBadge status={figure.historicity_status} isFictional={figure.is_fictional} />
+                  </div>
+                  {figure.era && (
+                    <p className="text-lg text-stone-600 mb-4 font-mono">{figure.era}</p>
+                  )}
+                  <div className="flex flex-wrap gap-3">
+                    <span className="inline-flex items-center px-3 py-1 text-[10px] font-black uppercase tracking-[0.15em] border-2 bg-amber-50 border-amber-600 text-amber-900">
+                      Portrayals: {figure.portrayals.length}
+                    </span>
+
+                    {/* Explore in Graph Button - Client Component for interactivity */}
+                    <ExploreGraphButton />
+                  </div>
                 </div>
               </div>
             </div>
@@ -107,6 +126,31 @@ export default async function FigurePage({
           {/* Sentiment Timeline - Full Width */}
           <div className="mb-8">
             <SentimentTrendChart portrayals={figure.portrayals} />
+          </div>
+
+          {/* Advanced Analytics Section - Detective Case File Features */}
+          <div className="mb-8">
+            <div className="bg-amber-600 text-white px-4 py-2 mb-0">
+              <h2 className="text-[10px] font-black uppercase tracking-[0.4em] flex items-center gap-2">
+                <span>■</span> Advanced Case Analysis
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 bg-stone-50 border-2 border-amber-600 border-t-0 p-6">
+              <CulturalImpactScore
+                portrayalCount={figure.portrayals.length}
+                mediaTypes={figure.portrayals.length > 0 ? Array.from(new Set(figure.portrayals.map(p => p.media.media_type).filter(Boolean))) : []}
+                firstAppearance={figure.portrayals.length > 0 ? Math.min(...figure.portrayals.map(p => Number(p.media.release_year))) : new Date().getFullYear()}
+                mostRecentAppearance={figure.portrayals.length > 0 ? Math.max(...figure.portrayals.map(p => Number(p.media.release_year))) : new Date().getFullYear()}
+              />
+              <ReputationVolatilityIndex
+                canonicalId={figure.canonical_id}
+                figureName={figure.name}
+              />
+              <CharacterProfileMatrix
+                canonicalId={figure.canonical_id}
+                figureName={figure.name}
+              />
+            </div>
           </div>
 
           {/* Contribution Form */}

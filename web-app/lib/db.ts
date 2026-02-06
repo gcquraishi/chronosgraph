@@ -1,6 +1,40 @@
 import { getSession } from './neo4j';
 import neo4j from 'neo4j-driver';
-import { HistoricalFigure, FigureProfile, Portrayal, SentimentDistribution, GraphNode, GraphLink, SeriesRelationship, SeriesMetadata, CharacterAppearance, Location, LocationWithStats, Era, EraWithStats, LocationWorks, EraWorks, DiscoveryBrowseResult } from './types';
+import { HistoricalFigure, FigureProfile, Portrayal, SentimentDistribution, GraphNode, GraphLink, SeriesRelationship, SeriesMetadata, CharacterAppearance, Location, LocationWithStats, Era, EraWithStats, LocationWorks, EraWorks, DiscoveryBrowseResult, TemporalCoverageData, TimeBucket, PeriodDetail } from './types';
+
+// Helper function to extract temporal metadata from Neo4j nodes
+function extractTemporalMetadata(node: any, nodeType: 'figure' | 'media'): GraphNode['temporal'] {
+  const props = node.properties;
+
+  if (nodeType === 'figure') {
+    const birth_year = props.birth_year ? neo4j.int(props.birth_year).toNumber() : undefined;
+    const death_year = props.death_year ? neo4j.int(props.death_year).toNumber() : undefined;
+
+    if (birth_year || death_year || props.era) {
+      return {
+        birth_year,
+        death_year,
+        era: props.era,
+        precision: (birth_year && death_year) ? 'exact' : 'decade'
+      };
+    }
+  } else if (nodeType === 'media') {
+    const release_year = props.release_year ? neo4j.int(props.release_year).toNumber() : undefined;
+    const setting_year = props.setting_year ? neo4j.int(props.setting_year).toNumber() : undefined;
+    const setting_year_end = props.setting_year_end ? neo4j.int(props.setting_year_end).toNumber() : undefined;
+
+    if (release_year || setting_year) {
+      return {
+        release_year,
+        setting_year,
+        setting_year_end,
+        precision: release_year ? 'exact' : 'unknown'
+      };
+    }
+  }
+
+  return undefined;
+}
 
 export async function searchFigures(query: string): Promise<HistoricalFigure[]> {
   const session = await getSession();
@@ -63,6 +97,7 @@ export async function getFigureById(canonicalId: string): Promise<FigureProfile 
             title: p.media.properties.title,
             release_year: p.media.properties.release_year?.toNumber?.() ?? Number(p.media.properties.release_year),
             wikidata_id: p.media.properties.wikidata_id,
+            media_type: p.media.properties.media_type,
           },
           sentiment: legacySentiment, // Legacy field for backward compatibility
           sentiment_tags: sentimentTags,
@@ -607,6 +642,7 @@ export async function getNodeNeighbors(
             id: figureId,
             name: figureNode.properties.name,
             type: 'figure',
+            temporal: extractTemporalMetadata(figureNode, 'figure'),
           });
           nodeIds.add(figureId);
         }
@@ -642,6 +678,7 @@ export async function getNodeNeighbors(
             name: mediaNode.properties.title,
             type: 'media',
             sentiment: relationship.properties.sentiment || 'Complex',
+            temporal: extractTemporalMetadata(mediaNode, 'media'),
           });
           nodeIds.add(mediaId);
           mediaNodeIds.push(wikidataId);
@@ -702,6 +739,7 @@ export async function getNodeNeighbors(
             id: otherId,
             name: otherFigure.properties.name,
             type: 'figure',
+            temporal: extractTemporalMetadata(otherFigure, 'figure'),
           });
           nodeIds.add(otherId);
         }
@@ -1636,6 +1674,267 @@ export async function checkExistingFigureByQid(qid: string): Promise<{
         name: figureNode.properties.name,
         birth_year: (figureNode.properties.birth_year?.toNumber?.() ?? Number(figureNode.properties.birth_year)) || undefined,
         death_year: (figureNode.properties.death_year?.toNumber?.() ?? Number(figureNode.properties.death_year)) || undefined,
+      },
+    };
+  } finally {
+    await session.close();
+  }
+}
+
+/**
+ * Temporal Coverage Visualization - Get aggregated coverage data by time periods
+ *
+ * @param granularity - Time bucket size: 'century' | 'decade' | 'year'
+ * @param mediaType - Optional filter by media type (Book, Film, Game, TV)
+ * @param region - Optional filter by geographic region
+ * @returns Temporal coverage data with time buckets and statistics
+ */
+export async function getTemporalCoverage(
+  granularity: 'century' | 'decade' | 'year' = 'century',
+  mediaType?: string,
+  region?: string
+): Promise<TemporalCoverageData> {
+  const session = await getSession();
+  try {
+    // Determine bucket size in years
+    const bucketSize = granularity === 'century' ? 100 : granularity === 'decade' ? 10 : 1;
+
+    // Build filters
+    const mediaFilter = mediaType ? `AND m.media_type = $mediaType` : '';
+    const regionFilter = region ? `AND EXISTS((m)-[:SET_IN]->(:Location {name: $region}))` : '';
+
+    // Query for MediaWork temporal distribution
+    const workResult = await session.run(
+      `MATCH (m:MediaWork)
+       WHERE m.release_year IS NOT NULL
+         AND NOT m.media_type IN ['BookSeries', 'GameSeries', 'FilmSeries', 'TVSeriesCollection']
+         ${mediaFilter}
+         ${regionFilter}
+       WITH m, toInteger(floor(toFloat(m.release_year) / ${bucketSize}) * ${bucketSize}) as bucketStart
+       WITH bucketStart,
+            count(m) as workCount,
+            collect(DISTINCT m.media_type) as mediaTypes,
+            collect(m) as works
+       ORDER BY bucketStart
+       RETURN bucketStart,
+              bucketStart + ${bucketSize} - 1 as bucketEnd,
+              workCount,
+              mediaTypes,
+              [w in works | {type: w.media_type, hasSeries: EXISTS((w)-[:PART_OF]->())}] as workDetails`,
+      { mediaType, region }
+    );
+
+    // Query for HistoricalFigure temporal distribution
+    const figureResult = await session.run(
+      `MATCH (f:HistoricalFigure)
+       WHERE f.birth_year IS NOT NULL
+       WITH f, toInteger(floor(toFloat(f.birth_year) / ${bucketSize}) * ${bucketSize}) as bucketStart
+       WITH bucketStart, count(f) as figureCount
+       ORDER BY bucketStart
+       RETURN bucketStart, figureCount`
+    );
+
+    // Create a map of figure counts by bucket
+    const figureCountMap = new Map<number, number>();
+    figureResult.records.forEach(record => {
+      const bucketStart = record.get('bucketStart')?.toNumber?.() ?? Number(record.get('bucketStart'));
+      const figureCount = record.get('figureCount')?.toNumber?.() ?? Number(record.get('figureCount'));
+      figureCountMap.set(bucketStart, figureCount);
+    });
+
+    // Build time buckets from work results
+    const timeBuckets: TimeBucket[] = workResult.records.map(record => {
+      const bucketStart = record.get('bucketStart')?.toNumber?.() ?? Number(record.get('bucketStart'));
+      const bucketEnd = record.get('bucketEnd')?.toNumber?.() ?? Number(record.get('bucketEnd'));
+      const workCount = record.get('workCount')?.toNumber?.() ?? Number(record.get('workCount'));
+      const mediaTypes = record.get('mediaTypes');
+      const workDetails = record.get('workDetails');
+
+      // Count media types
+      const mediaTypeBreakdown: Record<string, number> = {};
+      workDetails.forEach((w: any) => {
+        const type = w.type || 'Unknown';
+        mediaTypeBreakdown[type] = (mediaTypeBreakdown[type] || 0) + 1;
+      });
+
+      // Count series vs standalone
+      const seriesCount = workDetails.filter((w: any) => w.hasSeries).length;
+      const standaloneCount = workCount - seriesCount;
+
+      // Determine coverage status
+      let coverageStatus: 'sparse' | 'moderate' | 'rich';
+      if (workCount < 5) coverageStatus = 'sparse';
+      else if (workCount < 20) coverageStatus = 'moderate';
+      else coverageStatus = 'rich';
+
+      return {
+        period: `${bucketStart}-${bucketEnd}`,
+        startYear: bucketStart,
+        endYear: bucketEnd,
+        workCount,
+        figureCount: figureCountMap.get(bucketStart) || 0,
+        mediaTypes: mediaTypeBreakdown,
+        topLocations: [], // TODO: Add in future enhancement
+        seriesCount,
+        standaloneCount,
+        coverageStatus,
+      };
+    });
+
+    // Calculate statistics
+    const totalWorks = timeBuckets.reduce((sum, bucket) => sum + bucket.workCount, 0);
+    const totalFigures = timeBuckets.reduce((sum, bucket) => sum + bucket.figureCount, 0);
+    const earliestYear = timeBuckets.length > 0 ? timeBuckets[0].startYear : 0;
+    const latestYear = timeBuckets.length > 0 ? timeBuckets[timeBuckets.length - 1].endYear : new Date().getFullYear();
+    const coverageGaps = timeBuckets
+      .filter(bucket => bucket.workCount < 5)
+      .map(bucket => bucket.period);
+
+    return {
+      timeBuckets,
+      statistics: {
+        totalWorks,
+        totalFigures,
+        earliestYear,
+        latestYear,
+        coverageGaps,
+      },
+    };
+  } finally {
+    await session.close();
+  }
+}
+
+/**
+ * Temporal Coverage Visualization - Get detailed data for a specific time period
+ *
+ * @param startYear - Start year of period
+ * @param endYear - End year of period
+ * @param limit - Maximum number of works/figures to return (default 50)
+ * @returns Detailed period data with works and figures
+ */
+export async function getTemporalCoverageDetails(
+  startYear: number,
+  endYear: number,
+  limit: number = 50
+): Promise<PeriodDetail | null> {
+  const session = await getSession();
+  try {
+    // Query for works in period
+    const workResult = await session.run(
+      `MATCH (m:MediaWork)
+       WHERE m.release_year >= $startYear
+         AND m.release_year <= $endYear
+         AND NOT m.media_type IN ['BookSeries', 'GameSeries', 'FilmSeries', 'TVSeriesCollection']
+       RETURN m
+       ORDER BY m.release_year DESC
+       LIMIT $limit`,
+      { startYear, endYear, limit }
+    );
+
+    // Query for figures in period
+    const figureResult = await session.run(
+      `MATCH (f:HistoricalFigure)
+       WHERE (f.birth_year >= $startYear AND f.birth_year <= $endYear)
+          OR (f.death_year >= $startYear AND f.death_year <= $endYear)
+       RETURN f
+       ORDER BY f.birth_year
+       LIMIT $limit`,
+      { startYear, endYear, limit }
+    );
+
+    // Query for statistics
+    const statsResult = await session.run(
+      `MATCH (m:MediaWork)
+       WHERE m.release_year >= $startYear
+         AND m.release_year <= $endYear
+         AND NOT m.media_type IN ['BookSeries', 'GameSeries', 'FilmSeries', 'TVSeriesCollection']
+       WITH count(m) as workCount,
+            collect(m.media_type) as allTypes,
+            collect(m.creator) as allCreators
+       UNWIND allTypes as mediaType
+       WITH workCount, mediaType, allCreators, count(*) as typeCount
+       WITH workCount, collect({type: mediaType, count: typeCount}) as typeBreakdown, allCreators
+       UNWIND allCreators as creator
+       WITH workCount, typeBreakdown, creator, count(*) as creatorCount
+       WHERE creator IS NOT NULL
+       RETURN workCount,
+              typeBreakdown,
+              collect({name: creator, count: creatorCount}) as creators
+       ORDER BY creatorCount DESC
+       LIMIT 1`,
+      { startYear, endYear }
+    );
+
+    // Parse works
+    const works = workResult.records.map(record => {
+      const node = record.get('m');
+      return {
+        title: node.properties.title,
+        release_year: node.properties.release_year?.toNumber?.() ?? Number(node.properties.release_year),
+        wikidata_id: node.properties.wikidata_id,
+        media_id: node.properties.media_id || node.properties.wikidata_id,
+        media_type: node.properties.media_type || 'Unknown',
+        creator: node.properties.creator,
+        publisher: node.properties.publisher,
+        channel: node.properties.channel,
+        production_studio: node.properties.production_studio,
+        setting_year: node.properties.setting_year?.toNumber?.() ?? undefined,
+        setting_year_end: node.properties.setting_year_end?.toNumber?.() ?? undefined,
+      };
+    });
+
+    // Parse figures
+    const figures = figureResult.records.map(record => {
+      const node = record.get('f');
+      return {
+        canonical_id: node.properties.canonical_id,
+        name: node.properties.name,
+        is_fictional: node.properties.is_fictional || false,
+        historicity_status: node.properties.historicity_status || (node.properties.is_fictional ? 'Fictional' : 'Historical'),
+        era: node.properties.era,
+        wikidata_id: node.properties.wikidata_id,
+      };
+    });
+
+    // Parse statistics
+    let mediaTypeBreakdown: Record<string, number> = {};
+    let topCreators: Array<{ name: string; workCount: number }> = [];
+    let workCount = 0;
+
+    if (statsResult.records.length > 0) {
+      const statsRecord = statsResult.records[0];
+      workCount = statsRecord.get('workCount')?.toNumber?.() ?? Number(statsRecord.get('workCount'));
+
+      const typeBreakdown = statsRecord.get('typeBreakdown');
+      if (typeBreakdown) {
+        typeBreakdown.forEach((tb: any) => {
+          if (tb.type) {
+            mediaTypeBreakdown[tb.type] = tb.count?.toNumber?.() ?? Number(tb.count);
+          }
+        });
+      }
+
+      const creators = statsRecord.get('creators');
+      if (creators) {
+        topCreators = creators.slice(0, 5).map((c: any) => ({
+          name: c.name,
+          workCount: c.count?.toNumber?.() ?? Number(c.count),
+        }));
+      }
+    }
+
+    return {
+      period: `${startYear}-${endYear}`,
+      startYear,
+      endYear,
+      works,
+      figures,
+      statistics: {
+        workCount: works.length,
+        figureCount: figures.length,
+        mediaTypeBreakdown,
+        topCreators,
       },
     };
   } finally {

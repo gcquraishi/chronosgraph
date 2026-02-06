@@ -1,15 +1,15 @@
 # ChronosGraph Batch Import Report
 
-**Generated:** 2026-02-02 12:02:59
+**Generated:** 2026-02-03 17:40:12
 
-**Batch ID:** batch_import_20260202_120153
+**Batch ID:** batch_import_20260203_173914
 
 **Mode:** DRY RUN (no changes made)
 
 ## Summary
 
-- **Figures Created:** 23
-- **Figures Skipped (Duplicate):** 36
+- **Figures Created:** 15
+- **Figures Skipped (Duplicate):** 38
 - **Works Created:** 0
 - **Works Skipped (Duplicate):** 0
 - **Relationships Created:** 0
@@ -18,325 +18,292 @@
 
 ## Duplicate Figures Detected
 
-### Gaius Julius Caesar
+### Richard I of England
 
 - **Match Type:** exact_qid
 - **Confidence:** high
-- **Existing Figure:** Julius Caesar (HF_RM_001)
+- **Existing Figure:** Richard the Lionheart (HF_071)
 
-### Augustus
-
-- **Match Type:** exact_qid
-- **Confidence:** high
-- **Existing Figure:** Octavian (Augustus) (HF_RM_005)
-
-### Marcus Tullius Cicero
+### Joan of Arc
 
 - **Match Type:** exact_qid
 - **Confidence:** high
-- **Existing Figure:** Cicero (HF_048)
+- **Existing Figure:** Joan of Arc (Q7226)
 
-### Marcus Junius Brutus
-
-- **Match Type:** name_similarity
-- **Confidence:** high
-- **Similarity Score:** 1.000
-- **Existing Figure:** Marcus Junius Brutus (HF_RM_004)
-
-### Cleopatra VII
+### Eleanor of Aquitaine
 
 - **Match Type:** exact_qid
 - **Confidence:** high
-- **Existing Figure:** Cleopatra VII (HF_RM_003)
+- **Existing Figure:** Eleanor of Aquitaine (Q178525)
 
-### Tiberius
+### Henry II of England
+
+- **Match Type:** name_similarity
+- **Confidence:** high
+- **Similarity Score:** 1.000
+- **Existing Figure:** Henry II of England (Q160534)
+
+### Edward I of England
+
+- **Match Type:** name_similarity
+- **Confidence:** high
+- **Similarity Score:** 1.000
+- **Existing Figure:** Edward I of England (Q57798)
+
+### Edward III of England
+
+- **Match Type:** name_similarity
+- **Confidence:** high
+- **Similarity Score:** 1.000
+- **Existing Figure:** Edward III of England (Q160341)
+
+### Edward the Black Prince
 
 - **Match Type:** exact_qid
 - **Confidence:** high
-- **Existing Figure:** Tiberius (Q1407)
+- **Existing Figure:** Edward the Black Prince (Q184854)
 
-### Caligula
-
-- **Match Type:** exact_qid
-- **Confidence:** high
-- **Existing Figure:** Caligula (caligula)
-
-### Claudius
-
-- **Match Type:** name_similarity
-- **Confidence:** high
-- **Similarity Score:** 1.000
-- **Existing Figure:** Claudius (PROV:claudius)
-
-### Nero
+### Henry V of England
 
 - **Match Type:** exact_qid
 - **Confidence:** high
-- **Existing Figure:** Nero (nero)
+- **Existing Figure:** Henry V of England (Q131581)
 
-### Vespasian
-
-- **Match Type:** name_similarity
-- **Confidence:** high
-- **Similarity Score:** 1.000
-- **Existing Figure:** Vespasian (vespasian_emperor)
-
-### Titus
+### Philip II Augustus
 
 - **Match Type:** exact_qid
 - **Confidence:** high
-- **Existing Figure:** Titus (titus_emperor)
+- **Existing Figure:** Philip II of France (Q34428)
 
-### Domitian
-
-- **Match Type:** exact_qid
-- **Confidence:** high
-- **Existing Figure:** Domitian (domitian_emperor)
-
-### Hadrian
-
-- **Match Type:** name_similarity
-- **Confidence:** high
-- **Similarity Score:** 1.000
-- **Existing Figure:** Hadrian (hadrian)
-
-### Marcus Aurelius
+### Louis IX of France
 
 - **Match Type:** exact_qid
 - **Confidence:** high
-- **Existing Figure:** Marcus Aurelius (marcus_aurelius)
+- **Existing Figure:** Louis IX of France (Q346)
 
-### Commodus
-
-- **Match Type:** exact_qid
-- **Confidence:** high
-- **Existing Figure:** Commodus (commodus)
-
-### Constantine I (Constantine the Great)
+### Charlemagne
 
 - **Match Type:** exact_qid
 - **Confidence:** high
-- **Existing Figure:** Constantine the Great (Q8413)
+- **Existing Figure:** Charlemagne (Q3044)
 
-### Marcus Licinius Crassus
-
-- **Match Type:** name_similarity
-- **Confidence:** high
-- **Similarity Score:** 1.000
-- **Existing Figure:** Marcus Licinius Crassus (HF_047)
-
-### Spartacus
-
-- **Match Type:** name_similarity
-- **Confidence:** high
-- **Similarity Score:** 1.000
-- **Existing Figure:** Spartacus (PROV:spartacus)
-
-### Hannibal Barca
-
-- **Match Type:** name_similarity
-- **Confidence:** high
-- **Similarity Score:** 1.000
-- **Existing Figure:** Hannibal Barca (hannibal_barca)
-
-### Publius Cornelius Scipio Africanus
+### Frederick I Barbarossa
 
 - **Match Type:** exact_qid
 - **Confidence:** high
-- **Existing Figure:** Scipio Africanus (scipio_africanus)
+- **Existing Figure:** Frederick Barbarossa (Q79789)
 
-### Gaius Cassius Longinus
-
-- **Match Type:** name_similarity
-- **Confidence:** high
-- **Similarity Score:** 1.000
-- **Existing Figure:** Gaius Cassius Longinus (PROV:gaius_cassius)
-
-### Marcus Aemilius Lepidus
-
-- **Match Type:** name_similarity
-- **Confidence:** high
-- **Similarity Score:** 1.000
-- **Existing Figure:** Marcus Aemilius Lepidus (PROV:lepidus)
-
-### Marcus Vipsanius Agrippa
-
-- **Match Type:** name_similarity
-- **Confidence:** high
-- **Similarity Score:** 1.000
-- **Existing Figure:** Marcus Vipsanius Agrippa (PROV:marcus_agrippa)
-
-### Publius Vergilius Maro (Virgil)
+### Otto I the Great
 
 - **Match Type:** exact_qid
 - **Confidence:** high
-- **Existing Figure:** Virgil (Q1398)
+- **Existing Figure:** Otto the Great (Q43915)
 
-### Publius Ovidius Naso (Ovid)
-
-- **Match Type:** exact_qid
-- **Confidence:** high
-- **Existing Figure:** Ovid (Q7198)
-
-### Lucius Annaeus Seneca (Seneca the Younger)
+### Saladin
 
 - **Match Type:** exact_qid
 - **Confidence:** high
-- **Existing Figure:** Seneca the Younger (Q2054)
+- **Existing Figure:** Saladin (HF_070)
 
-### Gaius Plinius Secundus (Pliny the Elder)
+### Godfrey of Bouillon
 
 - **Match Type:** exact_qid
 - **Confidence:** high
-- **Existing Figure:** Pliny the Elder (Q82778)
+- **Existing Figure:** Godfrey of Bouillon (Q76721)
 
-### Gaius Maecenas
+### Harald Hardrada
+
+- **Match Type:** exact_qid
+- **Confidence:** high
+- **Existing Figure:** Harald Hardrada (Q203647)
+
+### Cnut the Great
+
+- **Match Type:** exact_qid
+- **Confidence:** high
+- **Existing Figure:** Cnut the Great (Q134128)
+
+### Thomas Aquinas
+
+- **Match Type:** exact_qid
+- **Confidence:** high
+- **Existing Figure:** Thomas Aquinas (Q9438)
+
+### Thomas Becket
+
+- **Match Type:** exact_qid
+- **Confidence:** high
+- **Existing Figure:** Thomas Becket (Q192236)
+
+### Pope Urban II
 
 - **Match Type:** name_similarity
 - **Confidence:** high
 - **Similarity Score:** 1.000
-- **Existing Figure:** Gaius Maecenas (PROV:gaius_maecenas)
+- **Existing Figure:** Pope Urban II (Q13067967)
 
-### Gaius Marius
+### Pope Innocent III
+
+- **Match Type:** exact_qid
+- **Confidence:** high
+- **Existing Figure:** Pope Innocent III (Q128076)
+
+### Francis of Assisi
+
+- **Match Type:** exact_qid
+- **Confidence:** high
+- **Existing Figure:** Francis of Assisi (Q676555)
+
+### Constantine XI Palaiologos
+
+- **Match Type:** exact_qid
+- **Confidence:** high
+- **Existing Figure:** Constantine XI Palaiologos (Q37142)
+
+### Justinian I
+
+- **Match Type:** exact_qid
+- **Confidence:** high
+- **Existing Figure:** Justinian I (Q41866)
+
+### Alfred the Great
+
+- **Match Type:** exact_qid
+- **Confidence:** high
+- **Existing Figure:** Alfred the Great (Q83476)
+
+### Richard III of England
 
 - **Match Type:** name_similarity
 - **Confidence:** high
 - **Similarity Score:** 1.000
-- **Existing Figure:** Gaius Marius (PROV:gaius_marius)
+- **Existing Figure:** Richard III of England (Q133028)
 
-### Tiberius Gracchus
-
-- **Match Type:** name_similarity
-- **Confidence:** high
-- **Similarity Score:** 1.000
-- **Existing Figure:** Tiberius Gracchus (PROV:tiberius_gracchus)
-
-### Gaius Gracchus
+### William Wallace
 
 - **Match Type:** name_similarity
 - **Confidence:** high
 - **Similarity Score:** 1.000
-- **Existing Figure:** Gaius Gracchus (PROV:gaius_gracchus)
+- **Existing Figure:** William Wallace (Q82457)
 
-### Publius Clodius Pulcher
-
-- **Match Type:** name_similarity
-- **Confidence:** high
-- **Similarity Score:** 1.000
-- **Existing Figure:** Publius Clodius Pulcher (PROV:clodius)
-
-### Agrippina the Younger
+### Robert the Bruce
 
 - **Match Type:** name_similarity
 - **Confidence:** high
 - **Similarity Score:** 1.000
-- **Existing Figure:** Agrippina the Younger (PROV:agrippina_younger)
+- **Existing Figure:** Robert the Bruce (Q187312)
 
-### Livia Drusilla
-
-- **Match Type:** name_similarity
-- **Confidence:** high
-- **Similarity Score:** 1.000
-- **Existing Figure:** Livia Drusilla (PROV:livia_drusilla)
-
-### Poppaea Sabina
+### Hildegard of Bingen
 
 - **Match Type:** name_similarity
 - **Confidence:** high
 - **Similarity Score:** 1.000
-- **Existing Figure:** Poppaea Sabina (PROV:poppaea)
+- **Existing Figure:** Hildegard of Bingen (Q70991)
 
-### Zenobia
+### Dante Alighieri
+
+- **Match Type:** exact_qid
+- **Confidence:** high
+- **Existing Figure:** Dante Alighieri (Q1067)
+
+### Geoffrey Chaucer
+
+- **Match Type:** exact_qid
+- **Confidence:** high
+- **Existing Figure:** Geoffrey Chaucer (Q5683)
+
+### Marco Polo
+
+- **Match Type:** exact_qid
+- **Confidence:** high
+- **Existing Figure:** Marco Polo (Q6101)
+
+### Genghis Khan
+
+- **Match Type:** exact_qid
+- **Confidence:** high
+- **Existing Figure:** Genghis Khan (Q720)
+
+### Kublai Khan
+
+- **Match Type:** exact_qid
+- **Confidence:** high
+- **Existing Figure:** Kublai Khan (Q7523)
+
+### William Marshal
 
 - **Match Type:** name_similarity
 - **Confidence:** high
 - **Similarity Score:** 1.000
-- **Existing Figure:** Zenobia (zenobia)
+- **Existing Figure:** William Marshal (Q348911)
+
+### Peter Abelard
+
+- **Match Type:** name_similarity
+- **Confidence:** high
+- **Similarity Score:** 1.000
+- **Existing Figure:** Peter Abelard (Q4295)
+
+### Bernard of Clairvaux
+
+- **Match Type:** name_similarity
+- **Confidence:** high
+- **Similarity Score:** 1.000
+- **Existing Figure:** Bernard of Clairvaux (Q188411)
+
+### Christine de Pizan
+
+- **Match Type:** name_similarity
+- **Confidence:** high
+- **Similarity Score:** 1.000
+- **Existing Figure:** Christine de Pizan (Q234816)
 
 ## Invalid Wikidata Q-IDs
 
-- **HistoricalFigure:** Marcus Tullius Cicero - Q-ID: Q1541
+- **HistoricalFigure:** Edward I of England - Q-ID: Q130531
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Marcus Junius Brutus - Q-ID: Q1539
+- **HistoricalFigure:** Philip II Augustus - Q-ID: Q34428
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Marcus Antonius (Mark Antony) - Q-ID: Q51673
+- **HistoricalFigure:** Harald Hardrada - Q-ID: Q203647
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Vespasian - Q-ID: Q9673
+- **HistoricalFigure:** John of England - Q-ID: Q112405
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Constantine I (Constantine the Great) - Q-ID: Q8413
+- **HistoricalFigure:** Henry VI of England - Q-ID: Q131340
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Julian (Julian the Apostate) - Q-ID: Q33941
+- **HistoricalFigure:** Richard III of England - Q-ID: Q130768
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Gnaeus Pompeius Magnus (Pompey the Great) - Q-ID: Q82203
+- **HistoricalFigure:** William Wallace - Q-ID: Q125120
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Marcus Licinius Crassus - Q-ID: Q83201
+- **HistoricalFigure:** Robert the Bruce - Q-ID: Q131629
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Spartacus - Q-ID: Q83646
+- **HistoricalFigure:** Isabella of France - Q-ID: Q230986
+  - Error: Q-ID Q230986 has no English label
+- **HistoricalFigure:** Hildegard of Bingen - Q-ID: Q62936
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Hannibal Barca - Q-ID: Q8456
+- **HistoricalFigure:** Dante Alighieri - Q-ID: Q1067
+  - Error: Q-ID Q1067 has no English label
+- **HistoricalFigure:** William Marshal - Q-ID: Q335392
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Publius Cornelius Scipio Africanus - Q-ID: Q2253
+- **HistoricalFigure:** El Cid - Q-ID: Q203045
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Marcus Porcius Cato (Cato the Younger) - Q-ID: Q192247
+- **HistoricalFigure:** Bohemond I of Antioch - Q-ID: Q182482
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Gaius Cassius Longinus - Q-ID: Q185814
-  - Error: Q-ID Q185814 is missing/deleted in Wikidata
-- **HistoricalFigure:** Marcus Aemilius Lepidus - Q-ID: Q191045
+- **HistoricalFigure:** Baldwin IV of Jerusalem - Q-ID: Q170302
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Marcus Vipsanius Agrippa - Q-ID: Q191039
+- **HistoricalFigure:** Peter Abelard - Q-ID: Q152139
+  - Error: Q-ID Q152139 has no English label
+- **HistoricalFigure:** Bernard of Clairvaux - Q-ID: Q215530
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Publius Vergilius Maro (Virgil) - Q-ID: Q1398
+- **HistoricalFigure:** Matilda of Tuscany - Q-ID: Q157073
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Publius Ovidius Naso (Ovid) - Q-ID: Q7198
+- **HistoricalFigure:** Henry IV, Holy Roman Emperor - Q-ID: Q61720
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Quintus Horatius Flaccus (Horace) - Q-ID: Q6197
+- **HistoricalFigure:** Alexios I Komnenos - Q-ID: Q41585
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Publius Cornelius Tacitus - Q-ID: Q2161
+- **HistoricalFigure:** Christine de Pizan - Q-ID: Q232177
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Gaius Suetonius Tranquillus (Suetonius) - Q-ID: Q40552
+- **HistoricalFigure:** Vlad the Impaler - Q-ID: Q43530
   - Error: Invalid Q-ID
-- **HistoricalFigure:** Lucius Annaeus Seneca (Seneca the Younger) - Q-ID: Q2054
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Gaius Plinius Secundus (Pliny the Elder) - Q-ID: Q82778
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Gaius Plinius Caecilius Secundus (Pliny the Younger) - Q-ID: Q168707
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Lucius Apuleius - Q-ID: Q186725
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Gaius Valerius Catullus (Catullus) - Q-ID: Q7222
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Petronius Arbiter - Q-ID: Q192605
-  - Error: Q-ID Q192605 is missing/deleted in Wikidata
-- **HistoricalFigure:** Decimus Iunius Iuvenalis (Juvenal) - Q-ID: Q8097
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Marcus Vitruvius Pollio (Vitruvius) - Q-ID: Q47163
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Gaius Maecenas - Q-ID: Q182193
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Lucius Cornelius Sulla Felix - Q-ID: Q82954
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Gaius Marius - Q-ID: Q103646
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Lucius Sergius Catilina (Catiline) - Q-ID: Q191953
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Tiberius Gracchus - Q-ID: Q194223
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Gaius Gracchus - Q-ID: Q194211
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Publius Clodius Pulcher - Q-ID: Q313524
-  - Error: Q-ID Q313524 is missing/deleted in Wikidata
-- **HistoricalFigure:** Clodia Metelli (Lesbia) - Q-ID: Q242545
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Agrippina the Younger - Q-ID: Q229246
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Livia Drusilla - Q-ID: Q229042
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Messalina (Valeria Messalina) - Q-ID: Q229811
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Poppaea Sabina - Q-ID: Q229864
-  - Error: Invalid Q-ID
-- **HistoricalFigure:** Zenobia - Q-ID: Q230462
-  - Error: Q-ID Q230462 has no English label
 
 ---
 

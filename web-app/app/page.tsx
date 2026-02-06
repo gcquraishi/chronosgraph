@@ -1,10 +1,16 @@
 'use client';
 
 import { Suspense, useState } from 'react';
+import Link from 'next/link';
 import GraphExplorer from '@/components/GraphExplorer';
 import LandingPathQuery from '@/components/LandingPathQuery';
+import ReputationTimeline from '@/components/ReputationTimeline';
+import VolatilityLeaderboard from '@/components/VolatilityLeaderboard';
+import RivalrySpotlight from '@/components/RivalrySpotlight';
+import ThemePicker from '@/components/ThemePicker';
 import { PathVisualization } from '@/lib/types';
 import { CRITICAL_ENTITIES } from '@/lib/constants/entities';
+import { BarChart3, Map, Clock, ChevronDown } from 'lucide-react';
 
 // CHR-6: Single Henry VIII node as landing page entry point
 // Henry VIII chosen as starting node because:
@@ -80,6 +86,10 @@ export default function LandingPage() {
     setShouldExpandHenry(true);
   };
 
+  const scrollToExplorer = () => {
+    document.getElementById('graph-explorer')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div className="min-h-screen bg-stone-100">
       {/* Hero Section - Case File Header */}
@@ -89,18 +99,80 @@ export default function LandingPage() {
             Historical Network Analysis // Archive_001
           </div>
           <h1 className="text-4xl md:text-6xl font-bold text-stone-900 tracking-tighter uppercase text-center">
-            Discover Historical Connections
+            ChronosGraph
           </h1>
           <p className="text-center text-stone-600 mt-2 text-sm">
-            Explore how historical figures connect through media portrayals
+            Explore how history judges its figures through media portrayals
           </p>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-7xl mx-auto space-y-8">
-          {/* Path Query Interface */}
-          <LandingPathQuery onPathFound={handlePathFound} />
+          {/* HERO: Featured Reputation Timeline (Henry VIII) */}
+          <div className="mb-8">
+            <div className="mb-4 text-center">
+              <h2 className="text-2xl md:text-3xl font-black text-stone-900 uppercase tracking-tight mb-2">
+                Watch How History Judges Its Figures
+              </h2>
+              <p className="text-sm text-stone-600 font-mono">
+                Sentiment analysis across decades of media portrayals
+              </p>
+            </div>
+            <ReputationTimeline canonicalId={HENRY_VIII_CANONICAL_ID} figureName="Henry VIII" />
+            <div className="flex justify-center gap-4 mt-4">
+              <Link
+                href={`/figure/${HENRY_VIII_CANONICAL_ID}`}
+                className="bg-amber-600 text-white px-6 py-3 font-black text-sm uppercase tracking-wider hover:bg-amber-700 transition-colors"
+              >
+                Explore Henry VIII
+              </Link>
+              <button
+                onClick={scrollToExplorer}
+                className="bg-stone-200 text-stone-900 px-6 py-3 font-black text-sm uppercase tracking-wider hover:bg-stone-300 transition-colors flex items-center gap-2"
+              >
+                <span>Pick Another Figure</span>
+                <ChevronDown className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* TWO-COLUMN LAYOUT: Volatility Leaderboard + Rivalry Spotlight */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {/* Left: Volatility Leaderboard */}
+            <div>
+              <VolatilityLeaderboard />
+            </div>
+
+            {/* Right: Rivalry Spotlight */}
+            <div>
+              <RivalrySpotlight />
+            </div>
+          </div>
+
+          {/* THEME PICKER: Cold-open discovery */}
+          <div className="mb-8">
+            <ThemePicker />
+          </div>
+
+          {/* Divider */}
+          <div className="relative" id="graph-explorer">
+            <div className="absolute inset-0 flex items-center" aria-hidden="true">
+              <div className="w-full border-t-2 border-stone-300"></div>
+            </div>
+            <div className="relative flex justify-center">
+              <div className="bg-stone-100 px-6 py-2 border-2 border-stone-300">
+                <h2 className="text-[10px] font-black text-stone-600 uppercase tracking-[0.3em]">
+                  Interactive Graph Explorer
+                </h2>
+              </div>
+            </div>
+          </div>
+
+          {/* PATH FINDER: Connect two figures */}
+          <div className="mb-8">
+            <LandingPathQuery onPathFound={handlePathFound} />
+          </div>
 
           {/* Divider */}
           <div className="relative">
@@ -121,7 +193,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Single-Node Graph - Dossier Sheet */}
+          {/* GRAPH EXPLORER: Single-Node Graph - Dossier Sheet */}
           <div className="bg-white border-t-4 border-amber-600 shadow-xl overflow-hidden">
             {/* Path Highlighting Indicator */}
             {highlightedPath && (
@@ -156,6 +228,81 @@ export default function LandingPage() {
                 shouldExpandCenter={shouldExpandHenry}
               />
             </Suspense>
+          </div>
+
+          {/* Discovery Section (Below Fold) */}
+          <div className="mt-8">
+            <div className="bg-amber-600 text-white px-4 py-2 mb-0">
+              <h2 className="text-[10px] font-black uppercase tracking-[0.4em] flex items-center gap-2">
+                <span>■</span> Discovery & Exploration
+              </h2>
+            </div>
+            <div className="bg-stone-200 border-2 border-amber-600 border-t-0 p-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Temporal Coverage Explorer */}
+                <Link
+                  href="/explore/coverage"
+                  className="block bg-white border-2 border-stone-300 hover:border-amber-600 transition-all p-6 group"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 bg-amber-50 border-2 border-amber-600 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+                      <BarChart3 className="w-6 h-6 text-amber-600" />
+                    </div>
+                    <h3 className="text-lg font-black text-stone-900 uppercase tracking-tight group-hover:text-amber-700 transition-colors">
+                      Historical Coverage
+                    </h3>
+                  </div>
+                  <p className="text-sm text-stone-600 leading-relaxed">
+                    Visualize ChronosGraph's temporal distribution across all historical periods. Explore coverage density, identify gaps, and discover content-rich eras.
+                  </p>
+                  <div className="mt-4 text-xs font-black text-amber-600 uppercase tracking-wider group-hover:text-amber-700">
+                    Explore Timeline →
+                  </div>
+                </Link>
+
+                {/* Search by Keywords */}
+                <Link
+                  href="/search"
+                  className="block bg-white border-2 border-stone-300 hover:border-amber-600 transition-all p-6 group"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 bg-amber-50 border-2 border-amber-600 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+                      <Map className="w-6 h-6 text-amber-600" />
+                    </div>
+                    <h3 className="text-lg font-black text-stone-900 uppercase tracking-tight group-hover:text-amber-700 transition-colors">
+                      Search Figures
+                    </h3>
+                  </div>
+                  <p className="text-sm text-stone-600 leading-relaxed">
+                    Search for historical figures by name, era, or keyword. Discover connections and explore media portrayals.
+                  </p>
+                  <div className="mt-4 text-xs font-black text-amber-600 uppercase tracking-wider group-hover:text-amber-700">
+                    Search Now →
+                  </div>
+                </Link>
+
+                {/* Browse Network Graph */}
+                <Link
+                  href="/explore/graph"
+                  className="block bg-white border-2 border-stone-300 hover:border-amber-600 transition-all p-6 group"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 bg-amber-50 border-2 border-amber-600 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+                      <Clock className="w-6 h-6 text-amber-600" />
+                    </div>
+                    <h3 className="text-lg font-black text-stone-900 uppercase tracking-tight group-hover:text-amber-700 transition-colors">
+                      Interactive Network
+                    </h3>
+                  </div>
+                  <p className="text-sm text-stone-600 leading-relaxed">
+                    Explore the full network graph of historical figures and media works. Navigate complex relationships visually.
+                  </p>
+                  <div className="mt-4 text-xs font-black text-amber-600 uppercase tracking-wider group-hover:text-amber-700">
+                    Explore Graph →
+                  </div>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>

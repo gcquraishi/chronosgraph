@@ -2,7 +2,10 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getMediaById, getMediaGraphData, getMediaLocationsAndEras } from '@/lib/db';
 import GraphExplorer from '@/components/GraphExplorer';
-import { BookOpen, Film, Tv, Gamepad2, User, List, MapPin, Clock } from 'lucide-react';
+import TemporalSignature from '@/components/TemporalSignature';
+import HistoricalAccuracySpectrum from '@/components/HistoricalAccuracySpectrum';
+import TemporalNarrativeArc from '@/components/TemporalNarrativeArc';
+import { BookOpen, Film, Tv, Gamepad2, User, List, MapPin, Clock, Archive } from 'lucide-react';
 
 function formatYear(year: number): string {
   if (year < 0) {
@@ -43,24 +46,40 @@ export default async function MediaPage({
             ← Back to Dashboard
           </Link>
 
-          <div className="bg-white border-t-4 border-amber-600 shadow-xl p-8 mb-8">
-            <div className="text-[10px] font-black text-amber-700 uppercase tracking-[0.3em] mb-2">
-              Media Work Dossier // {media.wikidata_id}
-            </div>
-            <div className="flex items-start gap-6">
-              <div className="flex-shrink-0">
-                <div className="w-20 h-20 bg-amber-50 border-2 border-amber-600 flex items-center justify-center">
-                  {getIcon(media.media_type)}
-                </div>
+          <div className="bg-white border-t-8 border-amber-600 shadow-2xl p-8 mb-8 relative overflow-hidden">
+            {/* Classification Banner */}
+            <div className="absolute top-0 left-0 right-0 bg-amber-600 text-white text-center py-1">
+              <div className="text-[10px] font-black uppercase tracking-[0.4em]">
+                MEDIA ARTIFACT FILE
               </div>
-              <div className="flex-grow">
-                <h1 className="text-4xl md:text-6xl font-bold text-stone-900 tracking-tighter uppercase mb-2">{media.title}</h1>
-                <p className="text-lg text-stone-600 mb-2 font-mono">
-                  {media.media_type} {media.release_year ? `(${media.release_year})` : ''}
-                </p>
-                {media.creator && (
-                  <p className="text-stone-600">Created by <span className="text-stone-900 font-bold">{media.creator}</span></p>
-                )}
+            </div>
+
+            <div className="mt-6">
+              <div className="text-[10px] font-black text-amber-700 uppercase tracking-[0.3em] mb-2 flex items-center gap-2">
+                <Archive className="w-3 h-3" />
+                Artifact ID // {media.wikidata_id}
+              </div>
+              <div className="flex items-start gap-6">
+                <div className="flex-shrink-0">
+                  <div className="w-24 h-24 bg-amber-50 border-4 border-amber-600 flex items-center justify-center shadow-lg">
+                    {getIcon(media.media_type)}
+                  </div>
+                  {/* Cataloged Stamp */}
+                  <div className="mt-2 text-center">
+                    <div className="inline-block px-2 py-0.5 bg-green-600 text-white text-[8px] font-black uppercase tracking-wider transform rotate-12">
+                      CATALOGED
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-grow">
+                  <h1 className="text-4xl md:text-6xl font-bold text-stone-900 tracking-tighter uppercase mb-2 leading-none">{media.title}</h1>
+                  <p className="text-lg text-stone-600 mb-2 font-mono">
+                    {media.media_type} {media.release_year ? `(${media.release_year})` : ''}
+                  </p>
+                  {media.creator && (
+                    <p className="text-stone-600">Created by <Link href={`/creator/${encodeURIComponent(media.creator)}`} className="text-stone-900 font-bold hover:text-amber-700 underline">{media.creator}</Link></p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -250,30 +269,67 @@ export default async function MediaPage({
             </div>
           )}
 
+          {/* Archaeological Analysis Section */}
+          <div className="mb-8">
+            <div className="bg-amber-600 text-white px-4 py-2 mb-0">
+              <h2 className="text-[10px] font-black uppercase tracking-[0.4em] flex items-center gap-2">
+                <span>■</span> Archaeological Analysis
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 bg-stone-50 border-2 border-amber-600 border-t-0 p-6">
+              {media.setting_year && media.release_year ? (
+                <TemporalSignature
+                  settingYear={media.setting_year}
+                  releaseYear={media.release_year}
+                  historicalSpan={media.setting_year_end ? media.setting_year_end - media.setting_year : undefined}
+                />
+              ) : (
+                <div className="bg-stone-100 border-2 border-stone-200 p-6">
+                  <h2 className="text-sm font-black text-stone-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <span className="text-amber-600">■</span> Temporal Signature
+                  </h2>
+                  <div className="bg-white border-2 border-stone-300 p-6 text-center">
+                    <p className="text-xs text-stone-500">Temporal data not available for this work</p>
+                  </div>
+                </div>
+              )}
+              <HistoricalAccuracySpectrum
+                wikidataId={media.wikidata_id}
+                workTitle={media.title}
+              />
+              <TemporalNarrativeArc
+                wikidataId={media.wikidata_id}
+                workTitle={media.title}
+              />
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
             <div className="lg:col-span-2">
                <GraphExplorer nodes={graphData.nodes} links={graphData.links} />
             </div>
-            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4 text-white">Historical Figures</h2>
+            <div className="bg-stone-100 border-2 border-stone-200 p-6">
+              <h2 className="text-sm font-black text-stone-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <span className="text-amber-600">■</span> Historical Figures
+              </h2>
               <div className="space-y-4">
                 {media.portrayals.map((p: any) => (
-                  <Link 
-                    key={p.figure.canonical_id} 
+                  <Link
+                    key={p.figure.canonical_id}
                     href={`/figure/${p.figure.canonical_id}`}
-                    className="block p-4 bg-gray-900 rounded-lg border border-transparent hover:border-blue-500 transition-all"
+                    className="block p-4 bg-white border-2 border-stone-300 hover:border-amber-600 transition-all"
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-bold text-white">{p.figure.name}</span>
-                      <span className={`text-xs px-2 py-0.5 rounded ${
-                        p.sentiment === 'Heroic' ? 'bg-green-500/20 text-green-400' :
-                        p.sentiment === 'Villainous' ? 'bg-red-500/20 text-red-400' :
-                        'bg-yellow-500/20 text-yellow-400'
+                      <span className="font-bold text-stone-900">{p.figure.name}</span>
+                      <span className={`text-[10px] px-2 py-0.5 font-black uppercase tracking-wider border-2 ${
+                        p.sentiment === 'Heroic' ? 'bg-green-50 border-green-600 text-green-800' :
+                        p.sentiment === 'Villainous' ? 'bg-red-50 border-red-600 text-red-800' :
+                        'bg-yellow-50 border-yellow-600 text-yellow-800'
                       }`}>
                         {p.sentiment}
                       </span>
                     </div>
-                    {p.role && <p className="text-sm text-gray-400 italic">"{p.role}"</p>}
+                    {p.role && <p className="text-sm text-stone-600 italic font-mono">"{p.role}"</p>}
                   </Link>
                 ))}
               </div>
